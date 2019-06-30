@@ -116,7 +116,7 @@
       lightweight-checkout: true      
       scm:
         - git:
-            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            url: 'https://github.com/litong01/hfrd.git'
             clean:
               before: true
             branches:
@@ -154,7 +154,7 @@
       lightweight-checkout: true
       scm:
         - git:
-            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            url: 'https://github.com/litong01/hfrd.git'
             clean:
               before: true
             branches:
@@ -184,7 +184,7 @@
       lightweight-checkout: true
       scm:
         - git:
-            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            url: 'https://github.com/litong01/hfrd.git'
             clean:
               before: true
             branches:
@@ -208,7 +208,7 @@
       lightweight-checkout: true
       scm:
         - git:
-            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            url: 'https://github.com/litong01/hfrd.git'
             clean:
               before: true
             branches:
@@ -245,7 +245,7 @@
       lightweight-checkout: true      
       scm:
         - git:
-            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            url: 'https://github.com/litong01/hfrd.git'
             clean:
               before: true
             branches:
@@ -282,7 +282,7 @@
       lightweight-checkout: true      
       scm:
         - git:
-            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            url: 'https://github.com/litong01/hfrd.git'
             clean:
               before: true
             branches:
@@ -310,7 +310,7 @@
       lightweight-checkout: true
       scm:
         - git:
-            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            url: 'https://github.com/litong01/hfrd.git'
             clean:
               before: true
             branches:

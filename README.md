@@ -5,7 +5,9 @@ This project was designed to provide fabric testers an easy way to set up fabric
 
 # Setting up hfrd
 
-HFRD server runs as a set of Docker containers. To get hfrd up running, you will need to have a Docker environment. If you do not have it, please install docker first by following its installation process. Once you have docker in place, please follow the process below.
+HFRD server runs as a set of Docker containers. To get hfrd up running,
+you will need to have a Docker environment. If you do not have it, please
+install docker first by following its installation process. Once you have docker in place, please follow the process below.
 
 ### Prepare the setup file
 Download the [hfrd setup file](setup/hfrd.sh) and the sample [hfrdconfig.xml](setup/hfrdconfig.xml) into a directory of your choice. You may place the downloaded hfrd.sh file into /usr/local/bin/hfrd, then change the permission so that it can be run anywhere.

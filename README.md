@@ -111,4 +111,5 @@ To run any chain code, you will have to provide the chain code in a tar gzip fil
 ![cc install operation](docs/images/ccinstall.png)
 
 
-HFRD will use the chain code uploaded to install the chain code onto peers specified in chain code install operations and run the chain code in chain code invoke operations.
+HFRD will use the chain code uploaded to install the chain code onto peers
+specified in chain code install operations and run the chain code in chain code invoke operations.

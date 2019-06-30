@@ -57,18 +57,13 @@ endmsg
 <?xml version='1.1' encoding='UTF-8'?>
 <hudson>
   <disabledAdministrativeMonitors/>
-  <version>2.138.2</version>
+  <version>1.0</version>
   <installStateName>RUNNING</installStateName>
   <numExecutors>30</numExecutors>
   <mode>NORMAL</mode>
-  <useSecurity>true</useSecurity>
-  <authorizationStrategy class="hudson.security.FullControlOnceLoggedInAuthorizationStrategy">
-    <denyAnonymousReadAccess>false</denyAnonymousReadAccess>
-  </authorizationStrategy>
-  <securityRealm class="hudson.security.HudsonPrivateSecurityRealm">
-    <disableSignup>true</disableSignup>
-    <enableCaptcha>false</enableCaptcha>
-  </securityRealm>
+  <useSecurity>false</useSecurity>
+  <authorizationStrategy class="hudson.security.AuthorizationStrategy$Unsecured"/>
+  <securityRealm class="hudson.security.SecurityRealm$None"/>
   <disableRememberMe>false</disableRememberMe>
   <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
   <workspaceDir>${JENKINS_HOME}/workspace/${ITEM_FULL_NAME}</workspaceDir>

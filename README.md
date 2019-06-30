@@ -43,7 +43,7 @@ To restart hfrd after hfrd was stopped, run the same command which you used to s
 Once you have hfrd running, use the api server url found at the very end of starting up hfrd process to access its user interface.
 
 ### The landing screen
-If you point your browser to the api server url, you should see the landing screen  ![landing screen](https://github.ibm.com/IBMCode/hfrd/blob/master/docs/images/mainui.png)
+If you point your browser to the api server url, you should see the landing screen  ![landing screen](docs/images/mainui.png)
 
 On this screen, there is one entry box and three tasks. When security is on, this id entry box will be filled automatically with your login id, when security is off, you will have to provide an ID to identify yourself. The setup process above assumed that the security plugin was off. 
 

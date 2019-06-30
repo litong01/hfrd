@@ -1,0 +1,17 @@
+{
+    "channels": [
+        {
+            "name":"channel1",
+            "members": [
+                    "org1",
+                    "org2"
+            ]
+        },
+        {
+            "name": "channel2",
+            "members": [
+                "org1"
+            ]
+        }
+    ]
+}

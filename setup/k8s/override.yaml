@@ -1,0 +1,13 @@
+# Default values for ibm-hfrd.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# If you want to provide a different user/password, you 
+# can use htpasswd to generate a new value and uncomment this variable:
+htpasswd: 
+
+# If you want to provide different TLS cert and key, you
+# can uncomment these parameters to provide the new values:
+#tls:
+#  crt: 
+#  key: 

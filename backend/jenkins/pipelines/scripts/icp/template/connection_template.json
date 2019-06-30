@@ -1,0 +1,27 @@
+{
+    "name": "nancynetwork",
+    "x-type": "hlfv1",
+    "version": "1.0",
+    "client": {
+        "organization": "org1",
+        "cryptoconfig": {
+            "path": "/fabric/keyfiles"
+        },
+        "connection": {
+           "timeout": {
+             "peer": { "endorser": "300", "eventHub": "300", "eventReg": "300"},
+             "orderer": "300"
+      }
+    }
+    },
+    "channels": {
+    },
+    "organizations": {
+    },
+    "orderers": {
+    },
+    "peers": {
+    },
+    "certificateAuthorities": {
+    }
+}

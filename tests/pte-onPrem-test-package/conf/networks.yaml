@@ -1,0 +1,68 @@
+--
+###############################################################################
+#
+#    Dir section
+#    Note: 1) Dirs should be within home directory of the contianer user
+#          2) Must use absolute path
+#          3) Use ${levelFirst_levelSecond_...} to extract the yaml params in
+#             shell script
+###############################################################################
+dir:
+  ROOT: /home/bjwswang/results/
+  networks: /home/bjwswang/results/networks/
+
+--
+###############################################################################
+#
+#    API Server section
+#
+###############################################################################
+apiserver:
+  apiuser: bjwswang
+  apiserverhost: http://hfrdrestsrv.rtp.raleigh.ibm.com:8080
+  apiversion: v1
+  # apiserverbaseuri : ${apiserver.apiserverhost}/${apiserver.apiversion}/${apiserver.apiuser}
+
+--
+###############################################################################
+#
+#    Network section
+#
+###############################################################################
+network:
+  # Each sub section means a group of networks with same topology
+  -
+    type: bxproduction_sp_2orgs
+    numberOfNetworks: 1
+    env: bxproduction
+    planName: sp
+    loc: POKM148_ZBC4
+    numOfOrgs: 2
+    numOfPeers: 2
+    ledgerType: levelDB
+    vCpus:
+      peer: 2
+      orderer: 1
+      kafka: 1
+    memory:
+      peer: 500
+      orderer: 500
+      kafka: 500
+  # Each sub section means a group of networks with same topology
+  -
+    type: cm_ep_2orgs
+    numberOfNetworks: 1
+    env: cm
+    planName: ep
+    loc: POKM148_ZBC4
+    numOfOrgs: 2
+    numOfPeers: 2
+    ledgerType: couch
+    vCpus:
+      peer: 2
+      orderer: 1
+      kafka: 1
+    memory:
+      peer: 500
+      orderer: 500
+      kafka: 500

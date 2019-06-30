@@ -1,0 +1,25 @@
+{% if networkspec.resourceQuota is defined %}
+resourceQuota:
+  {{ networkspec.resourceQuota | to_nice_yaml(indent=2) | indent(2, False) }}
+{% else %}
+resourceQuota:
+  resourceParams: &resourceParams
+    requests:
+      memory: "{{ networkspec.k8s.mem_req | default('1Gi') }}"
+      cpu: "{{ networkspec.k8s.cpu_req | default('1') }}"
+    limits:
+      memory: "{{ networkspec.k8s.mem_limit | default('1Gi') }}"
+      cpu: "{{ networkspec.k8s.cpu_limit | default('1')}}"
+  ca:
+    <<: *resourceParams
+  kafka:
+    <<: *resourceParams
+  zookeeper:
+    <<: *resourceParams
+  peer:
+    <<: *resourceParams
+  couchdb:
+    <<: *resourceParams
+  orderer:
+    <<: *resourceParams
+{% endif %}

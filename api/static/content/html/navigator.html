@@ -1,0 +1,62 @@
+<style>
+    ul {
+        list-style-type: none;
+        margin: 0px;
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    li {
+        float: left;
+        padding: 10px;
+        padding-left: 40px
+    }
+
+    li a {
+        display: block;
+    }
+
+    a {
+        color: #ffffff;
+    }
+
+    .active {
+        background-color: #4CAF50;
+    }
+</style>
+
+<script>
+    $(function () {
+        if (uid) {
+            console.log('user id:', uid)
+            $('#nav_ibp').attr('href', '/v1/' + uid + '/ui/ibp')
+            $('#nav_icp').attr('href', '/v1/' + uid + '/ui/icp')
+            $('#nav_k8s').attr('href', '/v1/' + uid + '/ui/network')
+            $('#nav_tests').attr('href', '/v1/' + uid + '/ui/moduletest')
+            $('#nav_ibpcerts').attr('href', '/v1/' + uid + '/ui/ibpcerts')
+        }
+        let link = window.location.href
+        console.log('window.location.href=', link)
+        if (link.endsWith('/ui/ibp')) {
+            $('#nav_ibp').addClass('active')
+        } else if (link.endsWith('/ui/icp')) {
+            $('#nav_icp').addClass('active')
+        } else if (link.endsWith('/ui/network')) {
+            $('#nav_k8s').addClass('active')
+        } else if (link.endsWith('/ui/moduletest')) {
+            $('#nav_tests').addClass('active')
+        } else if (link.endsWith('/ui/ibpcerts')) {
+            $('#nav_ibpcerts').addClass('active')
+        }
+    })
+</script>
+<nav>
+    <ul class="bx--type--delta">
+        <li><a href="/">Home</a></li>
+        <li><a id="nav_k8s" href="#">Fabric on k8s</a></li>
+        <li><a id="nav_ibp" href="#">Fabric on IBP</a></li>
+        <li><a id="nav_icp" href="#">Fabric on ICP</a></li>
+        <li><a id="nav_tests" href="#">Manage test</a></li>
+        <li><a id="nav_ibpcerts" href="#">Get certs from existing IBP</a></li>
+    </ul>
+</nav>

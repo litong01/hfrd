@@ -1,0 +1,19 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: fabriccertspod-{{req_id}}
+spec:
+  volumes:
+    - name: storage-{{ req_id }}
+      persistentVolumeClaim:
+        claimName: {{ pvcname | default("storage-"+req_id) }}
+  containers:
+    - name: task-pv-container-{{ req_id }}
+      image: alpine
+      args:
+        - sleep
+        - "3000"
+      volumeMounts:
+        - mountPath: "/fabric"
+          name: storage-{{ req_id }}

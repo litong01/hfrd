@@ -1,0 +1,146 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hfrd
+  labels:
+    app: hfrdserver
+spec:
+  restartPolicy: OnFailure
+  volumes:
+    - name: configvolume
+      configMap:
+        name: hfrdsettings
+        items:
+        - key: hfrdconfig
+          path: config.json
+    - name: hfrdstore
+      persistentVolumeClaim:
+        claimName: longrunpvc
+  containers:
+    - name: couchdb
+      image: couchdb
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - { mountPath: "/opt/couchdb/data", subPath: "couchdb", name: "hfrdstore" }
+    - name: hfrdserver
+      image: hfrd/server:latest
+      ports:
+      - containerPort: 8080
+      imagePullPolicy: IfNotPresent
+      securityContext:
+        privileged: true
+        runAsUser: 0
+      volumeMounts:
+      - mountPath: "/opt/hfrd/contentRepo"
+        subPath: "content"
+        name: "hfrdstore"
+      - mountPath: "/opt/hfrd/var/"
+        name: "configvolume"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hfrdjenkins
+  labels:
+    app: hfrdjenkins
+spec:
+  restartPolicy: OnFailure
+  volumes:
+    - name: configvolume
+      configMap:
+        name: hfrdsettings
+    - name: hfrdstore
+      persistentVolumeClaim:
+        claimName: longrunpvc
+  containers:
+    - name: jenkins
+      image: hfrd/jenkins:pub
+      ports:
+      - containerPort: 8080
+      imagePullPolicy: Always
+      securityContext:
+        privileged: true
+        runAsUser: 0
+      volumeMounts:
+      - mountPath: "/opt/hfrd/contentRepo"
+        subPath: "content"
+        name: "hfrdstore"
+      - mountPath: "/var/jenkins_home/workspace"
+        subPath: "jenkins/workspace"
+        name: "hfrdstore"
+      - mountPath: "/var/jenkins_home/jobs"
+        subPath: "jenkins/jobs"
+        name: "hfrdstore"
+      - mountPath: "/var/jenkins_home/scriptApproval.xml"
+        subPath: "jenkinsapproval"
+        name: "configvolume"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hfrdapache
+  labels:
+    app: hfrdapache
+spec:
+  restartPolicy: OnFailure
+  volumes:
+    - name: hfrdstore
+      persistentVolumeClaim:
+        claimName: longrunpvc
+  containers:
+    - name: apache
+      image: httpd:2.4.34-alpine
+      ports:
+      - containerPort: 80
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+      - mountPath: "/usr/local/apache2/htdocs/"
+        subPath: "content"
+        name: "hfrdstore"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hfrdserver
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: hfrdserver
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hfrdjenkins
+spec:
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: hfrdjenkins
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hfrdapache
+spec:
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: hfrdapache

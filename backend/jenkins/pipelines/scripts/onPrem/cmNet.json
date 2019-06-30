@@ -1,0 +1,40 @@
+{
+    "network": {
+            "region": "us_south",
+            "networkName": "HFRD Network",
+            "companyName": "HFRD",
+            "ibmCert": true,
+            "ordererType": "kafka",
+            "policyTemplateId": "demo1",
+            "serviceId": "{serviceid}",
+            "serviceInstance": {
+                "spaceGuid": "fake2",
+                "orgGuid": "fake",
+                "region": "us_south",
+                "timestamp": 1490974636,
+                "companyName": "HFRD",
+                "email": "bjwswang@cn.ibm.com"
+            }
+    },
+    "peer":{
+            "serviceId": "{serviceid}",
+            "companyName": "{serviceid}",
+            "caId": "GENERATE",
+            "peers": [
+                {
+                    "name": "PeerEP",
+                    "region": "us_south",
+                    "ibmCert": true,
+                    "ledgerdb":"{ledgertype}"
+                }
+            ],
+            "serviceInstance": {
+                "spaceGuid": "fake2",
+                "orgGuid": "fake",
+                "region": "us_south",
+                "timestamp": 1490974636,
+                "companyName": "{serviceid}",
+                "email": "bjwswang@cn.ibm.com"
+            }
+    }
+}

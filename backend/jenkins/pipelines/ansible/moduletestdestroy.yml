@@ -1,0 +1,42 @@
+- name: Get start timestamp
+  hosts: cloud
+  connection: local
+  vars_files:
+    - "./hfrdops.yml"
+  tasks:
+    - set_fact:
+        uid: "{{ uid }}"
+        req_id: "{{ reqId }}"
+        contentrepo: "{{ contentrepo }}"
+
+    - set_fact:
+        depfilepath: "{{ contentrepo }}/{{uid}}/{{req_id}}"
+        kubepath: "{{ contentrepo }}/{{uid}}/{{req_id}}/vars/kubeconfig"
+
+    - name: Find all the job deployment files
+      find:
+        paths: "{{ depfilepath }}"
+        patterns: "job*.yml"
+        file_type: "file"
+      register: deployfiles
+
+    - name: Remove all the jobs
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} delete
+        -f {{ item.path }} --grace-period=0 --force
+      with_items: "{{ deployfiles.files }}"
+      ignore_errors: yes
+
+    - name: Find all the utility deployment files
+      find:
+        paths: "{{ depfilepath }}"
+        patterns: "certssetup.yml,utils.yml,pvc.yml,bndresults.yml"
+        file_type: "file"
+      register: utilityfiles
+
+    - name: Remove all the pods for this test
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} delete
+        -f {{ item.path }} --grace-period=0 --force
+      with_items: "{{ utilityfiles.files | sort(attribute='ctime',reverse=True) }}"
+      ignore_errors: yes

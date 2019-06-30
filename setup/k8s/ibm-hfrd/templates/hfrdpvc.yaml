@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: longrunpvc
+spec:
+  storageClassName: ibmc-file-gold
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: "20Gi"

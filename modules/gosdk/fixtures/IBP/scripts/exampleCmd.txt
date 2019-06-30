@@ -1,0 +1,146 @@
+ python zipgen.py -n zipoutput/network.json -o /Users/sunhongwei/data/111net
+
+sundembp:scripts sunhongwei$ python zipgen.py -n zipoutput/network.json -o /Users/sunhongwei/data/222net
+getting orignal connection profile for organization[PeerOrg2] from: https://ibmblockchain-dev-v2.stage1.ng.bluemix.net/api/v1/networks/5c372ac731d54bfd88af0e40c93a2f3a/connection_profile
+
+processing orderers
+
+processing peers
+
+processing organizations
+
+processing certificateAuthorities
+2018/09/21 17:26:13 [INFO] TLS Enabled
+2018/09/21 17:26:13 [INFO] generating key: &{A:ecdsa S:256}
+2018/09/21 17:26:13 [INFO] encoded CSR
+2018/09/21 17:26:14 [INFO] Stored client certificate at /Users/sunhongwei/data/222net/PeerOrg2/users/admin@PeerOrg2/msp/signcerts/cert.pem
+2018/09/21 17:26:14 [INFO] Stored root CA certificate at /Users/sunhongwei/data/222net/PeerOrg2/users/admin@PeerOrg2/msp/cacerts/ash-zbc10a-4-secure-blockchain-ibm-com-20047.pem
+2018/09/21 17:26:14 [INFO] Stored intermediate CA certificates at /Users/sunhongwei/data/222net/PeerOrg2/users/admin@PeerOrg2/msp/intermediatecerts/ash-zbc10a-4-secure-blockchain-ibm-com-20047.pem
+
+ enroll admin user of PeerOrg2 successed
+
+connetion profile generated for orgnization:PeerOrg2
+getting orignal connection profile for organization[PeerOrg1] from: https://ibmblockchain-dev-v2.stage1.ng.bluemix.net/api/v1/networks/5c372ac731d54bfd88af0e40c93a2f3a/connection_profile
+
+processing orderers
+
+processing peers
+
+processing organizations
+
+processing certificateAuthorities
+2018/09/21 17:26:20 [INFO] TLS Enabled
+2018/09/21 17:26:20 [INFO] generating key: &{A:ecdsa S:256}
+2018/09/21 17:26:21 [INFO] encoded CSR
+2018/09/21 17:26:22 [INFO] Stored client certificate at /Users/sunhongwei/data/222net/PeerOrg1/users/admin@PeerOrg1/msp/signcerts/cert.pem
+2018/09/21 17:26:22 [INFO] Stored root CA certificate at /Users/sunhongwei/data/222net/PeerOrg1/users/admin@PeerOrg1/msp/cacerts/ash-zbc10c-4-secure-blockchain-ibm-com-20046.pem
+2018/09/21 17:26:22 [INFO] Stored intermediate CA certificates at /Users/sunhongwei/data/222net/PeerOrg1/users/admin@PeerOrg1/msp/intermediatecerts/ash-zbc10c-4-secure-blockchain-ibm-com-20046.pem
+
+ enroll admin user of PeerOrg1 successed
+
+connetion profile generated for orgnization:PeerOrg1
+
+ network[5c372ac731d54bfd88af0e40c93a2f3a]connetion profiles and all certs save into file:
+CP_5c372ac731d54bfd88af0e40c93a2f3a.zip
+
+
+python uploadcert.py -d /Users/sunhongwei/data/222net
+
+
+sundembp:scripts sunhongwei$ python uploadcert.py -d /Users/sunhongwei/data/111net
+
+Restart peers for org:PeerOrg2
+fabric-peer-org2-20127c is stopping...
+fabric-peer-org2-20127c status=exited
+fabric-peer-org2-20127c is starting...
+fabric-peer-org2-20127c status=Unknown
+fabric-peer-org2-20127c status=Unknown
+fabric-peer-org2-20127c status=Unknown
+fabric-peer-org2-20127c status=Unknown
+fabric-peer-org2-20127c status=running
+fabric-peer-org2-20129a is stopping...
+fabric-peer-org2-20129a status=exited
+fabric-peer-org2-20129a is starting...
+fabric-peer-org2-20129a status=Unknown
+fabric-peer-org2-20129a status=Unknown
+fabric-peer-org2-20129a status=Unknown
+fabric-peer-org2-20129a status=Unknown
+fabric-peer-org2-20129a status=running
+
+Restart peers for org:PeerOrg1
+fabric-peer-org1-20123c is stopping...
+fabric-peer-org1-20123c status=exited
+fabric-peer-org1-20123c is starting...
+fabric-peer-org1-20123c status=Unknown
+fabric-peer-org1-20123c status=Unknown
+fabric-peer-org1-20123c status=Unknown
+fabric-peer-org1-20123c status=Unknown
+fabric-peer-org1-20123c status=running
+fabric-peer-org1-20125a is stopping...
+fabric-peer-org1-20125a status=exited
+fabric-peer-org1-20125a is starting...
+fabric-peer-org1-20125a status=Unknown
+fabric-peer-org1-20125a status=Unknown
+fabric-peer-org1-20125a status=Unknown
+fabric-peer-org1-20125a status=Unknown
+fabric-peer-org1-20125a status=running
+
+uploaded certificates  and restarted peers for network:5c372ac731d54bfd88af0e40c93a2f3a
+
+=====================
+
+./gosdk channel create -c /Users/sunhongwei/data/111net/PeerOrg1/PeerOrg1_ConnProf.yaml --channelNamePrefix hfrdch21x --channelConsortium SampleConsortium --channelOrgs peerorg1 --ordererName fabric-orderer-20044e --iterationCount 2 --iterationInterval 1s
+
+./gosdk channel create -c /Users/sunhongwei/data/111net/PeerOrg1/PeerOrg1_ConnProf.yaml --channelNamePrefix hfrdch21ax --channelConsortium SampleConsortium --channelOrgs peerorg1,peerorg2 --ordererName fabric-orderer-20044e --iterationCount 2 --iterationInterval 1s
+channel.create 387.007847ms
+
+./gosdk channel join -c /Users/sunhongwei/data/111net/PeerOrg1/PeerOrg1_ConnProf.yaml --channelNamePrefix hfrdch21ax \
+--peers fabric-peer-org1-20125a,fabric-peer-org1-20123c --ordererName fabric-orderer-20044e --iterationCount 1 --iterationInterval 1s
+channel.join 5.082093793s
+
+./gosdk channel query -c /Users/sunhongwei/data/111net/PeerOrg1/PeerOrg1_ConnProf.yaml --channelNamePrefix hfrdch21ax --peers  fabric-peer-org1-20125a --iterationCount 1 --iterationInterval 2s
+Query hfrdch21ax0 config : 
+ BatchTimeout:1s,
+ BatchSize.MaxMessageCount:100.000000, 
+ BatchSize.AbsoluteMaxBytes:103809024.000000 
+ Org:peerorg1 AnchorPeers : map[] 
+channel.query 3.221825665s
+
+
+./gosdk channel update -c /Users/sunhongwei/data/111net/PeerOrg1/PeerOrg1_ConnProf.yaml --channelNamePrefix hfrdch21ax \
+--ordererOrgName ordererorg --ordererName orderer.example.com --peers fabric-peer-org1-20125a \
+--anchorPeers fabric-peer-org1-20125a:7051 \
+--iterationCount 1 --iterationInterval 1s --retryCount 1 
+=====failed ==== 
+
+
+./gosdk chaincode install -c /Users/sunhongwei/data/111net/PeerOrg1/PeerOrg1_ConnProf.yaml --chaincodeNamePrefix hfrdch21ax- --chaincodeVersion v1 \
+--path testchaincode --peers fabric-peer-org1-20125a,fabric-peer-org1-20123c  \
+--iterationCount 1 --iterationInterval 1s
+chaincode.install 1.565224686s
+chaincode.install 1.501311327s
+
+
+./gosdk chaincode instantiate -c /Users/sunhongwei/data/111net/PeerOrg1/PeerOrg1_ConnProf.yaml --chaincodeNamePrefix hfrdch21ax- --chaincodeVersion v1 \
+--channelName hfrdch21ax0 --path hfrd/chaincode/samplecc \
+--peers fabric-peer-org1-20125a,fabric-peer-org1-20123c --iterationCount 1
+chaincode.instantiate 57.460727002s
+
+
+./gosdk chaincode invoke  -c /Users/sunhongwei/data/111net/PeerOrg1/PeerOrg1_ConnProf.yaml --chaincodeName hfrdch21ax-0 --channelName hfrdch21ax0 \
+--chaincodeParams invoke,put,a,b --peers fabric-peer-org1-20125a \
+--iterationCount 5
+chaincode.invoke 1.771732924s
+
+
+ python zipgen.py -n zipoutput/network.json -o /Users/sunhongwei/data/222net
+
+
+ ./gosdk channel create -c /Users/sunhongwei/data/222net/PeerOrg1/PeerOrg1_ConnProf.yaml --channelNamePrefix hfrdch212x --channelConsortium SampleConsortium --channelOrgs peerorg1 --ordererName fabric-orderer-20044e --iterationCount 1 --iterationInterval 1s
+  ./gosdk channel create -c /Users/sunhongwei/data/222net/PeerOrg2/PeerOrg2_ConnProf.yaml --channelNamePrefix hfrdchorg2x --channelConsortium SampleConsortium --channelOrgs peerorg1,peerorg2 --ordererName fabric-orderer-20044e --iterationCount 1 --iterationInterval 1s
+
+ python zipgen.py -n network.json -o /Users/sunhongwei/data/333net
+ python uploadcert.py -d /Users/sunhongwei/data/333net
+ ./gosdk channel create -c /Users/sunhongwei/data/333net/PeerOrg1/PeerOrg1_ConnProf.yaml --channelNamePrefix hfrdch31x --channelConsortium SampleConsortium --channelOrgs peerorg1 --ordererName fabric-orderer-20044e --iterationCount 2 --iterationInterval 1s
+
+

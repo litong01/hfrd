@@ -1,0 +1,30 @@
+# Docker-in-Docker Fabric Test Container
+#
+# To build this image, run the following command:
+#   docker build --build-arg user=$USER \
+#      --build-arg uid=$(id -u) \
+#      --build-arg gid=$(id -g) \
+#      -f runnerbox_alpine -t runnerbox_alpine  .
+#
+FROM alpine
+
+ARG user=ubuntu
+ARG uid=1000
+ARG gid=1000
+
+USER root
+
+RUN set -eux; \
+    apk add --no-cache --update bash curl docker \
+    && addgroup -g ${gid} ${user} \
+    && mkdir -p /opt/fabrictest \
+    && adduser -D -h /opt/fabrictest -s /bin/bash -u ${uid} -G ${user} ${user} \
+    && adduser ${user} ping \
+    && rm -rf /var/cache/apk/*
+
+ADD pipelines /opt/src
+RUN chown -R ${uid}:${gid} /opt/src /opt/fabrictest
+ENV HOME /opt/fabrictest
+ENV WORKDIR /opt/fabrictest
+WORKDIR /opt/fabrictest
+USER ${user}

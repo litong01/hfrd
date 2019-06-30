@@ -1,0 +1,168 @@
+- name: Get start timestamp
+  hosts: cloud
+  connection: local
+  vars:
+    testitem:
+      loadSpread: '1'
+    my_idx: 0
+  vars_files:
+    - "./hfrdops.yml"
+  tasks:
+    - set_fact:
+        starttime: "{{ ansible_date_time }}"
+        status_flag: "Success"
+        runningjobs: "{{ [] }}"
+        uid: "{{ uid }}"
+        req_id: "{{ reqId }}"
+        orgName: "{{ orgName }}"
+        orgCertsFile: "{{ orgCertsFile }}"
+        channels: "{{ channels }}"
+        contentrepo: "{{ contentrepo }}"
+
+    - set_fact:
+        work_dir: "{{ playbook_dir }}/run{{ req_id }}"
+        kubepath: "{{ playbook_dir }}/vars/kubeconfig"
+
+    - name: Create working directory
+      file:
+        path: "{{ work_dir }}/kube"
+        state: "{{ item }}"
+      with_items:
+        - absent
+        - directory
+
+    - name: Get certs file
+      command: >-
+        cp "{{ contentrepo+'/'+uid+'/'+req_id }}/{{ item }}"
+        "{{ work_dir }}/{{ item }}"
+      with_items:
+        - certs.tgz
+        - "{{ orgCertsFile }}.tgz"
+      ignore_errors: yes
+
+    - include_tasks: processkubeconfig.yml
+
+    - name: Save kubeconfig files
+      command: >-
+        cp -r {{ playbook_dir }}/vars {{ contentrepo }}/{{ uid }}/{{ req_id }}
+
+    - name: Create storage spec for this test
+      template:
+        src: "./templates/{{ item }}.j2"
+        dest: "{{ work_dir }}/{{ item }}.yml"
+      with_items:
+        - pvc
+        # - utils
+        - certssetup
+
+    - name: Save these deployment files
+      command: >-
+        cp {{ work_dir }}/{{ item }}.yml {{ contentrepo }}/{{ uid }}/{{ req_id }}/{{ item }}.yml
+      with_items:
+        - pvc
+        # - utils
+        - certssetup
+
+    - name: Create storage space for the test
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} apply
+        -f {{ work_dir }}/pvc.yml
+
+    - name: Query persistent volume status
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get -o=custom-columns=STATUS:.status.phase --no-headers
+        pvc {{ pvcname | default("storage-"+req_id) }}
+      register: pvcstatus
+      until: pvcstatus.stdout.find("Bound") >= 0
+      delay: 15
+      retries: 1000
+      tags: "querypvc"
+
+    - name: Get k8s node external IP
+    # TODO: hardcoded the get the first k8s node's external ip
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="ExternalIP")].address }'
+      register: nodeIP
+
+    - name: Get k8s node internal ip when external ip is empty
+    # TODO: hardcoded to get the first node's internal ip
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="InternalIP")].address }'
+      register: nodeInternalIP
+      failed_when: nodeInternalIP.stdout == ""
+      when: nodeIP.stdout == ""
+
+    - name: reset nodeIP if nodeIP(external ip is empty)
+      set_fact:
+          nodeIP: "{{ nodeInternalIP }}"
+      when: nodeIP.stdout == ""
+
+    - name: Update chartpath page
+      template:
+        src: "./templates/chartpath.j2"
+        dest: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/chartpath"
+
+    - name: Start up the pod to get certs uploaded
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} apply
+        -f {{ work_dir }}/certssetup.yml
+
+    - name: Query certs pod status
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} get
+        -o=custom-columns=STATUS:.status.phase
+        pod fabriccertspod-{{req_id}}
+      register: certsstatus
+      until: certsstatus.stdout.find("Running") >= 0
+      retries: 5
+      delay: 10
+
+    - name: Copy certs onto the persistent volume
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        cp {{ work_dir }}/certs.tgz {{ work_dir }}/{{ orgCertsFile }}.tgz  fabriccertspod-{{ req_id }}:/fabric
+
+    - name: Extract all certs onto the persistent volume
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        exec fabriccertspod-{{ req_id }} -c task-pv-container-{{ req_id }}
+        -- tar -C /fabric -xzvf /fabric/certs.tgz; tar -C /fabric -xzvf /fabric/{{ orgCertsFile }}.tgz
+
+    - name: Setup container command params
+        set_fact:
+          cmd_params: "{{ [] + hfrdops[opname].cmd }}"
+    - name: Add common parameters to the command
+        set_fact:
+          cmd_params: "{{ cmd_params + ['--orgName', orgName ] + ['--channels', channels] }}"
+
+    - name: Set up command and arg string
+      set_fact:
+        cmd_params: >-
+            {{ cmd_params | join('","') }}
+
+    - debug:
+        msg: "{{ cmd_params }}"
+
+    - name: Generate k8s job specs
+      template:
+        src: "./templates/testjob.j2"
+        dest: "{{ work_dir }}/job{{ my_idx }}.yml"
+
+    - name: Save the job deployment file
+      command: >-
+        cp {{ work_dir }}/job{{ my_idx }}.yml
+        {{ contentrepo }}/{{ uid }}/{{ req_id }}/job{{ my_idx }}.yml
+
+    - name: Run command to add orgs into existing channels
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} apply
+        -f {{ work_dir }}/job{{ my_idx }}.yml
+
+    - name: Build jobitem used to check job status
+      set_fact:
+        jonitem: [{'name':'Add org ' + orgName + 'into existing channels', 'operation':'ADD_ORG',
+      'idx':my_idx, 'loadSpread':testitem.loadSpread}]
+    - include_tasks: jobstatuscheck.yml

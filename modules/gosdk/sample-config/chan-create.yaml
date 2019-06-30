@@ -1,0 +1,23 @@
+Channels:
+  Create:
+    -
+      NamePrefix: channel
+      Count: 5
+      Consortium: SampleConsortium
+      PeerOrgNames:
+        - org1
+        - org2
+    -
+      NamePrefix: mychannel
+      Count: 5
+      Consortium: SampleConsortium
+      PeerOrgNames:
+        - org1
+        - org2
+    -
+      NamePrefix: hfrdchannel
+      Count: 5
+      Consortium: SampleConsortium
+      PeerOrgNames:
+        - org1
+        - org2

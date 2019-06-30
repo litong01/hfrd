@@ -1,0 +1,138 @@
+- debug:
+    msg: "outer item={{ testitem }}"
+
+- name: Init chaincode param variables
+  set_fact:
+    complex_params: []
+    complex_params_string: ""
+    transientmap_params: []
+    transientmap_param_keys_string: ""
+    transientmap_param_values: []
+    transientmap_param_values_string: ""
+
+- name: Get the op name
+  set_fact:
+    opname: "{{ testitem.operation | lower }}"
+
+- name: Use custom container
+  set_fact:
+    opname: "{{ opname + '_custom' }}"
+  when: testitem.container is defined
+
+- name: Verify the operation name is valid
+  fail:
+    msg: "The operation {{ testitem.operation }} is not supported"
+  when: hfrdops[opname] is not defined
+
+- name: Setup container command params
+  set_fact:
+    cmd_params: "{{ [] + hfrdops[opname].cmd }}"
+
+- name: Add common test parameters to the command
+  set_fact:
+    cmd_params: "{{ cmd_params + ['--'+item.key, item.value] }}"
+  when: " '--'+item.key in  hfrdcommon.params "
+  with_dict: "{{ testitem }}"
+
+- name: Add operate relevant parameters to the command
+  set_fact:
+    cmd_params: "{{ cmd_params + ['--'+item.key, item.value] }}"
+  when: "  not item.key == 'chaincodeParams' and not item.key == 'commandParams' and not item.key == 'transientMapParams' "
+  with_dict: "{{ testitem.parameters }}"
+
+- name: Load chaincode invoke or execute command parameters
+  set_fact:
+    complex_params: "{{ item.value }}"
+  when: " item.key == 'chaincodeParams' or item.key == 'commandParams' "
+  with_dict: "{{ testitem.parameters }}"
+
+- name: Add literal/stringPattern parameters to complex_params_string
+  set_fact:
+    complex_params_string: "{{ complex_params_string + paramItem.type + '~~~' + paramItem.value + '#' }}"
+  when: paramItem.min is not defined
+  loop: "{{ complex_params }}"
+  loop_control:
+    loop_var: paramItem
+
+- name: Add intRange/payloadRange parameters to complex_params_string
+  set_fact:
+    complex_params_string: "{{ complex_params_string +  paramItem.type + '~~~' + paramItem.min + '~~~' + paramItem.max + '#' }}"
+  when: paramItem.min is defined
+  loop: "{{ complex_params }}"
+  loop_control:
+    loop_var: paramItem
+
+- name: Add complex parameter to the command
+  set_fact:
+    cmd_params: "{{ cmd_params + ['--'+item.key,complex_params_string] }}"
+  when: " item.key == 'chaincodeParams' or item.key == 'commandParams' "
+  with_dict: "{{ testitem.parameters }}"
+
+- name: Load chaincode transientMap parameters
+  set_fact:
+    transientmap_params: "{{ item.value }}"
+  when: " item.key == 'transientMapParams' "
+  with_dict: "{{ testitem.parameters }}"
+
+- name: Load transientMap keys and build transientmap_param_keys_string
+  set_fact:
+    transientmap_param_keys_string: "{{ transientmap_param_keys_string + item.key + ',' }}"
+  with_items: "{{ transientmap_params }}"
+
+- name: Load transientMap values
+  set_fact:
+    transientmap_param_values: "{{ transientmap_param_values + [ item.value ] }}"
+  with_items: "{{ transientmap_params }}"
+
+- name: Load transientMap values and build transienmap_param_values_string
+  include_tasks: parsetransient.yml
+  loop: "{{ transientmap_param_values }}"
+  loop_control:
+    loop_var: transientmap_value
+
+- name: Add transientmap value array to the command
+  set_fact:
+    cmd_params: "{{ cmd_params + ['--dynamicTransientMapKs',transientmap_param_keys_string] + ['--dynamicTransientMapVs',transientmap_param_values_string] }}"
+  when: " item.key == 'transientMapParams' "
+  with_dict: "{{ testitem.parameters }}"
+
+- name: Set up command and arg string
+  set_fact:
+    cmd_params: >-
+     {{ cmd_params | join('","') }}
+
+- debug:
+    msg: "{{ cmd_params }}"
+
+- name: Generate k8s job specs
+  template:
+    src: "./templates/testjob.j2"
+    dest: "{{ work_dir }}/job{{ my_idx }}.yml"
+
+- name: Save the job deployment file
+  command: >-
+    cp {{ work_dir }}/job{{ my_idx }}.yml
+    {{ contentrepo }}/{{ uid }}/{{ req_id }}/job{{ my_idx }}.yml
+
+- name: Run test "{{ testitem.name }}"
+  command: >-
+    kubectl --kubeconfig {{ kubepath }} apply
+    -f {{ work_dir }}/job{{ my_idx }}.yml
+
+- name: adding to parallel job list
+  set_fact:
+    runningjobs: |
+      {{ runningjobs + [{'name':testitem.name, 'operation':testitem.operation,
+      'idx':my_idx, 'loadSpread':testitem.loadSpread}] }}
+
+- include_tasks: jobstatuscheck.yml
+  loop: "{{ runningjobs }}"
+  loop_control:
+    loop_var: jobitem
+    index_var: jobidx
+  when: (testitem.waitUntilFinish | default(true)) == true
+
+- name: reset the parallel job list
+  set_fact:
+    runningjobs: "{{ [] }}"
+  when: (testitem.waitUntilFinish | default(true)) == true

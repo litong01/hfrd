@@ -1,0 +1,27 @@
+# IBP HFRD convert  Container
+# To build this image, run the following command:
+#   docker build  -f Dockerfile.in -t hfrdibp  .
+
+FROM ubuntu:bionic
+
+ENV CA_VERSION=1.1.0
+ENV ARCH=linux-OS_ARCH
+ENV ARCH=linux-amd64
+
+RUN apt update -y && apt upgrade -y && apt install -y \
+	curl \
+	python \
+	python-setuptools \
+	python-pip \
+	python-yaml \
+	&& rm -rf /var/lib/apt/lists/* \
+	&&  pip install requests  \
+	&& mkdir /input \
+	&& mkdir /output 
+
+RUN curl https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric-ca/hyperledger-fabric-ca/linux-amd64-1.1.0/hyperledger-fabric-ca-linux-amd64-1.1.0.tar.gz | tar xz \
+	&& mv bin/fabric-ca-client /usr/local/bin
+
+COPY docker-entrypoint.sh docker-entrypoint.sh
+COPY scripts scripts
+COPY scripts/network.json  /input

@@ -1,0 +1,42 @@
+# Docker Jenkins Slave
+#
+# This is the container which contains tools to deal with ibm
+# bluemix services
+#
+# To create the docker image:
+#    docker build -t bxbox_alpine -f bxbox_alpine .
+# To start a daemon container:
+#    docker run -it --rm --name bxbox -d bxbox_alpine
+# To exec a bash script:
+#    docker exec -it bxbox /path/bash-script.sh
+#
+FROM alpine
+
+ARG user=ubuntu
+ARG uid=1000
+ARG gid=1000
+
+RUN set -eux; \
+    apk add --no-cache --update bash curl jq python py-pip git openssh \
+    && pip install requests \
+    && pip install  pyyaml \
+    && curl -fsSL -o /var/cache/apk/bx.tar.gz https://clis.ng.bluemix.net/download/bluemix-cli/0.6.6/linux64 \
+    && cd /var/cache/apk && tar -xf /var/cache/apk/bx.tar.gz \
+    && chmod 755 /var/cache/apk/Bluemix_CLI/install_bluemix_cli \
+    && /var/cache/apk/Bluemix_CLI/install_bluemix_cli \
+    && curl https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric-ca/hyperledger-fabric-ca/linux-amd64-1.1.0/hyperledger-fabric-ca-linux-amd64-1.1.0.tar.gz | tar xz \
+	&& mv bin/fabric-ca-client /usr/local/bin \
+    && mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2 \
+    && addgroup -g ${gid} ${user} \
+    && adduser -D -u ${uid} -G ${user} ${user} \
+    && mkdir -p /opt/fabrictest/output /opt/src  /opt/hfrd/contentRepo \
+    && rm -rf /var/cache/apk/*
+
+ADD pipelines /opt/src
+RUN chown -R ${uid}:${gid} /opt/src /opt/fabrictest /opt/hfrd/contentRepo
+ENV HOME /opt/fabrictest
+ENV WORKDIR /opt/fabrictest
+WORKDIR /opt/fabrictest
+USER ${user}
+
+CMD []

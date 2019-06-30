@@ -1,0 +1,160 @@
+<html>
+<head>
+    <link href="/static/css/index.css" type="text/css" rel="stylesheet" />
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/ibp/network.js"></script>
+    <script>
+        const uid = "{{ .uid }}"
+        const jenkinsBase = "{{ .jenkinsBase }}"
+        const apacheBase = "{{ .apacheBase }}"
+        updateIbpList(uid, jenkinsBase, apacheBase)
+    </script>
+</head>
+<body>
+<div class="bx--grid">
+    <section id="nav-placeholder"></section>
+    <div class="bx--row">
+        <div class="bx--col-xs-6 bx--col-md-4">
+            <div style="padding: 20px" class="thestyle">
+                <h4 class="bx--data-table-v2-header" style="margin-bottom: 2rem">Create IBP Network</h4>
+                <form id="ibp">
+                    <!--Bluemix environment: staging, production-->
+                    <div class="bx--form-item">
+                        <span class="bx--file" data-file>
+                            <strong class="bx--label">Bluemix environment: </strong>
+                            <select id="env" class="bx--select" style="display: inline">
+                                <option value="bxstaging">Bluemix staging</option>
+                                <option value="bxproduction">Bluemix production</option>
+                            </select>
+                        </span>
+                        <div data-file-container class="bx--file-container"></div>
+                    </div>
+                    <!--IBP plan name: starter plan, enterprise plan-->
+                    <div class="bx--form-item">
+                        <div class="bx--file" data-file>
+                            <strong class="bx--label">Plan name: </strong>
+                            <select id="plan" class="bx--select" style="display: inline">
+                                <option value="sp">Starter Plan</option>
+                                <option value="ep">Enterprise Plan</option>
+                            </select>
+                            <div data-file-container class="bx--file-container"></div>
+                        </div>
+                    </div>
+                    <!--Specific to EP-->
+                    <div id="ep" style="display: none">
+                        <!--location id-->
+                        <div class="bx--form-item">
+                            <div class="bx--file" data-file>
+                                <strong class="bx--label">Location id: </strong>
+                                <select id="location" class="bx--select" style="display: inline">
+                                </select>
+                                <img src="/static/images/progress.gif" class="progress" 
+                                    style="display: none;vertical-align:middle" height=40 width=40>
+                                <div data-file-container class="bx--file-container"></div>
+                            </div>
+                        </div>
+                        <!--number of orgs-->
+                        <div class="bx--form-item">
+                            <div class="bx--file" data-file>
+                                <strong class="bx--label">Number of Organizations: </strong>
+                                <select id="numOfOrgs" class="bx--select" style="display: inline">
+                                    <option value=1>1</option>
+                                    <option value=2>2</option>
+                                </select>
+                                <div data-file-container class="bx--file-container"></div>
+                            </div>
+                        </div>
+                        <!--number of peers per org-->
+                        <div class="bx--form-item">
+                            <div class="bx--file" data-file>
+                                <strong class="bx--label">Number of Peers: </strong>
+                                <select id="numOfPeers" class="bx--select" style="display: inline">
+                                    <option value=1>1</option>
+                                    <option value=2>2</option>
+                                    <option value=3>3</option>
+                                </select>
+                                <div data-file-container class="bx--file-container"></div>
+                            </div>
+                        </div>
+                        <!--ledger type: levelDB, couch-->
+                        <div class="bx--form-item">
+                            <div class="bx--file" data-file>
+                                <strong class="bx--label">Ledger type: </strong>
+                                <select id="ledgerType" class="bx--select" style="display: inline">
+                                    <option value="levelDB">levelDB</option>
+                                    <option value="couch">couchDB</option>>
+                                </select>
+                                <div data-file-container class="bx--file-container"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button id="net" type="submit" class="bx--btn bx--btn--sm bx--btn--primary">Create Network</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="bx--col-xs-18 bx--col-md-8">
+            <div class="bx--data-table-v2-container" data-table-v2>
+                <h4 class="bx--data-table-v2-header">Created IBP Network List</h4>
+                <table class="bx--data-table-v2 bx--data-table-v2--zebra">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="bx--table-header-label">Network ID</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Log</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Plan</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">LocationID</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Environment</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Created At</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Operation</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="ibp-services"></tbody>
+                </table>
+                <hr>
+                <h4 class="bx--data-table-v2-header">Pending IBP Network Requests</h4>
+                <table class="bx--data-table-v2 bx--data-table-v2--zebra">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="bx--table-header-label">Submited at</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Log</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Plan</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-lable">LocationID</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Environment</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="ibp-pending"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $("#nav-placeholder").load("/static/html/navigator.html")
+</script>
+</html>

@@ -1,0 +1,66 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginxsvc
+  labels:
+    app: nginx
+spec:
+  type: NodePort
+  ports:
+  - port: 443
+    protocol: TCP
+    name: https0
+    nodePort: 30443
+  selector:
+    app: nginx
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: my-nginx
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      volumes:
+      - name: secret-volume
+        secret:
+           secretName: tlscerts
+      - name: auth-volume
+        configMap:
+          name: hfrdsettings
+          items:
+          - key: htpasswd
+            path: htpasswd
+      - name: configmap-volume
+        configMap:
+          name: hfrdsettings
+          items:
+          - key: nginxconf
+            path: default.conf
+      - name: hfrdstore
+        persistentVolumeClaim:
+          claimName: longrunpvc
+      containers:
+      - name: nginxhttps
+        image: nginx
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 443
+        - containerPort: 80
+        - containerPort: 9696
+        - containerPort: 9797
+        volumeMounts:
+        - mountPath: /etc/nginx/ssl
+          name: secret-volume
+        - mountPath: /etc/nginx/auth
+          name: auth-volume
+        - mountPath: /etc/nginx/conf.d
+          name: configmap-volume 
+        - mountPath: "/contentRepo"
+          subPath: "content"
+          name: "hfrdstore"

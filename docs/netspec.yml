@@ -1,0 +1,33 @@
+peer_db: "CouchDB"
+tls: false
+logging_level: "DEBUG"
+k8s:
+  exposeserviceport: False
+  storageclass: "default"
+  storagecapacity: "2Gi"
+  shared_storage: false
+  mem_req: "512Mi"
+  mem_limit: "1024Mi"
+  cpu_req: "0.1"
+  cpu_limit: "0.2"
+
+network:
+  cas: ["ca1st.orga", "ca1st.orgb", "ca1st.orgc"]
+  peers: ["anchor@peer1st.orga", "anchor@peer1st.orgb"]
+  orderers: ["orderer1st.orgc"]
+  zookeepers: ["zookeeper1st","zookeeper2nd","zookeeper3rd"]
+  kafkas: ["kafka1st","kafka2nd","kafka3rd"]
+
+baseimage_tag: "amd64-1.3.0"
+helper_tag: "amd64-0.4.14"
+
+ca:
+  admin: "admin"
+  adminpw: "adminpw"
+  image_tag: "amd64-1.3.0"
+
+repo:
+  url: "hyperledger/"
+  username: ""
+  password: ""
+  bin: "https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-amd64-1.3.0/hyperledger-fabric-linux-amd64-1.3.0.tar.gz"

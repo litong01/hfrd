@@ -1,0 +1,54 @@
+- debug:
+    msg: "outer item={{ jobitem }}"
+
+- name: Query test "{{ jobitem.name }}" status
+  command: >-
+    kubectl --kubeconfig {{ kubepath }} get --no-headers
+    -o=custom-columns=S:.status.succeeded,F:.status.failed
+    job job-{{ req_id }}-{{ jobitem.idx }}
+  register: jobStatus
+  until: >-
+    (jobStatus.stdout|trim|length) > 0 and
+    ((jobStatus.stdout.split()[0]|trim|int) == (jobitem.loadSpread|trim|int) or
+    (jobStatus.stdout.split()[-1]|trim|int) >= 3)
+  retries: 1000
+  delay: 30
+
+- name: Determine the operation status
+  set_fact:
+    status_flag: "Success"
+  when: (jobStatus.stdout.split()[0]|trim|int) == (jobitem.loadSpread|trim|int)
+
+- name: Determine the operation status
+  set_fact:
+    status_flag: "Failure"
+  when: (jobStatus.stdout.split()[-1]|trim|int) >= 3
+
+- name: Get all pod names that belong to job
+  shell:
+    kubectl --kubeconfig {{ kubepath }}
+    get pods | grep job-{{ req_id }}-{{ jobitem.idx }} | awk '{print $1}'
+  register: pod_names_output
+
+- name: Creates directory
+  file:
+    path: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/logs"
+    state: directory
+  when: status_flag != "Success"
+
+- name: Get pod logs when there is an error
+  shell:
+    kubectl --kubeconfig {{ kubepath }}
+    logs --tail 100 {{ item }} > {{ contentrepo }}/{{ uid }}/{{ req_id }}/logs/{{ item }}.out
+  with_items:
+    - "{{ pod_names_output.stdout_lines }}"
+  when: status_flag != "Success"
+  ignore_errors: yes
+
+- debug:
+    msg: "Test {{ jobitem.name }} / {{ jobitem.operation }} FAILED, Please check PODs({{ pod_names_output.stdout_lines }}) logs."
+  when: status_flag != "Success"
+
+- fail:
+    msg: "test has failed."
+  when: status_flag != "Success" and continueAfterFail == false

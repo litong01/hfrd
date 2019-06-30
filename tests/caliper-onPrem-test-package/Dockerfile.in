@@ -1,0 +1,83 @@
+# PTE Test Runtime Container
+FROM ubuntu:bionic
+
+ARG uid=1000
+ARG gid=1000
+
+ENV CA_VERSION=1.1.0
+ENV GOPATH /home/TEST_USER/go
+ENV ARCH=linux-OS_ARCH
+
+RUN apt update -y && apt upgrade -y && apt install -y \
+	vim \
+	curl \
+	libpkcs11-helper1 \
+	build-essential \
+	jq \
+	bc \
+	python \
+	psmisc \
+	tree \
+	git \
+	sshpass \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& mkdir -p /opt/fabrictest
+
+RUN curl https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric-ca/hyperledger-fabric-ca/${ARCH}-${CA_VERSION}/hyperledger-fabric-ca-${ARCH}-${CA_VERSION}.tar.gz | tar xz \
+	&& mv bin/fabric-ca-client /usr/local/bin
+
+RUN if [ "TEST_USER" != "root" ]; then	\
+	groupadd -g ${gid} TEST_USER ; \
+	useradd -m -p $(openssl passwd -crypt TEST_USER) -u ${uid} -g TEST_USER -s /bin/bash TEST_USER ; \
+	fi
+
+ENV HOME /home/TEST_USER
+
+WORKDIR $HOME
+
+# install Node and NPM
+ENV NVM_DIR=/home/TEST_USER/.nvm
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+
+RUN . $NVM_DIR/nvm.sh \
+	&& nvm install lts/carbon
+
+# clone repos
+RUN cd /home/TEST_USER \
+	&& git clone https://github.com/hyperledger/fabric-sdk-node \
+	&& cd fabric-sdk-node; git checkout release-1.1; cd .. \
+	&& git clone https://github.com/hyperledger/fabric.git \
+	&& cd fabric; git checkout a6d1ec2; cd .. \
+	&& git clone https://github.com/hyperledger/fabric-test \
+	# TODO: use release-1.1 branch
+	# checkout a specific commit id on master branch because https://jira.hyperledger.org/browse/FAB-10629
+	# is only fixed on master branch so far.
+	&& cd fabric-test; git checkout d427304
+
+# install node packages
+RUN . $NVM_DIR/nvm.sh \
+	&& cd fabric-sdk-node && npm install -g gulp && npm install && gulp ca
+#&& npm uninstall grpc && npm install grpc@1.10.1
+
+# place PTE and chaincode
+RUN cp -r fabric-test/tools/PTE fabric-sdk-node/test/PTE
+RUN mkdir -p $GOPATH/src/github.com/hyperledger/ \
+    && mv fabric  /home/TEST_USER/fabric-test/  \
+	&& mv /home/TEST_USER/fabric-test/ $GOPATH/src/github.com/hyperledger
+
+# clone repos of caliper 
+RUN cd /home/TEST_USER \
+	&& git clone https://github.com/shw8927/caliper.git 
+RUN . $NVM_DIR/nvm.sh \
+    && cd /home/TEST_USER/caliper \
+    && npm install	
+
+# copy workloads and other stuff
+COPY docker-entrypoint.sh docker-entrypoint.sh
+COPY hfrd_test.sh hfrd_test.sh
+COPY hfrd_test.cfg hfrd_test.cfg
+COPY scripts scripts
+COPY conf conf
+
+RUN	chown -R ${uid}:${gid} /home/TEST_USER
+USER TEST_USER

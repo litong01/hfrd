@@ -1,0 +1,117 @@
+---
+CHANNEL_CREATE:
+  name: "create-channel"
+  operation: "CHANNEL_CREATE"
+  iterationCount: 5
+  iterationInterval: 0s
+  loadSpread: 1
+  waitUntilFinish: true
+  parameters:
+    connectionProfile: orga
+    channelNamePrefix: "demochannel"
+    prefixOffset: 0
+    channelConsortium: "FabricConsortium"
+    channelOrgs: "orga,orgb"
+    ordererName: orderer1st-orgc
+    logLevel: DEBUG
+CHANNEL_JOIN:
+  name: "join-channel"
+  operation: "CHANNEL_JOIN"
+  iterationCount: 5
+  iterationInterval: 1s
+  loadSpread: 1
+  waitUntilFinish: true
+  parameters:
+    connectionProfile: orga
+    channelNamePrefix: "demochannel"
+    prefixOffset: 0
+    peers: "peer1st-orga"
+    ordererName: orderer1st-orgc
+    logLevel: DEBUG
+CHAINCODE_INSTALL:
+  name: "install-chaincode"
+  operation: "CHAINCODE_INSTALL"
+  iterationCount: 5
+  iterationInterval: 1s
+  loadSpread: 1
+  waitUntilFinish: true
+  parameters:
+    connectionProfile: orga
+    chaincodeNamePrefix: "mysamplecc-"
+    prefixOffset: 0
+    chaincodeVersion: "v1"
+    path: "chaincode/samplecc"
+    peers: "peer1st-orga"
+    logLevel: DEBUG
+CHAINCODE_INSTANTIATE:
+  name: "instantiate-chaincode"
+  operation: "CHAINCODE_INSTANTIATE"
+  iterationCount: 1
+  iterationInterval: 1s
+  loadSpread: 1
+  waitUntilFinish: true
+  parameters:
+    connectionProfile: orga
+    chaincodeName: "mysamplecc-0"
+    prefixOffset: 0
+    chaincodeVersion: "v1"
+    path: "chaincode/samplecc"
+    channelNamePrefix: "demochannel"
+    peers: "peer1st-orga"
+    logLevel: DEBUG
+CHAINCODE_INVOKE:
+  name: "execute-cc"
+  operation: "CHAINCODE_INVOKE"
+  iterationCount: 100
+  iterationInterval: 2r
+  loadSpread: 5
+  waitUntilFinish: true
+  parameters:
+    connectionProfile: orga
+    channelName: "demochannel0"
+    chaincodeName: "mysamplecc-0"
+    queryOnly: false
+    peers: "peer1st-orga"
+    chaincodeParams:
+      - type: "literal"
+        value: "invoke"
+      - type: "literal"
+        value: "put"
+      - type: "stringPattern"
+        value: "account[0-9]"
+      - type: "stringPattern"
+        value: "account[a-z]"
+#    transientParams:
+#      - key: "marble"
+#        value:
+#          - type: "sequencialString"
+#            key: "name"
+#            value: "marble"
+#          - type: "literal"
+#            key: "color"
+#            value: "blue"
+#      - key: "testpvt"
+#        value:
+#          - type: "sequencialString"
+#            key: "name"
+#            value: "test"
+#          - type: "literal"
+#            key: "purpose"
+#            value: "testpvt"
+    logLevel: DEBUG
+EXECUTE_COMMAND:
+  name: "execute-command"
+  operation: "EXECUTE_COMMAND"
+  loadSpread: 1
+  parameters:
+      commandName: "/fabric/src/chaincode/hfrd_perf_tools.sh"
+      commandParams:
+        - type: "literal"
+          value: "-n"
+        - type: "literal"
+          value: "ncec5af5d31cb4b8fb42a61b73a482b64"
+        - type: "literal"
+          value: "-r"
+        - type: "literal"
+          value: "23423423-t"
+      logLevel: DEBUG

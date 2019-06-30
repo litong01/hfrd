@@ -1,0 +1,34 @@
+hfrdcommon:
+  params: [ "--iterationCount","--iterationInterval","--ignoreErrors", "--delayTime"]
+hfrdops:
+  channel_create:
+    cmd: ["gosdk", "channel", "create"]
+    params: ["--connectionProfile", "--channelNamePrefix", "--prefixOffset", "--channelConsortium", "--channelOrgs", "--ordererName"]
+  channel_join:
+    cmd: ["gosdk", "channel", "join"]
+    params: ["--connectionProfile", "--channelNamePrefix", "--prefixOffset","--peers", "--ordererName"]
+  channel_update:
+    cmd: ["gosdk", "channel", "update"]
+    params: ["--connectionProfile", "--channelNamePrefix", "--peers", "--ordererOrgName", "--ordererName", "--batchTimeout", "--maxMessageCount", "--absoluteMaxBytes","--anchorPeers"]
+  channel_query:
+    cmd: ["gosdk", "channel", "query"]
+    params: ["--connectionProfile", "--channelNamePrefix", "--peers"]
+  channel_add:
+    cmd: ["gosdk", "channel", "add"]
+    params: ["--orgName","--channels"]
+  chaincode_install:
+    cmd: ["gosdk", "chaincode", "install"]
+    params: ["--connectionProfile", "--chaincodeNamePrefix", "--chaincodeVersion", "--path", "--peers"]
+  chaincode_instantiate:
+    cmd: ["gosdk", "chaincode", "instantiate"]
+    params: ["--connectionProfile", "--chaincodeNamePrefix", "--chaincodeVersion", "--path", "--channelName","--peers"]
+  chaincode_invoke:
+    cmd: ["gosdk", "chaincode", "invoke"]
+    params: ["--connectionProfile", "--channelName", "--queryOnly", "--peers", "--chaincodeParams"]
+  execute_command:
+    cmd: ["gosdk","execute", "command"]
+    params: ["--commandName", "--commandParams"]
+  execute_command_custom:
+    cmd: ["/fabric/bin/gosdk","execute", "command"]
+    params: ["--commandName", "--commandParams"]
+

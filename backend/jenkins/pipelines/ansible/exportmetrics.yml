@@ -1,0 +1,29 @@
+- name: Creates directory
+  file:
+    path: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/metrics"
+    state: directory
+
+- name: calculate prometheus step interval
+  shell: >-
+    expr {{ endTime_tests.stdout }} / 10 - {{ startTime_tests.stdout }} / 10
+  register: metrics_step
+
+- name: Export metrics data
+  uri:
+    url: "http://{{ nodeIP.stdout }}:{{ prometheusNodePort.stdout }}/api/v1/query_range?query={{ metricsitem }}&start={{ startTime_tests.stdout }}&end={{ endTime_tests.stdout }}&step={{ metrics_step.stdout }}s"
+    dest: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/metrics/{{ metricsitem }}.json"
+  loop: "{{ metrics }}"
+  loop_control:
+    loop_var: metricsitem
+  ignore_errors: yes
+
+- name: Aggregate metrics data
+  command: >-
+      python utils/report_gen.py {{ req_id }} {{ contentrepo }}/{{ uid }}/{{ req_id }}/metrics/
+  ignore_errors: yes
+
+- name: Export grafana dashboard as pdf
+  uri:
+    url: "http://{{ nodeIP.stdout }}:{{ reporterNodePort.stdout }}/api/v5/report/hfrd01?var-TargetTestId={{ reqId }}&orgId=1&from={{ startTime_tests.stdout }}000&to={{ endTime_tests.stdout }}000&tz=UTC%2B02%3A00"
+    dest: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/metrics/{{ req_id }}-dashboard.pdf"
+  ignore_errors: yes

@@ -1,0 +1,77 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: "monitor-{{ req_id }}"
+  labels:
+    k8s-app: "monitor-{{ req_id }}"
+spec:
+  volumes:
+  - name: "pv-storage-{{ req_id }}"
+    persistentVolumeClaim:
+{% if pvcname is defined %}
+      claimName: {{ pvcname }}
+{% else %}
+      claimName: "storage-{{ req_id }}"
+{% endif %}
+  containers:
+  - name: prometheus
+    image: prom/prometheus:latest
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 9090
+    volumeMounts:
+    - mountPath: "/etc/prometheus"
+      name: "pv-storage-{{ req_id }}"
+      subPath: "monitor"
+  - name: pushgateway
+    image: prom/pushgateway:latest
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 9091
+  - name: grafana
+    image: grafana/grafana:latest
+    imagePullPolicy: IfNotPresent
+    env:
+    - { name: "GF_AUTH_ANONYMOUS_ENABLED", value: "True" }
+    ports:
+    - containerPort: 3000
+    volumeMounts:
+    - mountPath: "/var/lib/grafana/dashboards"
+      name: "pv-storage-{{ req_id }}"
+      subPath: "grafana/dashboards"
+    - mountPath: "/etc/grafana/provisioning"
+      name: "pv-storage-{{ req_id }}"
+      subPath: "grafana/provisioning"
+  - name: grafana-reporter
+    image: hfrd/grafana-reporter:latest
+    command: ["/go/bin/grafana-reporter"]
+    args: ["-ip","monitor-service-{{ req_id }}:3000"]
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 8686
+  nodeSelector:
+    beta.kubernetes.io/arch: amd64
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: "monitor-service-{{ req_id }}"
+spec:
+  selector:
+    k8s-app: "monitor-{{ req_id }}"
+  type: NodePort
+  ports:
+  - { name: "grafana", port: 3000}
+  - { name: "grafana-reporter", port: 8686}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: "monitor-service-int-{{ req_id }}"
+spec:
+  selector:
+    k8s-app: "monitor-{{ req_id }}"
+  type: NodePort
+  ports:
+  - { name: "pushgateway", port: 9091}
+  - { name: "prometheus", port: 9090}

@@ -1,0 +1,13 @@
+image: hfrd/server:latest
+tags: ['latest']
+manifests:
+  -
+    image: hfrd/server:s390x-latest
+    platform:
+      architecture: s390x
+      os: linux
+  -
+    image: hfrd/server:amd64-latest
+    platform:
+      architecture: amd64
+      os: linux

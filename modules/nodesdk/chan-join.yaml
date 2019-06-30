@@ -1,0 +1,13 @@
+Channels:
+   Join:
+      peerUrl: n509afa3a3f6d42dba96da98de9f43dde-org1-peer1.dev.blockchain.ibm.com
+      peerPort: 31002
+      channelName: org2-channel-1
+      orgName: org1
+      ordererNum: 0
+      isRemote: false
+      peerName: org1-peer1
+      caCertFile: ./certs/cacert.pem
+      cprofDir: ./config
+      srvCertFile: ./certs/srvcert.pem
+

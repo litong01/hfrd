@@ -1,0 +1,105 @@
+<html>
+  <head>
+    <link href="/static/css/index.css" type="text/css" rel="stylesheet" />
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/ibp/existednetwork.js"></script>
+    <script>
+      const uid = "{{ .uid }}"
+      const jenkinsBase = "{{ .jenkinsBase }}"
+      const apacheBase = "{{ .apacheBase }}"
+      updateIbpList(uid, jenkinsBase, apacheBase)
+      $( document ).ready(function() {
+       console.log( "ready!" );
+       $("#test").click(function (event) {
+        multipartformpost("testform","test",
+          "/v1/{{ .uid }}/ibpcerts", event)
+       })
+      });
+    </script>
+  </head>  
+  <body>
+  <div class="bx--grid">
+    <section id="nav-placeholder"></section>
+    <div class="bx--row">
+      <div class="bx--col-xs-6 bx--col-md-4">
+        <div style="padding: 20px" class="thestyle">
+          <form id="testform" action="/v1/{{ .uid }}/network/ibpCerts" method="post" enctype="multipart/form-data">
+            <div class="bx--form-item">
+              <strong class="bx--label">IBP network service config file (generated via Quality App)</strong>
+              <div class="bx--file" data-file>
+                <label
+                        for="service_config"
+                        class="bx--file-btn bx--btn bx--btn--secondary"
+                        role="button"
+                        tabindex="0">Add service_config.json file </label>
+                <input
+                        type="file"
+                        class="bx--file-input"
+                        id="service_config"
+                        name="service_config"
+                        data-file-uploader
+                        data-target="[data-file-container]"
+                        multiple
+                />
+                <span class="file-label"></span>
+                <div data-file-container class="bx--file-container"></div>
+              </div>
+            </div>
+
+            <div>
+              <button id="test" type="submit" class="bx--btn bx--btn--sm bx--btn--primary">Generate Certs</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="bx--col-xs-18 bx--col-md-8">
+        <div class="bx--data-table-v2-container" data-table-v2>
+          <h4 class="bx--data-table-v2-header">Completed IBP Network Certs Generation Jobs</h4>
+          <table class="bx--data-table-v2 bx--data-table-v2--zebra">
+            <thead>
+            <tr>
+              <th>
+                <span class="bx--table-header-label">Request ID</span>
+              </th>
+              <th>
+                <span class="bx--table-header-label">Network ID</span>
+              </th>
+              <th>
+                <span class="bx--table-header-label">Logs</span>
+              </th>
+              <th>
+                <span class="bx--table-header-label">Status</span>
+              </th>
+              <th>
+                <span class="bx--table-header-label">Operation</span>
+              </th>
+            </tr>
+            </thead>
+            <tbody id="ibp-certs-services" >
+            </tbody>
+          </table>
+          <hr>
+              <h4 class="bx--data-table-v2-header">Pending/Inprogress IBP Network Certs Genration Requests</h4>
+                <table class="bx--data-table-v2 bx--data-table-v2--zebra">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="bx--table-header-label">Request Id</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Log</span>
+                        </th>
+                       
+                    </tr>
+                    </thead>
+                    <tbody id="ibp-certs-pending"></tbody>
+                </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  </body>
+  <script>
+    $("#nav-placeholder").load("/static/html/navigator.html")
+</script>
+</html>

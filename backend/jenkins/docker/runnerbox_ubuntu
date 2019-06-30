@@ -1,0 +1,32 @@
+# Docker-in-Docker Fabric Test Container
+#
+# To build this image, run the following command:
+#   docker build --build-arg user=$USER \
+#      --build-arg uid=$(id -u) \
+#      --build-arg gid=$(id -g) \
+#      -f runnerbox_ubuntu -t runnerbox_ubuntu  .
+#
+FROM ubuntu:16.04
+
+ARG user=ubuntu
+ARG uid=1000
+ARG gid=1000
+
+USER root
+
+RUN apt-get -qq update \
+    && apt-get -qq -y install curl bash \
+    && groupadd -g ${gid} ${user} \
+    && mkdir -p /opt/fabrictest \
+    && useradd -d /opt/fabrictest -s /bin/bash ${user} -u ${uid} -g ${gid} \
+    && curl -sSL https://get.docker.com/ | sh \
+    && usermod -aG docker ${user}
+
+ADD pipelines /opt/src
+RUN chown -R ${uid}:${gid} /opt/src /opt/fabrictest
+ENV HOME /opt/fabrictest
+ENV WORKDIR /opt/fabrictest
+WORKDIR /opt/fabrictest
+VOLUME /var/lib/docker
+
+USER ${user}

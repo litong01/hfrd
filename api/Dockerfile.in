@@ -1,0 +1,24 @@
+FROM alpine
+
+ARG user=ubuntu
+ARG uid=1000
+ARG gid=1000
+
+USER root
+
+RUN set -eux; \
+    addgroup -g ${gid} ${user} \
+    && mkdir -p /opt/hfrd/var \
+    && adduser -D -h /opt/hfrd -s /bin/bash -u ${uid} -G ${user} ${user} \
+    && adduser ${user} ping && export GOPATH=/opt/hfrd \
+    && apk update && apk add --no-cache ca-certificates \
+    && rm -rf /var/cache/apk
+
+COPY hfrdserver /usr/local/bin/hfrdserver
+COPY static /opt/hfrd/static
+ENV HOME=/opt/hfrd \
+    WORKDIR=/opt/hfrd \
+    GIN_MODE=release
+WORKDIR $WORKDIR
+ENTRYPOINT ["hfrdserver"]
+USER ${user}

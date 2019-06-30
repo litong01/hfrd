@@ -1,0 +1,56 @@
+---
+{% if 'stable' in networkspec.baseimage_tag or 'latest' in networkspec.baseimage_tag %}
+{%   set metrics_available = true %}
+{% else %}
+{%   set atag = networkspec.baseimage_tag.split('-') %}
+{%   if atag | length > 1 %}
+{%     set metrics_available = (atag[1] is version('1.4', '>=')) %}
+{%   else %}
+{%     set metrics_available = (atag[0] is version('1.4', '>=')) %}
+{%   endif %}
+{% endif %}
+fabric:
+  peer_db: "{{ networkspec.peer_db | default('CouchDB') }}"
+  tls: {{ networkspec.tls | default(false) }}
+  consensus_type: "{{ networkspec.consensus_type | default('kafka') }}"
+  namespace: "{{ networkspec.namespace | default('default') }}"
+  generate_certs: True
+  logging_level: "{{ networkspec.logging_level | default('ERROR') }}"
+{% if metrics_available and (networkspec.exposeMetricsPort | default(false)) %}
+  metrics: true
+{% else %}
+  metrics: false
+{% endif %}
+  k8s:
+    {{ networkspec.k8s | to_nice_yaml(indent=2) | indent(4, False) }}
+{% if networkspec.orderersettings is defined %}
+  orderersettings:
+    {{ networkspec.orderersettings | to_nice_yaml(indent=2) | indent(4, False) }}
+{% endif %}
+{% if networkspec.raftsettings is defined %}
+  raftsettings:
+    {{ networkspec.raftsettings | to_nice_yaml(indent=2) | indent(4, False) }}
+{% endif %}
+{% if networkspec.peersettings is defined %}
+  peersettings:
+    {{ networkspec.peersettings | to_nice_yaml(indent=2) | indent(4, False) }}
+{% endif %}
+{% if networkspec.kafkasettings is defined %}
+  kafkasettings:
+    {{ networkspec.kafkasettings | to_nice_yaml(indent=2) | indent(4, False) }}
+{% endif %}
+  network:
+    fabricnet:
+      {{ networkspec.network | to_nice_yaml(indent=2) | indent(6, False) }}
+  baseimage_tag: "{{ networkspec.baseimage_tag | default('amd64-1.1.0') }}"
+  helper_tag: "{{ networkspec.helper_tag | default('amd64-0.4.8') }}"
+  ca:
+    admin: "{{ networkspec.ca.admin | default('admin') }}"
+    adminpw: "{{ networkspec.ca.adminpw | default('adminpw') }}"
+    image_tag: "{{ networkspec.ca.image_tag | default('amd64-1.1.0') }}"
+
+  repo:
+    url: "{{ networkspec.repo.url | default('hyperledger/') }}"
+    username: "{{ networkspec.repo.username | default('') }}"
+    password: "{{ networkspec.repo.password | default('') }}"
+    bin: "{{ networkspec.repo.bin | default('https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric/hyperledger-fabric/linux-amd64-1.1.0/hyperledger-fabric-linux-amd64-1.1.0.tar.gz') }}"

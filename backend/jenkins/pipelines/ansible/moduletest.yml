@@ -1,0 +1,321 @@
+- name: Get start timestamp
+  hosts: cloud
+  connection: local
+  vars_files:
+    - "./hfrdops.yml"
+    - "./metrics.yml"
+  tasks:
+    - set_fact:
+        starttime: "{{ ansible_date_time }}"
+        status_flag: "Success"
+        runningjobs: "{{ [] }}"
+        uid: "{{ uid }}"
+        req_id: "{{ reqId }}"
+        contentrepo: "{{ contentrepo }}"
+        metricserviceid: "{{ reqId }}"
+
+    - set_fact:
+        work_dir: "{{ playbook_dir }}/run{{ req_id }}"
+        kubepath: "{{ playbook_dir }}/vars/kubeconfig"
+
+    - name: Create working directory
+      file:
+        path: "{{ work_dir }}/kube"
+        state: "{{ item }}"
+      with_items:
+        - absent
+        - directory
+
+    - name: Get certs file
+      command: >-
+        cp {{ contentrepo+'/'+uid+'/'+req_id }}/{{ item }} {{ work_dir }}/{{ item }}
+      with_items:
+        - allcerts.tgz
+        - chaincode.tgz
+      ignore_errors: yes
+
+    - include_tasks: processkubeconfig.yml
+
+    - name: Save kubeconfig files
+      command: >-
+        cp -r {{ playbook_dir }}/vars {{ contentrepo }}/{{ uid }}/{{ req_id }}
+
+    - name: Get test plan
+      command: >-
+        cp {{ contentrepo+'/'+uid+'/'+req_id+'/testplan.yml' }}
+        {{ work_dir }}/testplan.yml
+
+    - name: Load test plan
+      include_vars:
+        file: "{{ work_dir }}/testplan.yml"
+
+    - name: Create storage spec for this test
+      template:
+        src: "./templates/{{ item }}.j2"
+        dest: "{{ work_dir }}/{{ item }}.yml"
+      with_items:
+        - pvc
+        - utils
+        - certssetup
+        - prometheus
+
+    - name: Save these deployment files
+      command: >-
+        cp {{ work_dir }}/{{ item }}.yml {{ contentrepo }}/{{ uid }}/{{ req_id }}/{{ item }}.yml
+      with_items:
+        - pvc
+        - utils
+        - certssetup
+        - prometheus
+
+    - name: Create storage space for the test
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} apply
+        -f {{ work_dir }}/pvc.yml
+
+    - name: Query persistent volume status
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get -o=custom-columns=STATUS:.status.phase --no-headers
+        pvc {{ pvcname | default("storage-"+req_id) }}
+      register: pvcstatus
+      until: pvcstatus.stdout.find("Bound") >= 0
+      delay: 15
+      retries: 1000
+      tags: "querypvc"
+
+    - name: Start up the pod to get certs uploaded
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} apply
+        -f {{ work_dir }}/certssetup.yml
+
+    - name: Query certs pod status
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} get
+        -o=custom-columns=STATUS:.status.phase
+        pod fabriccertspod-{{req_id}}
+      register: certsstatus
+      until: certsstatus.stdout.find("Running") >= 0
+      retries: 5
+      delay: 10
+
+    - name: Copy certs onto the persistent volume
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        cp {{ work_dir }}/allcerts.tgz fabriccertspod-{{ req_id }}:/fabric
+
+    - name: Ensure util service directory exists
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        exec fabriccertspod-{{ req_id }} -c task-pv-container-{{ req_id }}
+        -- mkdir -p /fabric/{{ item }}
+      with_items:
+        - monitor
+        - grafana
+
+    - name: Grant prometheus user permission to the directory
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        exec fabriccertspod-{{ req_id }} -c task-pv-container-{{ req_id }}
+        -- chown nobody:nogroup /fabric/monitor
+
+    - name: Copy grafana configuration onto the persistent volume
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        cp {{ playbook_dir }}/grafana fabriccertspod-{{ req_id }}:/fabric
+
+    - name: Grant prometheus user permission to the directory
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        exec fabriccertspod-{{ req_id }} -c task-pv-container-{{ req_id }}
+        -- chown -R 472:472 /fabric/grafana
+
+    - name: Copy prometheus configuration onto the persistent volume
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        cp {{ work_dir }}/prometheus.yml fabriccertspod-{{ req_id }}:/fabric/monitor/prometheus.yml
+
+    - name: Extract all certs onto the persistent volume
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        exec fabriccertspod-{{ req_id }} -c task-pv-container-{{ req_id }}
+        -- tar -C /fabric -xzf /fabric/allcerts.tgz
+
+    - name: Copy prometheus file sd config onto the persistent volume
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        exec fabriccertspod-{{ req_id }} -c task-pv-container-{{ req_id }}
+        -- cp /fabric/keyfiles/metriccfg.yml /fabric/monitor/metriccfg.yml
+      when: (collectFabricMetrics | default(False)) == True
+
+    - name: Setup utility services for the tests
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        apply -f {{ work_dir }}/utils.yml
+
+    - name: Wait for utility service to be ready
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get service monitor-service-{{ req_id }} -o jsonpath='{.spec.ports[?(@.name=="grafana")].nodePort}'
+      register: graphitestatus
+      until: graphitestatus.stdout.find("NotFound") < 0 and graphitestatus.stdout != ""
+      retries: 15
+      delay: 5
+
+    - name: Get grafana dashboard node port
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get service monitor-service-{{ req_id }} -o jsonpath='{.spec.ports[?(@.name=="grafana")].nodePort}'
+      register: grafanaNodePort
+      failed_when: grafanaNodePort.stdout == ""
+
+    - name: Get prometheus node port
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get service monitor-service-int-{{ req_id }} -o jsonpath='{.spec.ports[?(@.name=="prometheus")].nodePort}'
+      register: prometheusNodePort
+      failed_when: prometheusNodePort.stdout == ""
+
+    - name: Get grafana-reporter node port
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get service monitor-service-{{ metricserviceid }} -o jsonpath='{.spec.ports[?(@.name=="grafana-reporter")].nodePort}'
+      register: reporterNodePort
+      failed_when: reporterNodePort.stdout == ""
+
+    - name: Get k8s node external IP
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="ExternalIP")].address }'
+      register: nodeIP
+
+    - name: Get k8s node internal ip when external ip is empty
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="InternalIP")].address }'
+      register: nodeInternalIP
+      failed_when: nodeInternalIP.stdout == ""
+      when: nodeIP.stdout == ""
+
+    - name: reset nodeIP if nodeIP(external ip is empty)
+      set_fact:
+          nodeIP: "{{ nodeInternalIP }}"
+      when: nodeIP.stdout == ""
+
+    - name: Update chartpath page
+      template:
+        src: "./templates/chartpath.j2"
+        dest: "{{ work_dir }}/chartpath"
+
+    - name: Fix the chartpath from timestamp
+      replace:
+        path: "{{ work_dir }}/chartpath"
+        regexp: '&from=(.*)&to='
+        replace: "&from={{ ansible_date_time.epoch }}000&to="
+        backup: no
+
+    - name: Fix the chartpath to timestamp
+      replace:
+        path: "{{ work_dir }}/chartpath"
+        regexp: '&to=(.*)&var-TargetTestId='
+        replace: "&to={{ (ansible_date_time.epoch|int)+1200 }}000&var-TargetTestId="
+        backup: no
+
+    - name: Post chartpath
+      command: >-
+        cp {{ work_dir }}/chartpath {{ contentrepo }}/{{ uid }}/{{ req_id }}/chartpath
+
+    - name: Save metric service id
+      copy:
+        content: "{{ req_id }}"
+        dest: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/metricserviceid"
+
+    - name: Check chaincode package
+      stat:
+        path: "{{ work_dir }}/chaincode.tgz"
+      register: chaincodetgz
+
+    - name: ensure /chaincode directory exists
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        exec fabriccertspod-{{ req_id }} -c task-pv-container-{{ req_id }}
+        -- mkdir -p /chaincode
+      when: chaincodetgz.stat.exists
+      ignore_errors: yes
+
+    - name: Copy chaincode onto the persistent volume
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        cp {{ work_dir }}/chaincode.tgz fabriccertspod-{{ req_id }}:/chaincode
+      when: chaincodetgz.stat.exists
+
+    - name: ensure /fabric/src directory exists
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        exec fabriccertspod-{{ req_id }} -c task-pv-container-{{ req_id }}
+        -- mkdir -p /fabric/src
+      when: chaincodetgz.stat.exists
+      ignore_errors: yes
+
+    - name: Extract chaincode onto the persistent volume
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        exec fabriccertspod-{{ req_id }} -c task-pv-container-{{ req_id }}
+        -- tar -C /fabric/src -xzf /chaincode/chaincode.tgz
+      when: chaincodetgz.stat.exists
+
+    - name: Record the start time of tests
+      shell:
+        date +%s
+      register: startTime_tests
+
+    - include_tasks: runtest.yml
+      loop: "{{ tests }}"
+      loop_control:
+        loop_var: testitem
+        index_var: my_idx
+      when: status_flag == "Success" or continueAfterFail == true
+
+    - name: Record the end time of tests
+      shell:
+        date +%s
+      register: endTime_tests
+
+    - name: Fix the timestamp of end time in chartpath
+      replace:
+        path: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/chartpath"
+        regexp: '&to=(.*)&var-TargetTestId='
+        replace: "&to={{ (endTime_tests.stdout|int)+120 }}000&var-TargetTestId="
+        backup: no
+
+    - name: Export test metrics data
+      include_tasks: exportmetrics.yml
+
+    - name: Save log files
+      include_tasks: savelogfiles.yml
+      when: (saveLog|default(true)) == True
+
+    - name: Find all the job deployment files
+      find:
+        paths: "{{ work_dir }}"
+        patterns: "job*.yml"
+        file_type: "file"
+      register: deployfiles
+
+    - name: Remove all the jobs
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} delete
+        -f {{ item.path }}
+      with_items: "{{ deployfiles.files }}"
+      when: status_flag == "Success"
+      ignore_errors: yes
+
+    - name: Remove the job deployment files
+      command: >-
+        rm -rf {{ contentrepo }}/{{ uid }}/{{ req_id }}/job*.yml
+      when: status_flag == "Success"
+      ignore_errors: yes
+
+    - fail:
+        msg: "test has failed."
+      when: status_flag != "Success"

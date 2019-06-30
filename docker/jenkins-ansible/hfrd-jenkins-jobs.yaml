@@ -1,0 +1,327 @@
+---
+#########
+# Macros
+#########
+
+# Parameters
+
+- parameter:
+    name: method-parameter
+    parameters:
+      - string:
+          name: method
+          default: ''
+          description: "The action defines if the job should run. The valid values are POST, DELETE, GET"
+
+- parameter:
+    name: serviceid-parameter
+    parameters:
+      - string:
+          name: serviceid
+          default: '{serviceid_param}'
+          description: "The id of the service, this id was created during the time of the network creation. When delete or query the network, this id is required."
+
+- parameter:
+    name: env-parameter
+    parameters:
+      - string:
+          name: env
+          default: '{env_param}'
+          description: "The parameter to indicate where the fabric network will live. Possible values at present are bxstaging, bxproduction"
+
+- parameter:
+    name: loc-parameter
+    parameters:
+      - string:
+          name: loc
+          default: 'ASH-CI'
+          description: "The location of enterprise cluster that will be used to create networks"
+
+- parameter:
+    name: numOfOrgs-parameter
+    parameters:
+      - string:
+          name: numOfOrgs
+          default: '1'
+          description: "The parameter to define how many organizations will be created."
+
+- parameter:
+    name: numOfPeers-parameter
+    parameters:
+      - string:
+          name: numOfPeers
+          default: '2'
+          description: "The parameter to define how many peers in each organization will be created."
+
+- parameter:
+    name: ledgerType-parameter
+    parameters:
+      - string:
+          name: ledgerType
+          default: 'leveldb'
+          description: "The parameter to define which kind of ledgerdb will be used."
+
+- parameter:
+    name: contentrepo-parameter
+    parameters:
+    - string:
+        name: contentrepo
+        default: '/opt/hfrd/contentRepo'
+        description: "The location for content of apache server"
+
+- parameter:
+    name: uid-parameter
+    parameters:
+    - string:
+        name: uid
+        default: ''
+        description: "The user id"
+
+- parameter:
+    name: requestid-parameter
+    parameters:
+    - string:
+        name: requestid
+        default: ''
+        description: "The request id"        
+
+- parameter:
+    name: service_config-parameter
+    parameters:
+    - string:
+        name: service_config
+        default: ''
+        description: "service configration file for existed ibp network"  
+###################
+# Job Configuration
+###################
+
+- project:
+    name: HFRD
+    jobs:
+      - 'network'
+      - 'network-cm'
+      - 'network-icp'
+      - 'k8snetwork'
+      - 'moduletest'
+      - 'ibpcerts'
+      - 'autotest'
+
+- job-template:
+    name: network
+    project-type: pipeline
+    concurrent: true
+    pipeline-scm:
+      script-path: backend/jenkins/pipelines/network.jks
+      lightweight-checkout: true      
+      scm:
+        - git:
+            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            clean:
+              before: true
+            branches:
+               - '*/master'
+    parameters:
+      - method-parameter:
+          method: ''
+      - serviceid-parameter:
+          serviceid_param: ''
+      - env-parameter:
+          env_param: 'bxstaging'
+      - loc-parameter:
+          loc_param: 'ASH-CI'
+      - numOfOrgs-parameter:
+          numOfOrgs: 2
+      - numOfPeers-parameter:
+          numOfPeers: 2
+      - ledgerType-parameter:
+          ledgerType: 'levelDB'
+      - contentrepo-parameter:
+          contentrepo: '/opt/hfrd/contentRepo'
+      - uid-parameter:
+          uid: ''
+    properties:
+      - build-discarder:
+          days-to-keep: 180
+          artifact-days-to-keep: 180
+
+- job-template:
+    name: network-cm
+    project-type: pipeline
+    concurrent: true
+    pipeline-scm:
+      script-path: backend/jenkins/pipelines/network-cm.jks
+      lightweight-checkout: true
+      scm:
+        - git:
+            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            clean:
+              before: true
+            branches:
+               - '*/master'
+    parameters:
+      - method-parameter:
+          method: ''
+      - serviceid-parameter:
+          serviceid_param: ''
+      - env-parameter:
+          env_param: 'cm'
+      - loc-parameter:
+          loc: 'POKM148_ZBC4'
+      - numOfOrgs-parameter:
+          numOfOrgs: 2
+      - numOfPeers-parameter:
+          numOfPeers: 2
+      - ledgerType-parameter:
+          ledgerType: 'levelDB'
+
+- job-template:
+    name: network-icp
+    project-type: pipeline
+    concurrent: true
+    pipeline-scm:
+      script-path: backend/jenkins/pipelines/network-icp.jks
+      lightweight-checkout: true
+      scm:
+        - git:
+            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            clean:
+              before: true
+            branches:
+               - '*/master'
+    parameters:
+      - method-parameter:
+          method: ''
+      - requestid-parameter:
+          requestid: ''
+      - uid-parameter:
+          uid: ''
+      - contentrepo-parameter:
+          contentrepo: '/opt/hfrd/contentRepo'
+
+- job-template:
+    name: k8snetwork
+    project-type: pipeline
+    concurrent: true
+    pipeline-scm:
+      script-path: backend/jenkins/pipelines/k8snetwork.jks
+      lightweight-checkout: true
+      scm:
+        - git:
+            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            clean:
+              before: true
+            branches:
+               - '*/master'
+    parameters:
+      - string:
+          name: coderoot
+          default: '/var/jenkins_home/src'
+          description: 'The location to save and find the hfrd and cello code.'
+      - string:
+          name: requestid
+          default: '001'
+          description: 'The request identifier'
+      - contentrepo-parameter:
+          contentrepo: '/opt/hfrd/contentRepo'
+      - uid-parameter:
+          uid: ''
+      - string:
+          name: action
+          default: 'create'
+          description: 'The action for the job'
+
+    properties:
+      - build-discarder:
+          days-to-keep: 180
+          artifact-days-to-keep: 180
+
+- job-template:
+    name: moduletest
+    project-type: pipeline
+    concurrent: true
+    pipeline-scm:
+      script-path: backend/jenkins/pipelines/moduletest.jks
+      lightweight-checkout: true      
+      scm:
+        - git:
+            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            clean:
+              before: true
+            branches:
+               - '*/master'
+    parameters:
+      - string:
+          name: coderoot
+          default: '/var/jenkins_home/src'
+          description: 'The location to save and find the hfrd and cello code.'
+      - string:
+          name: requestid
+          default: '001'
+          description: 'The request identifier'
+      - contentrepo-parameter:
+          contentrepo: '/opt/hfrd/contentRepo'
+      - uid-parameter:
+          uid: ''
+      - string:
+          name: action
+          default: 'create'
+          description: 'The action for the job'
+
+    properties:
+      - build-discarder:
+          days-to-keep: 180
+          artifact-days-to-keep: 180
+
+- job-template:
+    name: ibpcerts
+    project-type: pipeline
+    concurrent: true
+    pipeline-scm:
+      script-path: backend/jenkins/pipelines/ibpcerts.jks
+      lightweight-checkout: true      
+      scm:
+        - git:
+            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            clean:
+              before: true
+            branches:
+               - '*/master'
+    parameters:
+      - requestid-parameter:
+          requestid: ''
+      - service_config-parameter:
+          service_config: 'service_config.json'
+      - contentrepo-parameter:
+          contentrepo: '/opt/hfrd/contentRepo'
+      - uid-parameter:
+          uid: ''
+    properties:
+      - build-discarder:
+          days-to-keep: 180
+          artifact-days-to-keep: 180
+
+- job-template:
+    name: autotest
+    project-type: pipeline
+    concurrent: true
+    pipeline-scm:
+      script-path: backend/jenkins/pipelines/autotest.jks
+      lightweight-checkout: true
+      scm:
+        - git:
+            url: 'https://litong01:b74f9603131da2b31ae2f56519794e98f7396c9c@github.ibm.com/IBMCode/hfrd.git'
+            clean:
+              before: true
+            branches:
+               - '*/master'
+    parameters:
+      - uid-parameter:
+          uid: ''
+      - contentrepo-parameter:
+          contentrepo: '/opt/hfrd/contentRepo'
+
+    properties:
+      - build-discarder:
+          days-to-keep: 30
+          artifact-days-to-keep: 30

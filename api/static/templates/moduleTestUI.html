@@ -1,0 +1,217 @@
+<html>
+<head>
+    <link href="/static/css/index.css" type="text/css" rel="stylesheet" />
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/bluemix-components.js"></script>
+    <script src="/static/js/hfrd.js"></script>
+    <script>
+        var uid = "{{ .uid }}"
+        $( document ).ready(function() {
+            console.log( "ready!" );
+            setTimeout(updateTest, 50, uid)
+            $("#test").click(function (event) {
+                multipartformpost("testform","test",
+                        "/v1/{{ .uid }}/moduletest", event)
+            })
+        });
+        function clickSendRerun(formid) {
+            modalpartformpost(formid,'/v1/{{ .uid }}/moduletest?rerun=1')
+        }
+    </script>
+</head>
+<body>
+<div class="bx--grid">
+    <section id="nav-placeholder"></section>
+    <div class="bx--row">
+        <div class="bx--col-xs-6 bx--col-md-4">
+            <div style="padding: 20px" class="thestyle">
+                <form id="testform" action="/v1/{{ .uid }}/moduletest" method="post" enctype="multipart/form-data">
+                    <div class="bx--form-item">
+                        <strong class="bx--label">Fabric network certificates</strong>
+                        <div class="bx--file" data-file>
+                            <label
+                                    for="cert"
+                                    class="bx--file-btn bx--btn bx--btn--secondary"
+                                    role="button"
+                                    tabindex="0">Add certs tar gzip</label>
+                            <input
+                                    type="file"
+                                    class="bx--file-input"
+                                    id="cert"
+                                    name="cert"
+                                    data-file-uploader
+                                    data-target="[data-file-container]"
+                                    multiple
+                            />
+                            <span class="file-label"></span>
+                            <div data-file-container class="bx--file-container"></div>
+                        </div>
+                    </div>
+                    <div class="bx--form-item">
+                        <strong class="bx--label">Kubeconfig zip file</strong>
+                        <div class="bx--file" data-file>
+                            <label
+                                    for="kubeconfig"
+                                    class="bx--file-btn bx--btn bx--btn--secondary"
+                                    role="button"
+                                    tabindex="0">Add kubeconfig</label>
+                            <input
+                                    type="file"
+                                    class="bx--file-input"
+                                    id="kubeconfig"
+                                    name="kubeconfig"
+                                    data-file-uploader
+                                    data-target="[data-file-container]"
+                                    multiple
+                            />
+                            <span class="file-label"></span>
+                            <div data-file-container class="bx--file-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="bx--form-item">
+                        <strong class="bx--label">Test plan yaml file</strong>
+                        <div class="bx--file" data-file>
+                            <label
+                                    for="plan"
+                                    class="bx--file-btn bx--btn bx--btn--secondary"
+                                    role="button"
+                                    tabindex="0">Add test plan</label>
+                            <input
+                                    type="file"
+                                    class="bx--file-input"
+                                    id="plan"
+                                    name="plan"
+                                    data-file-uploader
+                                    data-target="[data-file-container]"
+                                    multiple
+                            />
+                            <span class="file-label"></span>
+                            <div data-file-container class="bx--file-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="bx--form-item">
+                        <strong class="bx--label">Chaincode tar gzip</strong>
+                        <div class="bx--file" data-file>
+                            <label
+                                    for="chaincode"
+                                    class="bx--file-btn bx--btn bx--btn--secondary"
+                                    role="button"
+                                    tabindex="0">Add Chaincode tar gzip</label>
+                            <input
+                                    type="file"
+                                    class="bx--file-input"
+                                    id="chaincode"
+                                    name="chaincode"
+                                    data-file-uploader
+                                    data-target="[data-file-container]"
+                                    multiple
+                            />
+                            <span class="file-label"></span>
+                            <div data-file-container class="bx--file-container"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button id="test" type="submit" class="bx--btn bx--btn--sm bx--btn--primary">Run test</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="bx--col-xs-18 bx--col-md-8">
+            <div class="bx--data-table-v2-container" data-table-v2>
+                <h4 class="bx--data-table-v2-header">Submitted Test Requests</h4>
+                <table class="bx--data-table-v2 bx--data-table-v2--zebra">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="bx--table-header-label">Test ID</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Status</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Logs</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Charts</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Submitted At</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Operation</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ range .tests }}
+                    <tr>
+                        <td>
+                            <span><a id="a1{{ . }}" href="#" target="testFiles">{{ . }}</a></span>
+                        </td>
+                        <td>
+                            <span id="a2{{ . }}">Pending</span>
+                        </td>
+                        <td>
+                            <span><a id="a3{{ . }}" href="#" target="testLogs"><img src="/static/images/log.png" alt="log" height="24" width="24" /></a></span>
+                        </td>
+                        <td>
+                            <span><a id="a4{{ . }}" href="#" target="testCharts"><img src="/static/images/grafana.png" alt="chart" height="30" width="30" /></a></span>
+                        </td>
+                        <td>
+                            <span id="a5{{ . }}">N/A</span>
+                        </td>
+                        <td>
+                            <button name="{{ . }}" class="bx--btn bx--btn--secondary" type="button" data-modal-target="#rerun-{{ . }}">Rerun</button>&nbsp;&nbsp;
+                            <div data-modal="" id="rerun-{{ . }}" class="bx--modal bx--modal-tall" tabindex="-1">
+                                <div class="bx--modal-inner">
+                                    <h2 class="bx--modal-content__heading">RERUN</h2>
+                                    <button class="bx--modal__close" type="button" data-modal-close="">
+                                        <svg class="bx--modal__close--icon">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#common--close"></use>
+                                        </svg>
+                                    </button>
+                                    <div class="bx--modal-content">
+                                        <form id="rerunform-{{ . }}" enctype="multipart/form-data">
+                                            <div class="bx--form-item bx--text-input-wrapper" style="display: none;">
+                                                <input name="requestid" class="bx--modal-content__text" value="{{ . }}">
+                                            </div>
+                                            <br />
+                                            <div class="bx--form-item">
+                                                <strong class="bx--modal-content__label">Upload new test plan(Optional,use original test plan by default)</strong>
+                                                <div class="bx--file" data-file>
+                                                    <label for="testplan-{{ . }}" class="bx--file-btn bx--btn bx--btn--secondary" role="button" tabindex="0">Upload new test
+                                                        plan</label>
+                                                    <input type="file" class="bx--file-input" id="testplan-{{ . }}" name="testplan-{{ . }}" data-file-uploader data-target="[data-file-container]"
+                                                           multiple />
+                                                    <span class="file-label"></span>
+                                                    <div data-file-container class="bx--file-container"></div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="bx--modal__buttons">
+                                        <div class="bx--modal__buttons-container">
+                                            <button class="bx--btn--secondary" type="button" data-modal-close="">Cancel</button>
+                                            <button class="bx--btn--secondary" onclick="clickSendRerun('rerunform-{{ . }}')">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="bx--btn bx--btn--danger" type="submit" onclick="senddelete('/v1/{{ $.uid }}/moduletest?requestid={{ . }}');return false;">Delete</button>
+                        </td>
+                    </tr>
+                    {{ end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $("#nav-placeholder").load("/static/html/navigator.html")
+</script>
+</html>

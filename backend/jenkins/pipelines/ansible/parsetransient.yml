@@ -1,0 +1,13 @@
+- name: "Add literal/stringPattern parameters to transientmap_param_values_string"
+  set_fact:
+    transientmap_param_values_string: "{{ transientmap_param_values_string + item.type + '~~~' + item.key + '~~~' + item.value + '#' }}"
+  when: item.min is not defined
+  with_items: "{{ transientmap_value }}"
+- name: "Add intRange/payloadRange parameters to transientmap_param_values_string"
+  set_fact:
+    transientmap_param_values_string: "{{ transientmap_param_values_string + item.type + '~~~' + item.key + '~~~' + item.min + '~~~' + 'item.max' + '#' }}"
+  when: item.min is defined
+  with_items: "{{ transientmap_value }}"
+- name: "Combine transient map values with comma"
+  set_fact:
+    transientmap_param_values_string: "{{ transientmap_param_values_string + ',' }}"

@@ -1,0 +1,61 @@
+{
+    "test-network": {
+        "orderer": {
+            "orderer0": {
+                "name": "OrdererOrg",
+                "mspid": "OrdererOrg",
+                "mspPath": "",
+                "adminPath": "",
+                "comName": "",
+                "url": "SET THIS",
+                "server-hostname": null,
+                "tls_cacerts": ""
+            }
+        },
+        "tls_cert": "SET THIS",
+        "org1": {
+            "name": "org1",
+            "mspid": "org1",
+            "username": "admin",
+            "secret": "SET THIS",
+            "ca": {
+                "name": "org1-ca",
+                "url": "SET THIS"
+            },
+            "admin_cert": "SET THIS",
+            "priv": "SET THIS",
+            "privateKeyPEM": "",
+            "signedCertPEM": "",
+            "ordererID": "orderer0",
+            "adminPath": "",
+            "org1-peer1": {
+                "requests": "SET THIS",
+                "events": "SET THIS",
+                "server-hostname": null,
+                "tls_cacerts": ""
+            }
+        },
+        "org2": {
+            "name": "org2",
+            "mspid": "org2",
+            "username": "admin",
+            "secret": "SET THIS",
+            "ca": {
+                "name": "org2-ca",
+                "url": "SET THIS"
+            },
+            "admin_cert": "SET THIS",
+            "priv": "SET THIS",
+            "privateKeyPEM": "",
+            "signedCertPEM": "",
+            "ordererID": "orderer0",
+            "adminPath": "",
+            "org2-peer1": {
+                "requests": "SET THIS",
+                "events": "SET THIS",
+                "server-hostname": null,
+                "tls_cacerts": ""
+            }
+        }
+    }
+}

@@ -1,0 +1,77 @@
+# Test Runtime Container
+#
+# See: https://github.com/litong01/fabric-pilot
+#
+FROM ubuntu:bionic
+
+ARG user=ubuntu
+ARG uid=1000
+ARG gid=1000
+
+ENV CA_VERSION=1.1.0
+ENV GOPATH /home/${user}/go
+ENV ARCH=linux-amd64
+
+RUN apt update -y && apt upgrade -y && apt install -y \
+	vim \
+	curl \
+	libpkcs11-helper1 \
+	build-essential \
+	jq \
+	bc \
+	python \
+	psmisc \
+	tree \
+	git \
+	&& rm -rf /var/lib/apt/lists/* \
+	&& mkdir -p /opt/fabrictest
+
+RUN curl https://nexus.hyperledger.org/content/repositories/releases/org/hyperledger/fabric-ca/hyperledger-fabric-ca/${ARCH}-${CA_VERSION}/hyperledger-fabric-ca-${ARCH}-${CA_VERSION}.tar.gz | tar xz \
+	&& mv bin/fabric-ca-client /usr/local/bin
+
+RUN ln -s /usr/local/Bluemix/bin/cfcli/cf /usr/local/bin/cf
+
+RUN useradd -m -p $(openssl passwd -crypt ${user}) -s /bin/bash ${user}
+
+ENV HOME /home/${user}
+
+WORKDIR $HOME
+
+# install Node and NPM
+ENV NVM_DIR=/home/${user}/.nvm
+RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+
+RUN . $NVM_DIR/nvm.sh \
+	&& nvm install lts/carbon
+
+# clone repos
+RUN cd /home/${user} \
+	&& git clone https://github.com/hyperledger/fabric-sdk-node \
+	&& cd fabric-sdk-node; git checkout release-1.1; cd .. \
+	&& git clone https://github.com/hyperledger/fabric.git \
+	&& cd fabric; git checkout a6d1ec2; cd .. \
+	&& git clone https://github.com/hyperledger/fabric-test \
+	# TODO: use release-1.1 branch
+	# checkout a specific commit id on master branch because https://jira.hyperledger.org/browse/FAB-10629
+	# is only fixed on master branch so far.
+	&& cd fabric-test; git checkout d427304
+
+# install node packages
+RUN . $NVM_DIR/nvm.sh \
+	&& cd fabric-sdk-node && npm install -g gulp && npm install && gulp ca
+#&& npm uninstall grpc && npm install grpc@1.10.1
+
+# place PTE and chaincode
+RUN cp -r fabric-test/tools/PTE fabric-sdk-node/test/PTE
+RUN mkdir -p $GOPATH/src/github.com/hyperledger/ \
+    && mv fabric  /home/${user}/fabric-test/  \
+	&& mv /home/${user}/fabric-test/ $GOPATH/src/github.com/hyperledger
+
+# copy userInputs and other stuff
+COPY config-chan1-TLS.json config-chan1-TLS.json
+COPY docker-entrypoint-jks.sh docker-entrypoint-jks.sh
+COPY userInputs userInputs
+COPY creds creds
+RUN mkdir /home/${user}/results
+RUN chown -R ${user}:${user} /home/${user}
+USER ${user}

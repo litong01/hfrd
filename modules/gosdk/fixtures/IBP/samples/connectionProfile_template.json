@@ -1,0 +1,138 @@
+{
+	"name": "Matterhorn Network - Krb",
+	"description": "Connection Profile for an IBM Blockchain Platform Network",
+	"x-networkId": "29c2fd01e74d4042bc2e46931275637e",
+	"x-fabricVersion": "v1.1.0",
+	"version": "1.0.3",
+	"client": {
+		"organization": "PeerOrg1",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300",
+					"eventHub": "300",
+					"eventReg": "300"
+				},
+				"orderer": "300"
+			}
+		},
+		"x-organizationName": "IBM-0"
+	},
+	"channels": {
+		"channel2": {
+			"x-status": "membership_valid",
+			"orderers": ["fabric-orderer-20673b", "fabric-orderer-20673d", "fabric-orderer-20673e"],
+			"peers": {
+				"fabric-peer-org1-20678a": {
+					"x-chaincode": {}
+				}
+			},
+			"chaincodes": [],
+			"x-members": ["PeerOrg1"]
+		}
+	},
+	"organizations": {
+		"PeerOrg1": {
+			"mspid": "PeerOrg1",
+			"peers": ["fabric-peer-org1-20678a"],
+			"certificateAuthorities": ["fabric-ca-peerorg1-20675a", "fabric-ca-peerorg1-20675c"],
+			"signedCert": {
+				"pem": "-----BEGIN CERTIFICATE-----\nMII=\n-----END CERTIFICATE-----\n",
+				"x-name": "default"
+			},
+			"x-uploadedSignedCerts": []
+		}
+	},
+	"orderers": {
+		"fabric-orderer-20673b": {
+			"url": "grpcs://ash-zbc09b.4.secure.blockchain.ibm.com:20673",
+			"grpcOptions": {
+				"grpc.http2.keepalive_time": 360,
+				"grpc.keepalive_time_ms": 360000,
+				"grpc.http2.keepalive_timeout": 180,
+				"grpc.keepalive_timeout_ms": 180000
+			},
+			"tlsCACerts": {
+				"pem": "-----BEGIN CERTIFICATE-----\nMIIEVbd4=\n-----END CERTIFICATE-----\n"
+			}
+		},
+		"fabric-orderer-20673d": {
+			"url": "grpcs://ash-zbc09d.4.secure.blockchain.ibm.com:20673",
+			"grpcOptions": {
+				"grpc.http2.keepalive_time": 360,
+				"grpc.keepalive_time_ms": 360000,
+				"grpc.http2.keepalive_timeout": 180,
+				"grpc.keepalive_timeout_ms": 180000
+			},
+			"tlsCACerts": {
+				"pem": "-----BEGIN CERTIFICATE-----\nMIIWVbd4=\n-----END CERTIFICATE-----\n"
+			}
+		},
+		"fabric-orderer-20673e": {
+			"url": "grpcs://ash-zbc09e.4.secure.blockchain.ibm.com:20673",
+			"grpcOptions": {
+				"grpc.http2.keepalive_time": 360,
+				"grpc.keepalive_time_ms": 360000,
+				"grpc.http2.keepalive_timeout": 180,
+				"grpc.keepalive_timeout_ms": 180000
+			},
+			"tlsCACerts": {
+				"pem": "-----BEGIN CERTIFICATE-----\nMIIElDCCVbd4=\n-----END CERTIFICATE-----\n"
+			}
+		}
+	},
+	"peers": {
+		"fabric-peer-org1-20678a": {
+			"url": "grpcs://ash-zbc09a.4.secure.blockchain.ibm.com:20678",
+			"eventUrl": "grpcs://ash-zbc09a.4.secure.blockchain.ibm.com:20677",
+			"grpcOptions": {
+				"grpc.http2.keepalive_time": 360,
+				"grpc.keepalive_time_ms": 360000,
+				"grpc.http2.keepalive_timeout": 180,
+				"grpc.keepalive_timeout_ms": 180000
+			},
+			"tlsCACerts": {
+				"pem": "-----BEGIN CERTIFICATE-----\nMIIElD1ZWVbd4=\n-----END CERTIFICATE-----\n"
+			},
+			"x-mspid": "PeerOrg1",
+			"x-ledgerDbType": "couch",
+			"x-installed-chaincode": {}
+		}
+	},
+	"certificateAuthorities": {
+		"fabric-ca-peerorg1-20675a": {
+			"url": "https://ash-zbc09a.4.secure.blockchain.ibm.com:20675",
+			"httpOptions": {
+				"verify": true
+			},
+			"tlsCACerts": {
+				"pem": "-----BEGIN CERTIFICATE-----\nMIIElZWVbd4=\n-----END CERTIFICATE-----\n"
+			},
+			"registrar": [{
+				"enrollId": "admin",
+				"enrollSecret": "e6e713936e51f96a0ab66c4058ea5b5c",
+				"x-affiliations": ["ibp.PeerOrg1"]
+			}],
+			"caName": "PeerOrg1CA",
+			"x-mspid": "PeerOrg1",
+			"x-tlsCAName": "PeerOrg1TLSCA"
+		},
+		"fabric-ca-peerorg1-20675c": {
+			"url": "https://ash-zbc09c.4.secure.blockchain.ibm.com:20675",
+			"httpOptions": {
+				"verify": true
+			},
+			"tlsCACerts": {
+				"pem": "-----BEGIN CERTIFICATE-----\nMIIElDCCZWVbd4=\n-----END CERTIFICATE-----\n"
+			},
+			"registrar": [{
+				"enrollId": "admin",
+				"enrollSecret": "e6e713936e51f96a0ab66c4058ea5b5c"
+			}],
+			"caName": "PeerOrg1CA",
+			"x-mspid": "PeerOrg1",
+			"x-tlsCAName": "PeerOrg1TLSCA"
+		}
+	},
+	"x-type": "hlfv1"
+}

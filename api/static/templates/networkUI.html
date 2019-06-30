@@ -1,0 +1,172 @@
+<html>
+<head>
+    <link href="/static/css/index.css" type="text/css" rel="stylesheet" />
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/bluemix-components.js"></script>
+    <script src="/static/js/hfrd.js"></script>
+    <script>
+        var uid = "{{ .uid }}"
+        $( document ).ready(function() {
+            setTimeout(updateNet, 50, uid)
+            $("#net").click(function (event) {
+                multipartformpost("netform","net",
+                        "/v1/{{ .uid }}/network", event)
+            })
+        });
+        function clickAddOrg(formid) {
+            modalpartformpost(formid,'/v1/{{ .uid }}/addorg')
+        }
+    </script>
+</head>
+<body>
+<div class="bx--grid">
+    <section id="nav-placeholder"></section>
+    <div class="bx--row">
+        <div class="bx--col-xs-6 bx--col-md-4">
+            <div style="padding: 20px" class="thestyle">
+                <form id="netform" action="/v1/{{ .uid }}/network" method="post" enctype="multipart/form-data">
+                    <div class="bx--form-item">
+                        <strong class="bx--label">Kubeconfig zip file</strong>
+                        <div class="bx--file" data-file>
+                            <label
+                                    for="kubeconfig"
+                                    class="bx--file-btn bx--btn bx--btn--secondary"
+                                    role="button"
+                                    tabindex="0">Add kubeconfig</label>
+                            <input
+                                    type="file"
+                                    class="bx--file-input"
+                                    id="kubeconfig"
+                                    name="kubeconfig"
+                                    data-file-uploader
+                                    data-target="[data-file-container]"
+                                    multiple
+                            />
+                            <span class="file-label"></span>
+                            <div data-file-container class="bx--file-container"></div>
+                        </div>
+                    </div>
+                    <div class="bx--form-item">
+                        <strong class="bx--label">Fabric network spec yaml file</strong>
+                        <div class="bx--file" data-file>
+                            <label
+                                    for="config"
+                                    class="bx--file-btn bx--btn bx--btn--secondary"
+                                    role="button"
+                                    tabindex="0">Add network spec file</label>
+                            <input
+                                    type="file"
+                                    class="bx--file-input"
+                                    id="config"
+                                    name="config"
+                                    data-file-uploader
+                                    data-target="[data-file-container]"
+                                    multiple
+                            />
+                            <span class="file-label"></span>
+                            <div data-file-container class="bx--file-container"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <button id="net" type="submit" class="bx--btn bx--btn--sm bx--btn--primary">Create Network</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="bx--col-xs-18 bx--col-md-8">
+            <div class="bx--data-table-v2-container" data-table-v2>
+                <h4 class="bx--data-table-v2-header">Submitted Fabric Network Requests</h4>
+                <table class="bx--data-table-v2 bx--data-table-v2--zebra">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span class="bx--table-header-label">Network ID</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Status</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Logs</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Submitted At</span>
+                        </th>
+                        <th>
+                            <span class="bx--table-header-label">Operation</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ range .nets }}
+                    <tr>
+                        <td>
+                            <span><a id="n1{{ . }}" href="#" target="testDetails">{{ . }}</a></span>
+                        </td>
+                        <td>
+                            <span id="n2{{ . }}">Pending</span>
+                        </td>
+                        <td>
+                            <span><a id="n3{{ . }}" href="#" target="testDetails"><img src="/static/images/log.png" alt="log" height="24" width="24" /></a></span>
+                        </td>
+                        <td>
+                            <span id="n4{{ . }}">null</span>
+                        </td>
+                        <td>
+                            <button name="{{ . }}" class="bx--btn bx--btn--secondary" type="button" data-modal-target="#addorg-{{ . }}">Add Organization</button>
+                            <div data-modal="" id="addorg-{{ . }}" class="bx--modal bx--modal-tall" tabindex="-1">
+                                <div class="bx--modal-inner">
+                                    <h2 class="bx--modal-content__heading">Add New Organization Into Existing Channels</h2>
+                                    <button class="bx--modal__close" type="button" data-modal-close="">
+                                        <svg class="bx--modal__close--icon">
+                                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#common--close"></use>
+                                        </svg>
+                                    </button>
+                                    <div class="bx--modal-content">
+                                        <form id="orgform-{{ . }}" enctype="multipart/form-data">
+                                            <div class="bx--form-item bx--text-input-wrapper" style="display: none;">
+                                                <input name="network-id" for="network-id" class="bx--modal-content__text" value="{{ . }}">
+                                            </div>
+                                            <div class="bx--form-item bx--text-input-wrapper">
+                                                <label for="orgName-{{ . }}" class="bx--modal-content__label">Organization name</label>
+                                                <input name="orgName-{{ . }}" type="text" class="bx--modal-content__text" placeholder="org1">
+                                            </div>
+                                            <br/>
+                                            <div class="bx--form-item">
+                                                <strong class="bx--modal-content__label">Organization Certificates</strong>
+                                                <div class="bx--file" data-file>
+                                                    <label for="orgcerts-{{ . }}" class="bx--file-btn bx--btn bx--btn--secondary" role="button" tabindex="0">Add new org certs tar gzip</label>
+                                                    <input type="file" class="bx--file-input" id="orgcerts-{{ . }}" name="orgcerts-{{ . }}" data-file-uploader data-target="[data-file-container]"
+                                                           multiple />
+                                                    <span class="file-label"></span>
+                                                    <div data-file-container class="bx--file-container"></div>
+                                                </div>
+                                            </div>
+                                            <div class="bx--form-item bx--text-input-wrapper">
+                                                <label for="channels-{{ . }}" class="bx--modal-content__label">Specify channel list (string separated by commas,like channel1,channel2,channel3)</label>
+                                                <input  name="channels-{{ . }}" type="text" class="bx--modal-content__text" placeholder="channel1,channel2,channel3...">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="bx--modal__buttons">
+                                        <div class="bx--modal__buttons-container">
+                                            <button class="bx--btn--secondary" type="button" data-modal-close="">Cancel</button>
+                                            <button class="bx--btn--secondary" onclick="clickAddOrg('orgform-{{ . }}')">Add Organization</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="bx--btn bx--btn--danger" onclick="senddelete('/v1/{{ $.uid }}/network?requestid={{ . }}');return false;">Delete</button>
+                        </td>
+                    </tr>
+                    {{ end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $("#nav-placeholder").load("/static/html/navigator.html")
+</script>
+</html>

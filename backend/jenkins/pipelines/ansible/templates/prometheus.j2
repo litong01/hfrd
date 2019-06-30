@@ -1,0 +1,34 @@
+# HFRD test monitoring global config
+global:
+  scrape_interval:     10s
+  evaluation_interval: 60s
+  scrape_timeout:      6s
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  - job_name: 'hfrd'
+
+    honor_labels: true
+
+    static_configs:
+    - targets: ['localhost:9091']
+{% if (collectFabricMetrics|default(False)) %}
+  - job_name: 'fabric'
+    honor_labels: true
+    scrape_interval: 20s
+    metrics_path: /metrics
+    file_sd_configs:
+      - files:
+        - /etc/prometheus/metriccfg.yml
+{% endif %}

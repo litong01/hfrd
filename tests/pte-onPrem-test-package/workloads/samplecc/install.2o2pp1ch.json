@@ -1,0 +1,24 @@
+{
+    "channelID": "_ch1",
+    "chaincodeID": "sample_cc",
+    "chaincodeVer": "v0",
+    "transType": "install",
+    "TLS": "enabled",
+    "channelOpt": {
+        "name": "channel1",
+        "action": "create",
+        "orgName": [
+            "PEER_ORG"
+        ]
+    },
+    "deploy": {
+        "chaincodePath": "github.com/hyperledger/fabric-test/chaincodes/samplecc/go",
+        "fcn": "init",
+        "args": []
+    },
+    "SCFile": [
+        {
+            "ServiceCredentials": "SCFiles/config-chan1-TLS.json"
+        }
+    ]
+}

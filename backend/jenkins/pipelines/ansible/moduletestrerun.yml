@@ -1,0 +1,196 @@
+- name: Get start timestamp
+  hosts: cloud
+  connection: local
+  vars_files:
+    - "./hfrdops.yml"
+    - "./metrics.yml"
+  tasks:
+    - set_fact:
+        starttime: "{{ ansible_date_time }}"
+        status_flag: "Success"
+        runningjobs: "{{ [] }}"
+        uid: "{{ uid }}"
+        req_id: "{{ reqId }}"
+        contentrepo: "{{ contentrepo }}"
+        rerunid: "{{ rerunid }}"
+
+    - set_fact:
+        work_dir: "{{ playbook_dir }}/run{{ req_id }}"
+        kubepath: "{{ playbook_dir }}/vars/kubeconfig"
+
+    - name: Create working directory
+      file:
+        path: "{{ work_dir }}/kube"
+        state: "{{ item }}"
+      with_items:
+        - absent
+        - directory
+
+    - name: Get kubeconfig files from the original test
+      command: >-
+        cp -r {{ contentrepo }}/{{ uid }}/{{ rerunid }}/vars {{ playbook_dir }}/
+
+    - name: Save kubeconfig files
+      command: >-
+        cp -r {{ playbook_dir }}/vars {{ contentrepo }}/{{ uid }}/{{ req_id }}
+
+    - name: Check if the testplan.yml exists in new test dir
+      stat:
+        path: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/testplan.yml"
+      register: stat_result
+
+    - name: Get the new test plan from the new test dir if testplan.yml exists
+      command: >-
+        cp {{ contentrepo }}/{{ uid }}/{{ req_id }}/testplan.yml {{ work_dir }}/testplan.yml
+      when: stat_result.stat.exists
+
+    - name: Get test plan from the original test dir if testplan.yml not exists
+      command: >-
+        cp "{{ contentrepo }}/{{ uid }}/{{ rerunid }}/testplan.yml"
+        "{{ work_dir }}/testplan.yml"
+      when: not stat_result.stat.exists
+
+    - name: Post testplan if not exists in the new test dir
+      command: >-
+        cp {{ work_dir }}/testplan.yml {{ contentrepo }}/{{ uid }}/{{ req_id }}/testplan.yml
+      when: not stat_result.stat.exists
+
+    - name: Get chartpath and metricserviceid
+      command: >-
+        cp "{{ contentrepo }}/{{ uid }}/{{ rerunid }}/{{ item }}"
+        "{{ work_dir }}/{{ item }}"
+      with_items:
+        - "chartpath"
+        - "metricserviceid"
+
+    - name: Fix the chartpath for rerun test
+      replace:
+        path: "{{ work_dir }}/chartpath"
+        regexp: '=(.{8})-t'
+        replace: "={{ req_id }}"
+        backup: no
+
+    - name: Get k8s node external IP
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="ExternalIP")].address }'
+      register: nodeIP
+
+    - name: Get k8s node internal ip when external ip is empty
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get nodes -o jsonpath='{ $.items[0].status.addresses[?(@.type=="InternalIP")].address }'
+      register: nodeInternalIP
+      failed_when: nodeInternalIP.stdout == ""
+      when: nodeIP.stdout == ""
+
+    - name: reset nodeIP if nodeIP(external ip is empty)
+      set_fact:
+          nodeIP: "{{ nodeInternalIP }}"
+      when: nodeIP.stdout == ""
+
+    - name: Fix the chartpath from timestamp
+      replace:
+        path: "{{ work_dir }}/chartpath"
+        regexp: '&from=(.*)&to='
+        replace: "&from={{ ansible_date_time.epoch }}000&to="
+        backup: no
+
+    - name: Fix the chartpath to timestamp
+      replace:
+        path: "{{ work_dir }}/chartpath"
+        regexp: '&to=(.*)&var-TargetTestId='
+        replace: "&to={{ (ansible_date_time.epoch|int)+1200 }}000&var-TargetTestId="
+        backup: no
+
+    - name: Post chartpath and metricserviceid
+      command: >-
+        cp {{ work_dir }}/{{ item }} {{ contentrepo }}/{{ uid }}/{{ req_id }}/{{ item }}
+      with_items:
+        - "chartpath"
+        - "metricserviceid"
+
+    - name: Load test plan
+      include_vars:
+        file: "{{ work_dir }}/testplan.yml"
+
+    - name: Load metric service id
+      set_fact:
+        metricserviceid: "{{ lookup('file', work_dir+'/metricserviceid') }}"
+
+    - name: Get grafana dashboard node port
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get service monitor-service-{{ metricserviceid }} -o jsonpath='{.spec.ports[?(@.name=="grafana")].nodePort}'
+      register: grafanaNodePort
+      failed_when: grafanaNodePort.stdout == ""
+
+    - name: Get grafana-reporter node port
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get service monitor-service-{{ metricserviceid }} -o jsonpath='{.spec.ports[?(@.name=="grafana-reporter")].nodePort}'
+      register: reporterNodePort
+      failed_when: reporterNodePort.stdout == ""
+
+    - name: Get prometheus node port
+      command: >-
+        kubectl --kubeconfig {{ kubepath }}
+        get service monitor-service-int-{{ metricserviceid }} -o jsonpath='{.spec.ports[?(@.name=="prometheus")].nodePort}'
+      register: prometheusNodePort
+      failed_when: prometheusNodePort.stdout == ""
+
+    - name: Record the start time of tests
+      shell:
+        date +%s
+      register: startTime_tests
+
+    - include_tasks: runtest.yml
+      loop: "{{ tests }}"
+      loop_control:
+        loop_var: testitem
+        index_var: my_idx
+      when: status_flag == "Success" or continueAfterFail == true
+
+    - name: Record the end time of tests
+      shell:
+        date +%s
+      register: endTime_tests
+
+    - name: Fix the timestamp of end time in chartpath
+      replace:
+        path: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/chartpath"
+        regexp: '&to=(.*)&var-TargetTestId='
+        replace: "&to={{ (endTime_tests.stdout|int)+120 }}000&var-TargetTestId="
+        backup: no
+
+    - name: Export test metrics data
+      include_tasks: exportmetrics.yml
+
+    - name: Save log files
+      include_tasks: savelogfiles.yml
+      when: (saveLog|default(true)) == True
+
+    - name: Find all the job deployment files
+      find:
+        paths: "{{ work_dir }}"
+        patterns: "job*.yml"
+        file_type: "file"
+      register: deployfiles
+
+    - name: Remove all the jobs
+      command: >-
+        kubectl --kubeconfig {{ kubepath }} delete
+        -f {{ item.path }}
+      with_items: "{{ deployfiles.files }}"
+      when: status_flag == "Success"
+      ignore_errors: yes
+
+    - name: Remove the job deployment files
+      command: >-
+        rm -rf {{ contentrepo }}/{{ uid }}/{{ req_id }}/job*.yml
+      when: status_flag == "Success"
+      ignore_errors: yes
+
+    - fail:
+        msg: "test has failed."
+      when: status_flag != "Success"

@@ -1,0 +1,46 @@
+- name: Create bnd results deployment
+  template:
+    src: "./templates/{{ item }}.j2"
+    dest: "{{ work_dir }}/../vars/{{ item }}.yml"
+  with_items:
+    - bndresults
+
+- name: Save bndresults deployment files
+  command: >-
+    cp {{ work_dir }}/../vars/{{ item }}.yml {{ contentrepo }}/{{ uid }}/{{ req_id }}/{{ item }}.yml
+  with_items:
+    - bndresults
+
+# Stop the sampler pod before download these profiles
+- name: Delete bnd sampler pods
+  command: >-
+    kubectl --kubeconfig {{ kubepath }} delete pod bndsampler
+
+- name: Start collecting bnd results pod
+  command: >-
+    kubectl --kubeconfig {{ kubepath }} apply
+    -f {{ work_dir }}/../vars/bndresults.yml
+
+- name: Query bndresults pod status
+  command: >-
+    kubectl --kubeconfig {{ kubepath }} get
+    -o=custom-columns=STATUS:.status.phase
+    pod bndresults
+  register: podstatus
+  until: podstatus.stdout.find("Running") >= 0
+  retries: 5
+  delay: 10
+
+- name: Zip up these profiles
+  command: >-
+    kubectl --kubeconfig {{ kubepath }} exec
+    bndresults -- tar -cf data.tgz bndprofiles
+
+- name: Download the profiles
+  command: >-
+    kubectl --kubeconfig {{ kubepath }} cp
+    bndresults:data.tgz .
+
+- name: Save the profiles
+  command: >-
+    cp data.tgz {{ contentrepo }}/{{ uid }}/{{ req_id }}

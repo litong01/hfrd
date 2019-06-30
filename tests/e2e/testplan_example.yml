@@ -1,0 +1,109 @@
+---
+name: "System performance test"
+description: "This test is to create as much chaincode computation load as possible"
+continueAfterFail: yes
+tests:
+  - name: "create-channel"
+    operation: "CHANNEL_CREATE"
+    iterationCount: 5
+    iterationInterval: 0s
+    retryCount: 10
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/org1/org1_ConnProf.yaml
+      channelNamePrefix: "shwchannel"
+      channelConsortium: "SampleConsortium"
+      channelOrgs: "org1,org2"
+      ordererName: orderer
+  # Join org1 peers
+  - name: "join-org1-peers-to-channel"
+    operation: "CHANNEL_JOIN"
+    iterationCount: 3
+    iterationInterval: 1s
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/org1/org1_ConnProf.yaml
+      channelNamePrefix: "shwchannel"
+      peers: "org1-peer1"
+      ordererName: orderer
+  # # Update channel configurations: batchtimeout/batchsize/anchorPeers
+  # - name: "update-channel"
+  #   operation: "CHANNEL_UPDATE"
+  #   iterationCount: 10
+  #   iterationInterval: 1s
+  #   retryCount: 3
+  #   loadSpread: 1
+  #   parameters:
+  #     connectionProfile: "ConnectionProfile_orga.yaml"
+  #     channelNamePrefix: "testChannel"
+  #     peers: ["peer1st.orga"]
+  #     ordererOrgName: ordererorg
+  #     ordererName: orderer1st.orgc
+  #     batchTimeout: 20s
+  #     maxMessageCount: 100
+  #     absoluteMaxBytes: 103802353
+  #     anchorPeers: ["peer1st.orga"]
+  # # Query channel configurations: batchtimeout/batchsize/anchorPeers
+  # - name: "query-channel"
+  #   operation: "CHANNEL_QUERY"
+  #   iterationCount: 10
+  #   iterationInterval: 1s
+  #   retryCount: 3
+  #   loadSpread: 1
+  #   parameters:
+  #     connectionProfile: "ConnectionProfile_orga.yaml"
+  #     channelNamePrefix: "testChannel"
+  #     peers: ["peer1st.orga"]
+  - name: "install-chaincode"
+    operation: "CHAINCODE_INSTALL"
+    iterationCount: 2
+    iterationInterval: 1s
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/org1/org1_ConnProf.yaml
+      chaincodeNamePrefix: "shwsamplecc-"
+      chaincodeVersion: "v1"
+      path: "chaincode/samplecc" # cc src code path relative to $GOPATH
+      peers: "org1-peer1"
+  - name: "instantiate-chaincode"
+    operation: "CHAINCODE_INSTANTIATE"
+    iterationCount: 2
+    iterationInterval: 1s
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/org1/org1_ConnProf.yaml
+      chaincodeNamePrefix: "shwsamplecc-"
+      chaincodeVersion: "v1"
+      path: "chaincode/samplecc"
+      channelName: "shwchannel0"
+      peers: "org1-peer1"
+  - name: "execute-cc"
+    operation: "CHAINCODE_INVOKE"
+    iterationCount: 100
+    iterationInterval: 2r
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/org1/org1_ConnProf.yaml
+      channelName: "shwchannel0"
+      chaincodeName: "shwsamplecc-0"
+      queryOnly: false
+      peers: "org1-peer1"
+      chaincodeParams:
+        - type: "literal"
+          value: "invoke"
+        - type: "literal"
+          value: "put"
+        - type: "stringPattern"
+          value: "account[0-9]"
+        - type: "stringPattern"
+          value: "account[a-z]"
+        - type: "intRange"
+          min: "0"
+          max: "100"
+        - type: "payloadRange"
+          min: "1024"
+          max: "2048"

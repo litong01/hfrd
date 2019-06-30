@@ -1,0 +1,21 @@
+{
+  "jenkins": {
+    "baseUrl": "http://userid:apitoken@host:port",
+    "crumbUrl": "/crumbIssuer/api/json",
+    "jobUrl": "/job/{JobName}/api/xml?tree=builds[id,result,queueId]&xpath=\/\/build[queueId={QueueId}]",
+    "jobStatusUrl": "/job/{JobName}/{JobId}/artifact/workdir/results/jobStatus.json",
+    "serviceGetByServiceId": "job/{JobName}}/{JobId}/artifact/workdir/results/package.tar",
+    "buildUrl": "/job/{JobName}/buildWithParameters"
+  },
+  "log": {
+    "level": "info"
+  },
+  "auth": {
+    "enabled": false,
+    "type": "jwt"
+  },
+  "couchUrl": "http://userid:password@host:port",
+  "allowOrigins": ["http://ip1:port1", "http://ip2:port2"],
+  "contentRepo": "/opt/hfrd/contentRepo",
+  "apacheBaseUrl": "http(s)://host:port"
+}

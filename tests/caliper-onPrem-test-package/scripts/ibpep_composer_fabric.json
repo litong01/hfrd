@@ -1,0 +1,116 @@
+{  
+    "composer": {
+      "chaincodes": [{"id": "basic-sample-network", "version": "0.1.0", "path": "src/contract/composer", "orgs": ["PeerOrg1"], "loglevel": "INFO"}],
+      "cryptodir": "network/fabric/config/crypto-config",
+      "network": {
+        "x-type" : "hlfv1",
+        "timeout": 3000,
+        "version": "1.0.0",
+        "tls": true,
+        "orderers": {
+            "orderer001": {
+                "domain": "", 
+                "mspid": "", 
+                "url": "grpcs://ash-zbc04b.4.secure.blockchain.ibm.com:20016", 
+                "msp": "", 
+                "cert": "network/fabric/ibpep/ep_orderer_tls_cacerts.pem", 
+                "hostname": "ash-zbc04b.4.secure.blockchain.ibm.com",
+                "hosturl": "ordererxxxxx.example.com:7050"
+            }
+          
+        },
+        "certificateAuthorities": {
+          "fabric-ca-peerorg2-20019a": {
+            "url": "https://ash-zbc04a.4.secure.blockchain.ibm.com:20019", 
+            "name": "fabric-ca-peerorg2-20019a"
+          },
+          "fabric-ca-peerorg1-20018a": {
+            "url": "https://ash-zbc04a.4.secure.blockchain.ibm.com:20018", 
+            "name": "fabric-ca-peerorg1-20018a"
+          }
+        },
+        "organizations": [
+          {
+            "name": "PeerOrg1",
+            "mspid": "PeerOrg1",
+            "mspconfig": "",
+            "adminCert": "network/fabric/ibpep/creds/PeerOrg1admin/msp/signcerts/cert.pem",
+            "adminKey" : "network/fabric/ibpep/creds/PeerOrg1admin/msp/keystore/priv.pem",
+            "certificateAuthorities": [
+              "fabric-ca-peerorg1-20018a"
+            ],
+            "peers": [
+              "fabric-peer-org1-20069a",
+              "fabric-peer-org1-20071c"
+            ]
+          },
+          {            
+            "name": "PeerOrg2",
+            "mspid": "PeerOrg2",
+            "mspconfig": "",
+            "adminCert": "network/fabric/ibpep/creds/PeerOrg2admin/msp/signcerts/cert.pem",
+            "adminKey" : "network/fabric/ibpep/creds/PeerOrg2admin/msp/keystore/priv.pem",
+            "certificateAuthorities": [
+              "fabric-ca-peerorg2-20019a"
+            ],
+            "peers": [
+              "fabric-peer-org2-20075c",
+              "fabric-peer-org2-20073a"
+            ]            
+          }       
+        ],
+        "peers": {
+          "fabric-peer-org1-20069a": {
+            "url": "grpcs://ash-zbc04a.4.secure.blockchain.ibm.com:20069",
+            "eventUrl": "grpcs://ash-zbc04a.4.secure.blockchain.ibm.com:20068",
+            "hostname": "ash-zbc04a.4.secure.blockchain.ibm.com",
+            "cert" : "network/fabric/ibpep/fabric-peer-org1-20069a_tlscacerts.pem",
+            "channels":[
+              "channel1"
+            ]
+          },
+          "fabric-peer-org1-20071c": {
+            "url": "grpcs://ash-zbc04c.4.secure.blockchain.ibm.com:20071",
+            "eventUrl": "grpcs://ash-zbc04c.4.secure.blockchain.ibm.com:20070",
+            "hostname": "ash-zbc04c.4.secure.blockchain.ibm.com",
+            "cert" : "network/fabric/ibpep/fabric-peer-org1-20071c_tlscacerts.pem",
+            "channels":[
+              "channel1"
+            ]
+          },
+          "fabric-peer-org2-20073a": {
+            "url": "grpcs://ash-zbc04a.4.secure.blockchain.ibm.com:20073",
+            "eventUrl": "grpcs://ash-zbc04a.4.secure.blockchain.ibm.com:20072",
+            "hostname": "ash-zbc04a.4.secure.blockchain.ibm.com",
+            "cert" : "network/fabric/ibpep/fabric-peer-org2-20073a_tlscacerts.pem",
+            "channels":[
+            
+            ]
+          },
+          "fabric-peer-org2-20075c": {
+            "url": "grpcs://ash-zbc04c.4.secure.blockchain.ibm.com:20075",
+            "eventUrl": "grpcs://ash-zbc04c.4.secure.blockchain.ibm.com:20074",
+            "hostname": "ash-zbc04c.4.secure.blockchain.ibm.com",
+            "cert" : "network/fabric/ibpep/fabric-peer-org2-20075c_tlscacerts.pem",
+            "channels":[
+           
+            ]
+          }
+        },
+        "channels": {
+          "channel1": {
+            "config": "",          
+            "mspconfig": "",
+            "cafile": "network/fabric/ibpep/ep_orderer_tls_cacerts.pem",
+            "orderers": [
+              "orderer001"
+            ],
+            "peers": [
+              "fabric-peer-org1-20069a",
+              "fabric-peer-org1-20071c"
+            ]
+          }
+        }
+      }            
+    }
+  }

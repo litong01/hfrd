@@ -1,0 +1,28 @@
+{
+    "channels": [
+        {
+            "name":"channel1",
+            "members": [
+                    "PeerOrg1"
+            ],
+            "batchSize" : { "messageCount" : 100,
+                            "absoluteMaxBytes" : 103809024,
+                            "preferredMaxBytes" : 524288
+                        },
+            "batchTimeout": "10s",
+            "channelRestrictionMaxCount" : "150"
+        },
+        {
+            "name": "channel2",
+            "members": [
+                "PeerOrg1"
+            ],
+            "batchSize" : { "messageCount" : 100,
+                            "absoluteMaxBytes" : 103809024,
+                            "preferredMaxBytes" : 524288
+                        },
+            "batchTimeout": "10s",
+            "channelRestrictionMaxCount" : "150"
+        }
+    ]
+}

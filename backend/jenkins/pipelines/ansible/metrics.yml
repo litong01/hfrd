@@ -1,0 +1,7 @@
+avg_cc_invoke_time: avg(hfrd_chaincode_invoke_timer_mean{testid="{{ reqId }}"})
+max_cc_invoke_time: max(hfrd_chaincode_invoke_timer_max{testid="{{ reqId }}"})
+min_cc_invoke_time: min(hfrd_chaincode_invoke_timer_min{testid="{{ reqId }}"})
+avg_cc_invoke_proposal_time: avg(hfrd_chaincode_invoke_proposal_timer_mean{testid="{{ reqId }}"})
+avg_cc_invoke_broadcast_time: avg(hfrd_chaincode_invoke_broadcast_timer_mean{testid="{{ reqId }}"})
+cc_invoke_tps: sum(hfrd_chaincode_invoke_counter_ps{testid="{{ reqId }}"})
+metrics: [ "{{ avg_cc_invoke_time }}","{{ max_cc_invoke_time }}","{{ min_cc_invoke_time }}","{{ avg_cc_invoke_proposal_time }}","{{ avg_cc_invoke_broadcast_time }}","{{ cc_invoke_tps }}" ]

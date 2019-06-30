@@ -1,0 +1,61 @@
+
+---
+# icp cluster configurations
+icp:
+  cluster_ip: ''
+  proxy_ip: ''
+  namespace: "default"
+  storage_class: "nfs-recycle"
+  user: ''
+  password: ''
+
+# ibp4icp helm charts version. Used to download helm charts source code from git
+helm_branch: release-1.0
+# network topology
+network:
+  name: hfrd
+  arch: s390x
+  fabric_version: 1.4.0
+  ca:
+    cpu: 200m
+    cpu_limit: 500m
+    memory: 200M
+    memory_limit: 500M
+  orderer:
+    num_orderers: 1
+    cpu: 250m
+    cpu_limit: 1
+    memory: 250Mi
+    memory_limit: 1Gi
+  peer:
+    num_orgs: 2
+    peers_per_org: 1
+    cpu: 250m
+    cpu_limit: 1
+    memory: 300Mi
+    memory_limit: 1Gi
+
+images_repo:
+  ca:
+    image_repo: ibmcom/ibp-fabric-ca
+    tag: 1.4.0
+    init_image_repo: ibmcom/ibp-init
+    init_image_tag: 1.4.0
+  orderer:
+    image_repo: ibmcom/ibp-fabric-orderer
+    tag: 1.4.0
+    init_image_repo: ibmcom/ibp-init
+    init_image_tag: 1.4.0
+  peer:
+    image_repo: ibmcom/ibp-fabric-peer
+    tag: 1.4.0
+    dind_image_repo: ibmcom/ibp-dind
+    dind_image_tag: 1.4.0
+    init_image_repo: ibmcom/ibp-init
+    init_image_tag: 1.4.0
+orderer_settings:
+  max_batch_timeout: 1s
+  batch_size:
+    max_message_count: 10
+    absolute_max_bytes: "103809024"
+    preferred_max_bytes: "33554432"

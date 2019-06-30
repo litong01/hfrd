@@ -1,0 +1,127 @@
+certificateAuthorities:
+  ca.org1.example.com:
+    caName: ca.org1.example.com
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: ${GOPATH}/src/hfrd/modules/gosdk/fixtures/sdk-crypto/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
+    url: https://ca.org1.example.com:7054
+  ca.org2.example.com:
+    caName: ca.org2.example.com
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: ${GOPATH}/src/hfrd/modules/gosdk/fixtures/sdk-crypto/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem
+    url: https://ca.org2.example.com:7054
+client:
+  connection:
+    timeout:
+      orderer: 300
+      peer:
+        endorser: 300
+        eventHub: 300
+        eventReg: 300
+  organization: org1
+  cryptoconfig:
+    path: ${GOPATH}/src/hfrd/modules/gosdk/fixtures/sdk-crypto
+channels:
+  mychannel10:
+    peers:
+      peer0.org1.example.com:
+        endorsingpeer: true
+        chaincodequery: true
+        ledgerquery: true
+        eventsource: true
+entityMatchers:
+  certificateAuthority:
+  - mappedHost: ca.org1.example.com
+    pattern: (\w*)ca.org1.example.com(\w*)
+    urlSubstitutionExp: http://localhost:7054
+  - mappedHost: ca.org2.example.com
+    pattern: (\w*)ca.org2.example.com(\w*)
+    urlSubstitutionExp: http://localhost:8054
+  orderer:
+  - mappedHost: orderer.example.com
+    pattern: (\w*)orderer.example.com(\w*)
+    sslTargetOverrideUrlSubstitutionExp: orderer.example.com
+    urlSubstitutionExp: localhost:7050
+  peer:
+  - eventUrlSubstitutionExp: localhost:7053
+    mappedHost: peer0.org1.example.com
+    pattern: (\w*)peer0.org1.example.com(\w*)
+    sslTargetOverrideUrlSubstitutionExp: peer0.org1.example.com
+    urlSubstitutionExp: localhost:7051
+  - eventUrlSubstitutionExp: localhost:8053
+    mappedHost: peer1.org1.example.com
+    pattern: (\w*)peer1.org1.example.com(\w*)
+    sslTargetOverrideUrlSubstitutionExp: peer1.org1.example.com
+    urlSubstitutionExp: localhost:8051
+  - eventUrlSubstitutionExp: localhost:9053
+    mappedHost: peer0.org2.example.com
+    pattern: (\w*)peer0.org2.example.com(\w*)
+    sslTargetOverrideUrlSubstitutionExp: peer0.org2.example.com
+    urlSubstitutionExp: localhost:9051
+  - eventUrlSubstitutionExp: localhost:10053
+    mappedHost: peer1.org2.example.com
+    pattern: (\w*)peer1.org2.example.com(\w*)
+    sslTargetOverrideUrlSubstitutionExp: peer1.org2.example.com
+    urlSubstitutionExp: localhost:10051
+name: orga-network
+orderers:
+  orderer.example.com:
+    grpcOptions:
+      ssl-target-name-override: orderer.example.com
+    tlsCACerts:
+      path: ${GOPATH}/src/hfrd/modules/gosdk/fixtures/sdk-crypto/ordererorg/tlsca/tlsca.example.com-cert.pem
+    url: localhost:7050
+organizations:
+  org1:
+    certificateAuthorities:
+    - ca.org1.example.com
+    mspid: Org1MSP
+    cryptoPath: org1.example.com/users/{username}@org1.example.com/msp
+    peers:
+    - peer0.org1.example.com
+    - peer1.org1.example.com
+  org2:
+    certificateAuthorities:
+    - ca.org2.example.com
+    mspid: Org2MSP
+    cryptoPath: org2.example.com/users/{username}@org2.example.com/msp
+    peers:
+    - peer0.org2.example.com
+    - peer1.org2.example.com
+  ordererorg:
+    mspid: OrdererMSP
+    cryptoPath: ordererorg/users/{username}@example.com/msp
+peers:
+  peer0.org1.example.com:
+    eventUrl: peer0.org1.example.com:7053
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.example.com
+    tlsCACerts:
+      path: ${GOPATH}/src/hfrd/modules/gosdk/fixtures/sdk-crypto/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
+    url: peer0.org1.example.com:7051
+  peer0.org2.example.com:
+    eventUrl: peer0.org2.example.com:7053
+    grpcOptions:
+      ssl-target-name-override: peer0.org2.example.com
+    tlsCACerts:
+      path: ${GOPATH}/src/hfrd/modules/gosdk/fixtures/sdk-crypto/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem
+    url: peer0.org2.example.com:7051
+  peer1.org1.example.com:
+    eventUrl: peer1.org1.example.com:7053
+    grpcOptions:
+      ssl-target-name-override: peer1.org1.example.com
+    tlsCACerts:
+      path: ${GOPATH}/src/hfrd/modules/gosdk/fixtures/sdk-crypto/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
+    url: peer1.org1.example.com:7051
+  peer1.org2.example.com:
+    eventUrl: peer1.org2.example.com:7053
+    grpcOptions:
+      ssl-target-name-override: peer1.org2.example.com
+    tlsCACerts:
+      path: ${GOPATH}/src/hfrd/modules/gosdk/fixtures/sdk-crypto/org2.example.com/tlsca/tlsca.org2.example.com-cert.pem
+    url: peer1.org2.example.com:7051
+version: 1.0.0
+x-type: hlfv1

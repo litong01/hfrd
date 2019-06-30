@@ -1,0 +1,13 @@
+image: hfrd/nfs-provisioner:latest
+tags: ['latest']
+manifests:
+  -
+    image: hfrd/nfs-provisioner:s390x-latest
+    platform:
+      architecture: s390x
+      os: linux
+  -
+    image: hfrd/nfs-provisioner:amd64-latest
+    platform:
+      architecture: amd64
+      os: linux

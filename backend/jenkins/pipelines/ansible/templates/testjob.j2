@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: "job-{{ req_id }}-{{ my_idx }}"
+spec:
+  template:
+    spec:
+      volumes:
+        - name: storage-{{ req_id }}
+          persistentVolumeClaim:
+{% if pvcname is defined %}
+            claimName: {{ pvcname }}
+{% else %}
+            claimName: storage-{{ metricserviceid | default(req_id) }}
+{% endif %}
+{% if testitem.container is defined %}
+      initContainers:
+      - name: init-{{ req_id }}-{{ my_idx }}
+        image: hfrd/gosdk:latest
+        securityContext:
+          runAsUser: 0
+        imagePullPolicy: Always
+        command: ['sh', '-c']
+        args:
+          - mkdir -p /fabric/bin;
+            cp -u /usr/local/bin/gosdk /fabric/bin
+        volumeMounts:
+          - mountPath: /fabric
+            name: storage-{{ req_id }}
+{% endif %}
+      containers:
+      - name: "con-{{ req_id }}-{{ my_idx }}"
+        image: {{ testitem.container | default('hfrd/gosdk:latest') }}
+        command: ["{{ cmd_params }}" ]
+        imagePullPolicy: Always
+        env:
+          - { name: "METRICS_TARGET_URL", value: "monitor-service-int-{{ metricserviceid | default(req_id) }}:9091" }
+          - { name: "TEST_ID", value: "{{ req_id }}"}
+          - { name: "GOPATH", value: "/fabric" }
+          - { name: "LOG_LEVEL", value: "{{ logLevel | default('ERROR') }}" }
+        volumeMounts:
+          - mountPath: /fabric
+            name: storage-{{ req_id }}
+      restartPolicy: Never
+  backoffLimit: 3
+  completions: {{ testitem.loadSpread }}
+  parallelism: {{ testitem.loadSpread }}

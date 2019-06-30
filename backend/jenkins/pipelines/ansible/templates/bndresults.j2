@@ -1,0 +1,19 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: bndresults
+spec:
+  volumes:
+  - name: task-pv-storage
+    persistentVolumeClaim:
+      claimName: fabriccerts
+  containers:
+  - name: bnd-profile-collector
+    image: alpine
+    command: ["sleep"]
+    args: ["3000"]
+    volumeMounts:
+    - mountPath: "/bndprofiles"
+      name: "task-pv-storage"
+      subPath: "bndprofiles"

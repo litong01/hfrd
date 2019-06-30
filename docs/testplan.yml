@@ -1,0 +1,83 @@
+---
+name: "System performance test"
+description: "This test is to create as much chaincode computation load as possible"
+continueAfterFail: yes
+logLevel: "ERROR"
+saveLog: False
+collectFabricMetrics: False
+tests:
+  - name: "create-channel"
+    operation: "CHANNEL_CREATE"
+    iterationCount: 5
+    iterationInterval: 0s
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/orga/connection.yml
+      channelNamePrefix: "demochannel"
+      channelConsortium: "FabricConsortium"
+      channelOrgs: "orga,orgb"
+      ordererName: orderer1st-orgc
+  # Join orga peers
+  - name: "join-orga-peers-to-channel"
+    operation: "CHANNEL_JOIN"
+    iterationCount: 5
+    iterationInterval: 1s
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/orga/connection.yml
+      channelNamePrefix: "demochannel"
+      peers: "peer1st-orga"
+      ordererName: orderer1st-orgc
+  # # Join orgb peers
+  - name: "join-orgb-peers-to-channel"
+    operation: "CHANNEL_JOIN"
+    iterationCount: 5
+    iterationInterval: 1s
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/orgb/connection.yml
+      channelNamePrefix: "demochannel"
+      peers: "peer1st-orgb"
+      ordererName: orderer1st-orgc
+  #  install cc on orga peers
+  - name: "install-chaincode"
+    operation: "CHAINCODE_INSTALL"
+    iterationCount: 5
+    iterationInterval: 1s
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/orga/connection.yml
+      chaincodeNamePrefix: "mysamplecc-"
+      chaincodeVersion: "v1"
+      path: "chaincode/samplecc" # cc src code path relative to $GOPATH
+      peers: "peer1st-orga"
+    #  install cc on orgb peers
+  - name: "install-chaincode"
+    operation: "CHAINCODE_INSTALL"
+    iterationCount: 5
+    iterationInterval: 1s
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/orgb/connection.yml
+      chaincodeNamePrefix: "mysamplecc-"
+      chaincodeVersion: "v1"
+      path: "chaincode/samplecc" # cc src code path relative to $GOPATH
+      peers: "peer1st-orgb"
+  - name: "instantiate-chaincode"
+    operation: "CHAINCODE_INSTANTIATE"
+    iterationCount: 1
+    iterationInterval: 1s
+    retryCount: 3
+    loadSpread: 1
+    parameters:
+      connectionProfile: /fabric/keyfiles/orga/connection.yml
+      chaincodeNamePrefix: "mysamplecc-"
+      chaincodeVersion: "v1"
+      path: "chaincode/samplecc"
+      channelName: "demochannel0"
+      peers: "peer1st-orga"

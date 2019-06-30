@@ -1,0 +1,368 @@
+swagger: '2.0'
+info:
+  version: '0.0.1'
+  title: 'Hyperledger Fabric Regression Driver(HFRD) API'
+  description: 'HFRD API definition'
+  contact:
+    email: email4tong@yahoo.com
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+host: hfrdrestsrv.rtp.raleigh.ibm.com:9090
+basePath: /
+schemes:
+ - http
+
+# tags are used for organizing operations
+tags:
+- name: users
+  description: Operations available to users
+
+paths:
+  /v1/{uid}/services:
+    parameters:
+    - in: path
+      name: uid
+      description: the user id which the service belongs
+      required: true
+      type: string
+    get:
+      tags:
+      - users
+      summary: query all services created by the uid
+      operationId: servicesRetrieveByUid
+      description: query service/network list created by the uid
+      produces:
+        - application/json
+      responses:
+        200:
+          description: query is successful
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Service'
+            description: services/networks list JSON
+        401:
+          description: Unauthorized
+        500:
+          description: Internal Server Error
+
+  /v1/{uid}/service:
+    parameters:
+    - in: path
+      name: uid
+      description: the user id which the service belongs
+      required: true
+      type: string
+    post:
+      tags:
+      - users
+      summary: create a new service
+      operationId: serviceCreate
+      description: create a service in requested environment
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: plan
+          description: Plan of the blockchain service we want to create
+          required: true
+          schema:
+            $ref: '#/definitions/Plan'
+
+      responses:
+        202:
+          description: request accepted
+          headers:
+            Request-Id:
+              type: string
+              description: the request id
+        400:
+          description: invalid input or request failed
+        409:
+          description: service already exists
+    get:
+      tags:
+      - users
+      summary: query a service by request id
+      operationId: serviceRetrieveByRequestId
+      description: query a service by request id in requested environment
+      parameters:
+        - in: query
+          name: requestid
+          description: the request id when the service was created.
+          required: true
+          type: string
+        - $ref: '#/parameters/env'
+      produces:
+        - application/gzip
+        - text/plain
+      responses:
+        200:
+          description: query is successful
+          schema:
+            type: file
+            description: gzip file
+        202:
+          description: the service is being created
+        400:
+          description: invalid input or request failed
+        404:
+          description: service not found with the request id provided
+    delete:
+      tags:
+      - users
+      summary: delete a service by request id
+      operationId: serviceDeleteByRequestId
+      description: delete a service by request id in requested environment
+      parameters:
+        - in: query
+          name: requestid
+          description: the request id when the service was created against.
+          required: true
+          type: string
+        - $ref: '#/parameters/env'
+      responses:
+        200:
+          description: service deletion is successful
+        202:
+          description: service deletion is still in progress
+        400:
+          description: invalid input or request failed
+  /v1/{uid}/service/{serviceid}:
+    parameters:
+    - in: path
+      name: uid
+      description: the user id which the service belongs
+      required: true
+      type: string
+    - in: path
+      name: serviceid
+      description: the service id
+      required: true
+      type: string
+    - $ref: '#/parameters/env'
+    get:
+      tags:
+      - users
+      summary: query the service
+      operationId: serviceRetrieveByID
+      description: query a service by service id in requested environment
+      produces:
+        - application/gzip
+      responses:
+        200:
+          description: query is successful
+          schema:
+            type: file
+            description: gzip file
+        202:
+          description: request accepted
+          headers:
+            Request-Id:
+              type: string
+              description: the request id to be used for next query
+        400:
+          description: invalid input or request failed
+    delete:
+      tags:
+      - users
+      summary: delete a service
+      operationId: serviceDeleteByServiceId
+      description: delete a service by service id in requested environment
+      responses:
+        202:
+          description: request accepted
+          headers:
+            Request-Id:
+              type: string
+              description: the request id you need to query the delete status
+        204:
+          description: service removed
+        400:
+          description: request failed
+  /v1/{uid}/test:
+    parameters:
+    - in: path
+      name: uid
+      description: the user id which the service belongs
+      required: true
+      type: string
+    post:
+      tags:
+      - users
+      summary: run a test
+      operationId: testRun
+      description: run a test
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          required: true
+          description: The test metadata
+          name: test
+          schema:
+            $ref: '#/definitions/Test'
+      responses:
+        202:
+          description: request accepted
+          headers:
+            Request-Id:
+              type: string
+              description: the request id to be used for next query
+        400:
+          description: request failed
+    get:
+      tags:
+      - users
+      summary: query a test status or output
+      operationId: testRetrieveByRequestId
+      description: query a test status
+      parameters:
+        - in: query
+          name: requestid
+          description: the request id returned when the test was created.
+          required: true
+          type: string
+      produces:
+        - application/text
+      responses:
+        200:
+          description: query is successful
+          schema:
+            type: file
+            description: text file
+        400:
+          description: request failed
+  /v1/{uid}/job/{jobname}/{queueid}:
+    summary: get job id and status by job name and queue id
+    parameters:
+    - in: path
+      name: uid
+      description: user id
+      required: true
+      type: string
+    - in: path
+      name: jobname
+      description: the jobname
+      required: true
+      type: string
+      enum: ['moduletest', 'network', 'ibpcerts', 'k8snetwork', 'network-cm']
+    - in: path
+      name: queueid
+      description: the queue id
+      required: true
+      type: string
+    get:
+      tags:
+        - users
+      responses:
+        200:
+          description: Status OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobId:
+                    type: string
+                    description: the job id
+                  status:
+                    type: string
+                    description: the job status
+        404:
+          description: unable to get job status
+
+definitions:
+  Plan:
+    type: object
+    description: Blockchain service plan
+    properties:
+      env:
+        type: string
+        description: The environment in which to create blockchain services
+        enum: ['bxstaging', 'bxproduction', 'cm']
+        default: 'bxstaging'
+      loc:
+        type: string
+        description: location id. This is required by Enterprise Plan only.
+        example: 'ASH-CI'
+      name:
+        type: string
+        description: plan name, like 'sp'(starter plan) and 'ep'(enterprise plan). Default plan name is "sp" for bx environment and "ep" for cluster manager environment
+        enum: ['sp', 'ep']
+        example: 'sp'
+      config:
+        $ref: '#/definitions/Config'
+  Config:
+    type: object
+    description: customized blockchain Enterprise Plan network. ONLY for ENTERPRISE PLAN in bxstaging, bxproduction and cm environment
+    properties:
+      numOfOrgs:
+        type: integer
+        description: how many organizations in the blockchain network to be created
+        format: int32
+        default: 1
+      numOfPeers:
+        type: integer
+        description: how many peers per organization
+        format: int32
+        default: 2
+      ledgerType:
+        type: string
+        description: what kind of ledger DB for each fabric peer
+        enum: ['levelDB', 'couch']
+        default: 'levelDB'
+  Test:
+    type: object
+    description: Metadata for the test to be executed
+    properties:
+      url:
+        type: string
+        description: The url that points to test package tar
+      hash:
+        type: string
+        description: The hash value of test package tar
+      startcmd:
+        type: string
+        description: test execution entry point
+        example: test-entrypoint.sh
+      sslcerts:
+        type: boolean
+        description: true to use ssl certificates for authentication. false to ignore ssl certificates
+        default: true
+    required:
+      - url
+      - hash
+      - startcmd
+  Service:
+    type: object
+    description: metadata for the blockchain service/network
+    properties:
+      serviceId:
+        type: string
+        description: Bluemix service id
+      networkId:
+        type: string
+        description: blockchain network id
+      planName:
+        type: string
+        description: blockchain network plan name, like [SP, EP, EPP]
+      env:
+        type: string
+        description: blockchain environment, like [bxstaging, bxproduction, cm]
+      createdAt:
+        type: string
+        description: date and time the blockchain network is created
+
+parameters:
+  env:
+    name: env
+    type: string
+    description: The environment in which to create blockchain services
+    in: query
+    required: false
+    default: 'bxstaging'
+    enum: ['bxstaging', 'bxproduction', 'cm']

@@ -1,0 +1,723 @@
+2018-08-30 09:36:08,058 p=1488 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 09:36:08,058 p=1488 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 09:36:08,086 p=1488 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 09:36:08,719 p=1488 u=ubuntu |  ok: [cloud]
+2018-08-30 09:36:08,732 p=1488 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:36:08,784 p=1488 u=ubuntu |  ok: [cloud]
+2018-08-30 09:36:08,795 p=1488 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:36:08,846 p=1488 u=ubuntu |  ok: [cloud]
+2018-08-30 09:36:08,857 p=1488 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 09:36:09,103 p=1488 u=ubuntu |  changed: [cloud]
+2018-08-30 09:36:09,114 p=1488 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 09:36:09,407 p=1488 u=ubuntu |  changed: [cloud]
+2018-08-30 09:36:09,418 p=1488 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 09:36:09,600 p=1488 u=ubuntu |  changed: [cloud]
+2018-08-30 09:36:09,618 p=1488 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 09:36:09,689 p=1488 u=ubuntu |  fatal: [cloud]: FAILED! => {"changed": false, "msg": "Could not find or access '/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kubeconfig.tgz'"}
+2018-08-30 09:36:09,690 p=1488 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 09:36:09,691 p=1488 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 09:36:09,691 p=1488 u=ubuntu |  cloud                      : ok=6    changed=3    unreachable=0    failed=1   
+2018-08-30 09:36:46,555 p=1661 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 09:36:46,556 p=1661 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 09:36:46,564 p=1661 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 09:36:47,047 p=1661 u=ubuntu |  ok: [cloud]
+2018-08-30 09:36:47,057 p=1661 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:36:47,108 p=1661 u=ubuntu |  ok: [cloud]
+2018-08-30 09:36:47,119 p=1661 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:36:47,170 p=1661 u=ubuntu |  ok: [cloud]
+2018-08-30 09:36:47,181 p=1661 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 09:36:47,405 p=1661 u=ubuntu |  ok: [cloud]
+2018-08-30 09:36:47,416 p=1661 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 09:36:47,697 p=1661 u=ubuntu |  ok: [cloud]
+2018-08-30 09:36:47,709 p=1661 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 09:36:47,885 p=1661 u=ubuntu |  ok: [cloud]
+2018-08-30 09:36:47,896 p=1661 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 09:36:48,351 p=1661 u=ubuntu |  fatal: [cloud]: FAILED! => {"changed": false, "dest": "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube", "extract_results": {"cmd": ["/usr/bin/unzip", "-o", "--strip-components=1", "/home/ubuntu/.ansible/tmp/ansible-tmp-1535636207.95-117928844796581/source", "-d", "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube"], "err": "", "out": "error:  -fn or any combination of -c, -l, -p, -t, -u and -v options invalid\ncaution:  both -n and -o specified; ignoring -o\nUnZip 6.00 of 20 April 2009, by Debian. Original by Info-ZIP.\n\nUsage: unzip [-Z] [-opts[modifiers]] file[.zip] [list] [-x xlist] [-d exdir]\n  Default action is to extract files in list, except those in xlist, to exdir;\n  file[.zip] may be a wildcard.  -Z => ZipInfo mode (\"unzip -Z\" for usage).\n\n  -p  extract files to pipe, no messages     -l  list files (short format)\n  -f  freshen existing files, create none    -t  test compressed archive data\n  -u  update files, create if necessary      -z  display archive comment only\n  -v  list verbosely/show version info       -T  timestamp archive to latest\n  -x  exclude files that follow (in xlist)   -d  extract files into exdir\nmodifiers:\n  -n  never overwrite existing files         -q  quiet mode (-qq => quieter)\n  -o  overwrite files WITHOUT prompting      -a  auto-convert any text files\n  -j  junk paths (do not make directories)   -aa treat ALL files as text\n  -U  use escapes for all non-ASCII Unicode  -UU ignore any Unicode fields\n  -C  match filenames case-insensitively     -L  make (some) names lowercase\n  -X  restore UID/GID info                   -V  retain VMS version numbers\n  -K  keep setuid/setgid/tacky permissions   -M  pipe through \"more\" pager\n  -O CHARSET  specify a character encoding for DOS, Windows and OS/2 archives\n  -I CHARSET  specify a character encoding for UNIX and other archives\n\nSee \"unzip -hh\" or unzip.txt for more help.  Examples:\n  unzip data1 -x joe   => extract all files except joe from zipfile data1.zip\n  unzip -p foo | more  => send contents of foo.zip via pipe into program more\n  unzip -fo foo ReadMe => quietly replace existing ReadMe if archive file newer\n", "rc": 10}, "gid": 1000, "group": "ubuntu", "handler": "ZipArchive", "mode": "0775", "msg": "failed to unpack /home/ubuntu/.ansible/tmp/ansible-tmp-1535636207.95-117928844796581/source to /home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube", "owner": "ubuntu", "size": 4096, "src": "/home/ubuntu/.ansible/tmp/ansible-tmp-1535636207.95-117928844796581/source", "state": "directory", "uid": 1000}
+2018-08-30 09:36:48,352 p=1661 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 09:36:48,353 p=1661 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 09:36:48,353 p=1661 u=ubuntu |  cloud                      : ok=6    changed=0    unreachable=0    failed=1   
+2018-08-30 09:39:21,866 p=1859 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 09:39:21,867 p=1859 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 09:39:21,875 p=1859 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 09:39:22,362 p=1859 u=ubuntu |  ok: [cloud]
+2018-08-30 09:39:22,372 p=1859 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:39:22,424 p=1859 u=ubuntu |  ok: [cloud]
+2018-08-30 09:39:22,436 p=1859 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:39:22,487 p=1859 u=ubuntu |  ok: [cloud]
+2018-08-30 09:39:22,498 p=1859 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 09:39:22,720 p=1859 u=ubuntu |  ok: [cloud]
+2018-08-30 09:39:22,731 p=1859 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 09:39:23,010 p=1859 u=ubuntu |  ok: [cloud]
+2018-08-30 09:39:23,021 p=1859 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 09:39:23,197 p=1859 u=ubuntu |  ok: [cloud]
+2018-08-30 09:39:23,208 p=1859 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 09:39:23,642 p=1859 u=ubuntu |  fatal: [cloud]: FAILED! => {"changed": false, "dest": "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube/", "extract_results": {"cmd": ["/usr/bin/unzip", "-o", "--strip-components=1", "/home/ubuntu/.ansible/tmp/ansible-tmp-1535636363.26-46078593422941/source", "-d", "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube/"], "err": "", "out": "error:  -fn or any combination of -c, -l, -p, -t, -u and -v options invalid\ncaution:  both -n and -o specified; ignoring -o\nUnZip 6.00 of 20 April 2009, by Debian. Original by Info-ZIP.\n\nUsage: unzip [-Z] [-opts[modifiers]] file[.zip] [list] [-x xlist] [-d exdir]\n  Default action is to extract files in list, except those in xlist, to exdir;\n  file[.zip] may be a wildcard.  -Z => ZipInfo mode (\"unzip -Z\" for usage).\n\n  -p  extract files to pipe, no messages     -l  list files (short format)\n  -f  freshen existing files, create none    -t  test compressed archive data\n  -u  update files, create if necessary      -z  display archive comment only\n  -v  list verbosely/show version info       -T  timestamp archive to latest\n  -x  exclude files that follow (in xlist)   -d  extract files into exdir\nmodifiers:\n  -n  never overwrite existing files         -q  quiet mode (-qq => quieter)\n  -o  overwrite files WITHOUT prompting      -a  auto-convert any text files\n  -j  junk paths (do not make directories)   -aa treat ALL files as text\n  -U  use escapes for all non-ASCII Unicode  -UU ignore any Unicode fields\n  -C  match filenames case-insensitively     -L  make (some) names lowercase\n  -X  restore UID/GID info                   -V  retain VMS version numbers\n  -K  keep setuid/setgid/tacky permissions   -M  pipe through \"more\" pager\n  -O CHARSET  specify a character encoding for DOS, Windows and OS/2 archives\n  -I CHARSET  specify a character encoding for UNIX and other archives\n\nSee \"unzip -hh\" or unzip.txt for more help.  Examples:\n  unzip data1 -x joe   => extract all files except joe from zipfile data1.zip\n  unzip -p foo | more  => send contents of foo.zip via pipe into program more\n  unzip -fo foo ReadMe => quietly replace existing ReadMe if archive file newer\n", "rc": 10}, "gid": 1000, "group": "ubuntu", "handler": "ZipArchive", "mode": "0775", "msg": "failed to unpack /home/ubuntu/.ansible/tmp/ansible-tmp-1535636363.26-46078593422941/source to /home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube/", "owner": "ubuntu", "size": 4096, "src": "/home/ubuntu/.ansible/tmp/ansible-tmp-1535636363.26-46078593422941/source", "state": "directory", "uid": 1000}
+2018-08-30 09:39:23,643 p=1859 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 09:39:23,644 p=1859 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 09:39:23,644 p=1859 u=ubuntu |  cloud                      : ok=6    changed=0    unreachable=0    failed=1   
+2018-08-30 09:40:31,015 p=2052 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 09:40:31,016 p=2052 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 09:40:31,024 p=2052 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 09:40:31,504 p=2052 u=ubuntu |  ok: [cloud]
+2018-08-30 09:40:31,515 p=2052 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:40:31,568 p=2052 u=ubuntu |  ok: [cloud]
+2018-08-30 09:40:31,579 p=2052 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:40:31,631 p=2052 u=ubuntu |  ok: [cloud]
+2018-08-30 09:40:31,644 p=2052 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 09:40:31,867 p=2052 u=ubuntu |  ok: [cloud]
+2018-08-30 09:40:31,878 p=2052 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 09:40:32,156 p=2052 u=ubuntu |  ok: [cloud]
+2018-08-30 09:40:32,167 p=2052 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 09:40:32,342 p=2052 u=ubuntu |  ok: [cloud]
+2018-08-30 09:40:32,354 p=2052 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 09:40:32,802 p=2052 u=ubuntu |  changed: [cloud]
+2018-08-30 09:40:32,814 p=2052 u=ubuntu |  TASK [Rename ca tls private key] ***************************************************************************************
+2018-08-30 09:40:33,040 p=2052 u=ubuntu |  changed: [cloud]
+2018-08-30 09:40:33,059 p=2052 u=ubuntu |  TASK [Create storage spec for this test] *******************************************************************************
+2018-08-30 09:40:33,374 p=2052 u=ubuntu |  changed: [cloud] => (item=pvc)
+2018-08-30 09:40:33,540 p=2052 u=ubuntu |  changed: [cloud] => (item=utils)
+2018-08-30 09:40:33,552 p=2052 u=ubuntu |  TASK [Create storage space for the test] *******************************************************************************
+2018-08-30 09:40:33,577 p=2052 u=ubuntu |  fatal: [cloud]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: 'kube' is undefined\n\nThe error appears to have been in '/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.yml': line 50, column 7, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n    - name: Create storage space for the test\n      ^ here\n"}
+2018-08-30 09:40:33,579 p=2052 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 09:40:33,580 p=2052 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 09:40:33,580 p=2052 u=ubuntu |  cloud                      : ok=9    changed=3    unreachable=0    failed=1   
+2018-08-30 09:43:51,205 p=2355 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 09:43:51,207 p=2355 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 09:43:51,215 p=2355 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 09:43:51,696 p=2355 u=ubuntu |  ok: [cloud]
+2018-08-30 09:43:51,707 p=2355 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:43:51,760 p=2355 u=ubuntu |  ok: [cloud]
+2018-08-30 09:43:51,771 p=2355 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:43:51,822 p=2355 u=ubuntu |  ok: [cloud]
+2018-08-30 09:43:51,833 p=2355 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 09:43:52,058 p=2355 u=ubuntu |  ok: [cloud]
+2018-08-30 09:43:52,069 p=2355 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 09:43:52,346 p=2355 u=ubuntu |  ok: [cloud]
+2018-08-30 09:43:52,357 p=2355 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 09:43:52,534 p=2355 u=ubuntu |  ok: [cloud]
+2018-08-30 09:43:52,545 p=2355 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 09:43:52,981 p=2355 u=ubuntu |  ok: [cloud]
+2018-08-30 09:43:52,992 p=2355 u=ubuntu |  TASK [Rename ca tls private key] ***************************************************************************************
+2018-08-30 09:43:53,213 p=2355 u=ubuntu |  changed: [cloud]
+2018-08-30 09:43:53,224 p=2355 u=ubuntu |  TASK [Create storage spec for this test] *******************************************************************************
+2018-08-30 09:43:53,460 p=2355 u=ubuntu |  ok: [cloud] => (item=pvc)
+2018-08-30 09:43:53,619 p=2355 u=ubuntu |  ok: [cloud] => (item=utils)
+2018-08-30 09:43:53,630 p=2355 u=ubuntu |  TASK [Create storage space for the test] *******************************************************************************
+2018-08-30 09:43:53,645 p=2355 u=ubuntu |  fatal: [cloud]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: 'kube' is undefined\n\nThe error appears to have been in '/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.yml': line 52, column 7, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n    - name: Create storage space for the test\n      ^ here\n"}
+2018-08-30 09:43:53,646 p=2355 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 09:43:53,647 p=2355 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 09:43:53,647 p=2355 u=ubuntu |  cloud                      : ok=9    changed=1    unreachable=0    failed=1   
+2018-08-30 09:44:57,174 p=2651 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 09:44:57,174 p=2651 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 09:44:57,183 p=2651 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 09:44:57,658 p=2651 u=ubuntu |  ok: [cloud]
+2018-08-30 09:44:57,669 p=2651 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:44:57,721 p=2651 u=ubuntu |  ok: [cloud]
+2018-08-30 09:44:57,732 p=2651 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:44:57,782 p=2651 u=ubuntu |  ok: [cloud]
+2018-08-30 09:44:57,795 p=2651 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 09:44:58,016 p=2651 u=ubuntu |  changed: [cloud]
+2018-08-30 09:44:58,027 p=2651 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 09:44:58,304 p=2651 u=ubuntu |  ok: [cloud]
+2018-08-30 09:44:58,315 p=2651 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 09:44:58,492 p=2651 u=ubuntu |  ok: [cloud]
+2018-08-30 09:44:58,503 p=2651 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 09:44:58,928 p=2651 u=ubuntu |  fatal: [cloud]: FAILED! => {"changed": false, "dest": "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube", "extract_results": {"cmd": ["/usr/bin/unzip", "-o", "--strip 1", "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kubeconfig.zip", "-d", "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube"], "err": "UnZip 6.00 of 20 April 2009, by Debian. Original by Info-ZIP.\n\nUsage: unzip [-Z] [-opts[modifiers]] file[.zip] [list] [-x xlist] [-d exdir]\n  Default action is to extract files in list, except those in xlist, to exdir;\n  file[.zip] may be a wildcard.  -Z => ZipInfo mode (\"unzip -Z\" for usage).\n\n  -p  extract files to pipe, no messages     -l  list files (short format)\n  -f  freshen existing files, create none    -t  test compressed archive data\n  -u  update files, create if necessary      -z  display archive comment only\n  -v  list verbosely/show version info       -T  timestamp archive to latest\n  -x  exclude files that follow (in xlist)   -d  extract files into exdir\nmodifiers:\n  -n  never overwrite existing files         -q  quiet mode (-qq => quieter)\n  -o  overwrite files WITHOUT prompting      -a  auto-convert any text files\n  -j  junk paths (do not make directories)   -aa treat ALL files as text\n  -U  use escapes for all non-ASCII Unicode  -UU ignore any Unicode fields\n  -C  match filenames case-insensitively     -L  make (some) names lowercase\n  -X  restore UID/GID info                   -V  retain VMS version numbers\n  -K  keep setuid/setgid/tacky permissions   -M  pipe through \"more\" pager\n  -O CHARSET  specify a character encoding for DOS, Windows and OS/2 archives\n  -I CHARSET  specify a character encoding for UNIX and other archives\n\nSee \"unzip -hh\" or unzip.txt for more help.  Examples:\n  unzip data1 -x joe   => extract all files except joe from zipfile data1.zip\n  unzip -p foo | more  => send contents of foo.zip via pipe into program more\n  unzip -fo foo ReadMe => quietly replace existing ReadMe if archive file newer\n", "out": "", "rc": 10}, "gid": 1000, "group": "ubuntu", "handler": "ZipArchive", "mode": "0775", "msg": "failed to unpack /home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kubeconfig.zip to /home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube", "owner": "ubuntu", "size": 4096, "src": "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kubeconfig.zip", "state": "directory", "uid": 1000}
+2018-08-30 09:44:58,930 p=2651 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 09:44:58,930 p=2651 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 09:44:58,931 p=2651 u=ubuntu |  cloud                      : ok=6    changed=1    unreachable=0    failed=1   
+2018-08-30 09:47:52,912 p=2847 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 09:47:52,913 p=2847 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 09:47:52,921 p=2847 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 09:47:53,398 p=2847 u=ubuntu |  ok: [cloud]
+2018-08-30 09:47:53,408 p=2847 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:47:53,460 p=2847 u=ubuntu |  ok: [cloud]
+2018-08-30 09:47:53,471 p=2847 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 09:47:53,521 p=2847 u=ubuntu |  ok: [cloud]
+2018-08-30 09:47:53,532 p=2847 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 09:47:53,758 p=2847 u=ubuntu |  changed: [cloud]
+2018-08-30 09:47:53,769 p=2847 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 09:47:54,048 p=2847 u=ubuntu |  ok: [cloud]
+2018-08-30 09:47:54,059 p=2847 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 09:47:54,232 p=2847 u=ubuntu |  ok: [cloud]
+2018-08-30 09:47:54,245 p=2847 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 09:47:54,673 p=2847 u=ubuntu |  changed: [cloud]
+2018-08-30 09:47:54,685 p=2847 u=ubuntu |  TASK [Rename ca tls private key] ***************************************************************************************
+2018-08-30 09:47:54,918 p=2847 u=ubuntu |  changed: [cloud]
+2018-08-30 09:47:54,931 p=2847 u=ubuntu |  TASK [Create storage spec for this test] *******************************************************************************
+2018-08-30 09:47:55,151 p=2847 u=ubuntu |  ok: [cloud] => (item=pvc)
+2018-08-30 09:47:55,314 p=2847 u=ubuntu |  ok: [cloud] => (item=utils)
+2018-08-30 09:47:55,325 p=2847 u=ubuntu |  TASK [Create storage space for the test] *******************************************************************************
+2018-08-30 09:47:55,341 p=2847 u=ubuntu |  fatal: [cloud]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: 'kube' is undefined\n\nThe error appears to have been in '/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.yml': line 50, column 7, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n    - name: Create storage space for the test\n      ^ here\n"}
+2018-08-30 09:47:55,342 p=2847 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 09:47:55,343 p=2847 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 09:47:55,343 p=2847 u=ubuntu |  cloud                      : ok=9    changed=3    unreachable=0    failed=1   
+2018-08-30 10:09:04,723 p=3198 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 10:09:04,724 p=3198 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 10:09:04,732 p=3198 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 10:09:05,217 p=3198 u=ubuntu |  ok: [cloud]
+2018-08-30 10:09:05,228 p=3198 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 10:09:05,283 p=3198 u=ubuntu |  ok: [cloud]
+2018-08-30 10:09:05,294 p=3198 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 10:09:05,345 p=3198 u=ubuntu |  ok: [cloud]
+2018-08-30 10:09:05,357 p=3198 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 10:09:05,596 p=3198 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-08-30 10:09:05,675 p=3198 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-08-30 10:09:05,688 p=3198 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 10:09:05,974 p=3198 u=ubuntu |  ok: [cloud]
+2018-08-30 10:09:05,985 p=3198 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 10:09:06,167 p=3198 u=ubuntu |  ok: [cloud]
+2018-08-30 10:09:06,178 p=3198 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 10:09:06,620 p=3198 u=ubuntu |  changed: [cloud]
+2018-08-30 10:09:06,632 p=3198 u=ubuntu |  TASK [Rename ca tls private key] ***************************************************************************************
+2018-08-30 10:09:06,860 p=3198 u=ubuntu |  changed: [cloud]
+2018-08-30 10:09:06,872 p=3198 u=ubuntu |  TASK [Copy kube cert to the right place] *******************************************************************************
+2018-08-30 10:09:07,007 p=3198 u=ubuntu |  changed: [cloud]
+2018-08-30 10:09:07,019 p=3198 u=ubuntu |  TASK [Create storage spec for this test] *******************************************************************************
+2018-08-30 10:09:07,243 p=3198 u=ubuntu |  ok: [cloud] => (item=pvc)
+2018-08-30 10:09:07,409 p=3198 u=ubuntu |  ok: [cloud] => (item=utils)
+2018-08-30 10:09:07,423 p=3198 u=ubuntu |  TASK [Create storage space for the test] *******************************************************************************
+2018-08-30 10:09:07,438 p=3198 u=ubuntu |  fatal: [cloud]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: 'kube' is undefined\n\nThe error appears to have been in '/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.yml': line 64, column 7, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n    - name: Create storage space for the test\n      ^ here\n"}
+2018-08-30 10:09:07,440 p=3198 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 10:09:07,441 p=3198 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 10:09:07,441 p=3198 u=ubuntu |  cloud                      : ok=10   changed=4    unreachable=0    failed=1   
+2018-08-30 10:10:57,336 p=3548 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 10:10:57,337 p=3548 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 10:10:57,345 p=3548 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 10:10:57,835 p=3548 u=ubuntu |  ok: [cloud]
+2018-08-30 10:10:57,846 p=3548 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 10:10:57,898 p=3548 u=ubuntu |  ok: [cloud]
+2018-08-30 10:10:57,910 p=3548 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 10:10:57,961 p=3548 u=ubuntu |  ok: [cloud]
+2018-08-30 10:10:57,972 p=3548 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 10:10:58,208 p=3548 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-08-30 10:10:58,290 p=3548 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-08-30 10:10:58,301 p=3548 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 10:10:58,585 p=3548 u=ubuntu |  ok: [cloud]
+2018-08-30 10:10:58,596 p=3548 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 10:10:58,775 p=3548 u=ubuntu |  ok: [cloud]
+2018-08-30 10:10:58,787 p=3548 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 10:10:59,221 p=3548 u=ubuntu |  changed: [cloud]
+2018-08-30 10:10:59,231 p=3548 u=ubuntu |  TASK [Rename ca tls private key] ***************************************************************************************
+2018-08-30 10:10:59,454 p=3548 u=ubuntu |  changed: [cloud]
+2018-08-30 10:10:59,465 p=3548 u=ubuntu |  TASK [Copy kube cert to the right place] *******************************************************************************
+2018-08-30 10:10:59,601 p=3548 u=ubuntu |  changed: [cloud]
+2018-08-30 10:10:59,613 p=3548 u=ubuntu |  TASK [Create storage spec for this test] *******************************************************************************
+2018-08-30 10:10:59,835 p=3548 u=ubuntu |  ok: [cloud] => (item=pvc)
+2018-08-30 10:11:00,001 p=3548 u=ubuntu |  ok: [cloud] => (item=utils)
+2018-08-30 10:11:00,014 p=3548 u=ubuntu |  TASK [Create storage space for the test] *******************************************************************************
+2018-08-30 10:11:03,636 p=3548 u=ubuntu |  changed: [cloud]
+2018-08-30 10:11:03,650 p=3548 u=ubuntu |  TASK [Query initialization container status] ***************************************************************************
+2018-08-30 10:11:04,166 p=3548 u=ubuntu |  FAILED - RETRYING: Query initialization container status (3 retries left).
+2018-08-30 10:11:19,604 p=3548 u=ubuntu |  FAILED - RETRYING: Query initialization container status (2 retries left).
+2018-08-30 10:11:35,074 p=3548 u=ubuntu |  FAILED - RETRYING: Query initialization container status (1 retries left).
+2018-08-30 10:11:50,495 p=3548 u=ubuntu |  fatal: [cloud]: FAILED! => {"attempts": 3, "changed": true, "cmd": ["kubectl", "--kubeconfig", "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube/kubeconfig", "get", "-o=custom-columns=STATUS:.status.phase", "--no-headers", "pvc", "storage001"], "delta": "0:00:00.313132", "end": "2018-08-30 10:11:50.472789", "rc": 0, "start": "2018-08-30 10:11:50.159657", "stderr": "", "stderr_lines": [], "stdout": "Pending", "stdout_lines": ["Pending"]}
+2018-08-30 10:11:50,496 p=3548 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 10:11:50,497 p=3548 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 10:11:50,497 p=3548 u=ubuntu |  cloud                      : ok=11   changed=5    unreachable=0    failed=1   
+2018-08-30 10:15:32,192 p=4055 u=ubuntu |   [WARNING]: Ignoring invalid attribute: retry
+
+2018-08-30 10:15:32,356 p=4055 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 10:15:32,357 p=4055 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 10:15:32,365 p=4055 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 10:15:32,860 p=4055 u=ubuntu |  ok: [cloud]
+2018-08-30 10:15:32,870 p=4055 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 10:15:32,922 p=4055 u=ubuntu |  ok: [cloud]
+2018-08-30 10:15:32,933 p=4055 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 10:15:32,984 p=4055 u=ubuntu |  ok: [cloud]
+2018-08-30 10:15:32,995 p=4055 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 10:15:33,226 p=4055 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-08-30 10:15:33,309 p=4055 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-08-30 10:15:33,321 p=4055 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 10:15:33,605 p=4055 u=ubuntu |  ok: [cloud]
+2018-08-30 10:15:33,616 p=4055 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 10:15:33,796 p=4055 u=ubuntu |  ok: [cloud]
+2018-08-30 10:15:33,807 p=4055 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 10:15:34,240 p=4055 u=ubuntu |  changed: [cloud]
+2018-08-30 10:15:34,251 p=4055 u=ubuntu |  TASK [Rename ca tls private key] ***************************************************************************************
+2018-08-30 10:15:34,475 p=4055 u=ubuntu |  changed: [cloud]
+2018-08-30 10:15:34,485 p=4055 u=ubuntu |  TASK [Copy kube cert to the right place] *******************************************************************************
+2018-08-30 10:15:34,615 p=4055 u=ubuntu |  changed: [cloud]
+2018-08-30 10:15:34,626 p=4055 u=ubuntu |  TASK [Create storage spec for this test] *******************************************************************************
+2018-08-30 10:15:34,848 p=4055 u=ubuntu |  ok: [cloud] => (item=pvc)
+2018-08-30 10:15:35,012 p=4055 u=ubuntu |  ok: [cloud] => (item=utils)
+2018-08-30 10:15:35,023 p=4055 u=ubuntu |  TASK [Create storage space for the test] *******************************************************************************
+2018-08-30 10:15:36,617 p=4055 u=ubuntu |  changed: [cloud]
+2018-08-30 10:15:36,631 p=4055 u=ubuntu |  TASK [Query initialization container status] ***************************************************************************
+2018-08-30 10:15:37,095 p=4055 u=ubuntu |  FAILED - RETRYING: Query initialization container status (3 retries left).
+2018-08-30 10:15:52,533 p=4055 u=ubuntu |  FAILED - RETRYING: Query initialization container status (2 retries left).
+2018-08-30 10:16:07,955 p=4055 u=ubuntu |  FAILED - RETRYING: Query initialization container status (1 retries left).
+2018-08-30 10:16:23,385 p=4055 u=ubuntu |  fatal: [cloud]: FAILED! => {"attempts": 3, "changed": true, "cmd": ["kubectl", "--kubeconfig", "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/kube/kubeconfig", "get", "-o=custom-columns=STATUS:.status.phase", "--no-headers", "pvc", "storage001"], "delta": "0:00:00.319537", "end": "2018-08-30 10:16:23.362550", "rc": 0, "start": "2018-08-30 10:16:23.043013", "stderr": "", "stderr_lines": [], "stdout": "Pending", "stdout_lines": ["Pending"]}
+2018-08-30 10:16:23,386 p=4055 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/moduletest.retry
+
+2018-08-30 10:16:23,387 p=4055 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 10:16:23,387 p=4055 u=ubuntu |  cloud                      : ok=11   changed=5    unreachable=0    failed=1   
+2018-08-30 10:16:46,197 p=4543 u=ubuntu |   [WARNING]: Found variable using reserved name: name
+
+2018-08-30 10:16:46,197 p=4543 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-08-30 10:16:46,206 p=4543 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-08-30 10:16:46,688 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:46,699 p=4543 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 10:16:46,755 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:46,766 p=4543 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-08-30 10:16:46,819 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:46,833 p=4543 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-08-30 10:16:47,072 p=4543 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-08-30 10:16:47,167 p=4543 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-08-30 10:16:47,179 p=4543 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-08-30 10:16:47,478 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:47,491 p=4543 u=ubuntu |  TASK [Get kubefile] ****************************************************************************************************
+2018-08-30 10:16:47,668 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:47,681 p=4543 u=ubuntu |  TASK [Unpack kubeconfig files] *****************************************************************************************
+2018-08-30 10:16:48,165 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:48,177 p=4543 u=ubuntu |  TASK [Rename ca tls private key] ***************************************************************************************
+2018-08-30 10:16:48,405 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:48,416 p=4543 u=ubuntu |  TASK [Copy kube cert to the right place] *******************************************************************************
+2018-08-30 10:16:48,548 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:48,560 p=4543 u=ubuntu |  TASK [Create storage spec for this test] *******************************************************************************
+2018-08-30 10:16:48,778 p=4543 u=ubuntu |  ok: [cloud] => (item=pvc)
+2018-08-30 10:16:48,943 p=4543 u=ubuntu |  ok: [cloud] => (item=utils)
+2018-08-30 10:16:48,955 p=4543 u=ubuntu |  TASK [Create storage space for the test] *******************************************************************************
+2018-08-30 10:16:50,435 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:50,445 p=4543 u=ubuntu |  TASK [Query initialization container status] ***************************************************************************
+2018-08-30 10:16:50,890 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:50,902 p=4543 u=ubuntu |  TASK [Setup utility services for the tests] ****************************************************************************
+2018-08-30 10:16:52,090 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:52,101 p=4543 u=ubuntu |  TASK [include_tasks] ***************************************************************************************************
+2018-08-30 10:16:52,197 p=4543 u=ubuntu |  included: /home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/runtest.yml for cloud
+2018-08-30 10:16:52,201 p=4543 u=ubuntu |  included: /home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/runtest.yml for cloud
+2018-08-30 10:16:52,205 p=4543 u=ubuntu |  included: /home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/runtest.yml for cloud
+2018-08-30 10:16:52,209 p=4543 u=ubuntu |  included: /home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/runtest.yml for cloud
+2018-08-30 10:16:52,215 p=4543 u=ubuntu |  included: /home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/runtest.yml for cloud
+2018-08-30 10:16:52,238 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:52,291 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "outer item={u'loadSpread': 1, u'name': u'Create channel', u'parameters': {u'orderer': u'orderer1st.orgc', u'channelNamePrefix': u'testChannel'}, u'iterationCount': 3, u'retryCount': 3, u'operation': u'CHANNEL_CREATE', u'iterationInterval': u'0s'}"
+}
+2018-08-30 10:16:52,303 p=4543 u=ubuntu |  TASK [Get the op name] *************************************************************************************************
+2018-08-30 10:16:52,354 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:52,372 p=4543 u=ubuntu |  TASK [Verify the operation name is valid] ******************************************************************************
+2018-08-30 10:16:52,387 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:52,400 p=4543 u=ubuntu |  TASK [Setup container command params] **********************************************************************************
+2018-08-30 10:16:52,453 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:52,465 p=4543 u=ubuntu |  TASK [Add all the parameters to the command] ***************************************************************************
+2018-08-30 10:16:52,536 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'orderer1st.orgc', 'key': u'orderer'})
+2018-08-30 10:16:52,536 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'testChannel', 'key': u'channelNamePrefix'})
+2018-08-30 10:16:52,550 p=4543 u=ubuntu |  TASK [Set up command and arg string] ***********************************************************************************
+2018-08-30 10:16:52,602 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:52,613 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:52,666 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "gosdk\",\"channel\",\"create\",\"--orderer\",\"orderer1st.orgc\",\"--channelNamePrefix\",\"testChannel"
+}
+2018-08-30 10:16:52,678 p=4543 u=ubuntu |  TASK [Generate k8s job specs] ******************************************************************************************
+2018-08-30 10:16:52,951 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:52,963 p=4543 u=ubuntu |  TASK [fail] ************************************************************************************************************
+2018-08-30 10:16:52,977 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:52,991 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:53,045 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "outer item={u'loadSpread': 1, u'name': u'Join channel', u'parameters': {u'peers': [u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc'], u'channelNamePrefix': u'testChannel'}, u'iterationCount': 10, u'retryCount': 3, u'operation': u'CHANNEL_JOIN', u'iterationInterval': u'60r'}"
+}
+2018-08-30 10:16:53,056 p=4543 u=ubuntu |  TASK [Get the op name] *************************************************************************************************
+2018-08-30 10:16:53,108 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:53,121 p=4543 u=ubuntu |  TASK [Verify the operation name is valid] ******************************************************************************
+2018-08-30 10:16:53,137 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:53,149 p=4543 u=ubuntu |  TASK [Setup container command params] **********************************************************************************
+2018-08-30 10:16:53,202 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:53,214 p=4543 u=ubuntu |  TASK [Add all the parameters to the command] ***************************************************************************
+2018-08-30 10:16:53,276 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': [u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc'], 'key': u'peers'})
+2018-08-30 10:16:53,276 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'testChannel', 'key': u'channelNamePrefix'})
+2018-08-30 10:16:53,288 p=4543 u=ubuntu |  TASK [Set up command and arg string] ***********************************************************************************
+2018-08-30 10:16:53,339 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:53,351 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:53,405 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "gosdk\",\"channel\",\"join\",\"--peers\",\"[u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc']\",\"--channelNamePrefix\",\"testChannel"
+}
+2018-08-30 10:16:53,417 p=4543 u=ubuntu |  TASK [Generate k8s job specs] ******************************************************************************************
+2018-08-30 10:16:53,625 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:53,637 p=4543 u=ubuntu |  TASK [fail] ************************************************************************************************************
+2018-08-30 10:16:53,652 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:53,664 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:53,718 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "outer item={u'loadSpread': 1, u'name': u'Install chaincode', u'parameters': {u'path': u'hfrd/chaincode/samplecc', u'peers': [u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc'], u'chaincodeVersion': u'v1', u'chaincodeNamePrefix': u'samplecc'}, u'iterationCount': 10, u'retryCount': 3, u'operation': u'CHAINCODE_INSTALL', u'iterationInterval': u'60r'}"
+}
+2018-08-30 10:16:53,731 p=4543 u=ubuntu |  TASK [Get the op name] *************************************************************************************************
+2018-08-30 10:16:53,785 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:53,797 p=4543 u=ubuntu |  TASK [Verify the operation name is valid] ******************************************************************************
+2018-08-30 10:16:53,813 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:53,825 p=4543 u=ubuntu |  TASK [Setup container command params] **********************************************************************************
+2018-08-30 10:16:53,879 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:53,891 p=4543 u=ubuntu |  TASK [Add all the parameters to the command] ***************************************************************************
+2018-08-30 10:16:53,958 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'hfrd/chaincode/samplecc', 'key': u'path'})
+2018-08-30 10:16:53,959 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': [u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc'], 'key': u'peers'})
+2018-08-30 10:16:53,960 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'v1', 'key': u'chaincodeVersion'})
+2018-08-30 10:16:53,960 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'samplecc', 'key': u'chaincodeNamePrefix'})
+2018-08-30 10:16:53,974 p=4543 u=ubuntu |  TASK [Set up command and arg string] ***********************************************************************************
+2018-08-30 10:16:54,026 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:54,037 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:54,091 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "gosdk\",\"chaincode\",\"install\",\"--path\",\"hfrd/chaincode/samplecc\",\"--peers\",\"[u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc']\",\"--chaincodeVersion\",\"v1\",\"--chaincodeNamePrefix\",\"samplecc"
+}
+2018-08-30 10:16:54,103 p=4543 u=ubuntu |  TASK [Generate k8s job specs] ******************************************************************************************
+2018-08-30 10:16:54,314 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:54,326 p=4543 u=ubuntu |  TASK [fail] ************************************************************************************************************
+2018-08-30 10:16:54,341 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:54,353 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:54,408 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "outer item={u'loadSpread': 1, u'name': u'Instantiate chaincode', u'parameters': {u'path': u'hfrd/chaincode/samplecc', u'peers': [u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc'], u'channelName': u'testChannel1', u'chaincodeVersion': u'v1', u'chaincodeNamePrefix': u'samplecc'}, u'iterationCount': 10, u'retryCount': 3, u'operation': u'CHAINCODE_INSTANTIATE', u'iterationInterval': u'60r'}"
+}
+2018-08-30 10:16:54,419 p=4543 u=ubuntu |  TASK [Get the op name] *************************************************************************************************
+2018-08-30 10:16:54,474 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:54,485 p=4543 u=ubuntu |  TASK [Verify the operation name is valid] ******************************************************************************
+2018-08-30 10:16:54,501 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:54,513 p=4543 u=ubuntu |  TASK [Setup container command params] **********************************************************************************
+2018-08-30 10:16:54,567 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:54,579 p=4543 u=ubuntu |  TASK [Add all the parameters to the command] ***************************************************************************
+2018-08-30 10:16:54,648 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'hfrd/chaincode/samplecc', 'key': u'path'})
+2018-08-30 10:16:54,649 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': [u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc'], 'key': u'peers'})
+2018-08-30 10:16:54,649 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'testChannel1', 'key': u'channelName'})
+2018-08-30 10:16:54,650 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'v1', 'key': u'chaincodeVersion'})
+2018-08-30 10:16:54,654 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'samplecc', 'key': u'chaincodeNamePrefix'})
+2018-08-30 10:16:54,668 p=4543 u=ubuntu |  TASK [Set up command and arg string] ***********************************************************************************
+2018-08-30 10:16:54,722 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:54,733 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:54,786 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "gosdk\",\"chaincode\",\"instantiate\",\"--path\",\"hfrd/chaincode/samplecc\",\"--peers\",\"[u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc']\",\"--channelName\",\"testChannel1\",\"--chaincodeVersion\",\"v1\",\"--chaincodeNamePrefix\",\"samplecc"
+}
+2018-08-30 10:16:54,800 p=4543 u=ubuntu |  TASK [Generate k8s job specs] ******************************************************************************************
+2018-08-30 10:16:55,006 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:55,019 p=4543 u=ubuntu |  TASK [fail] ************************************************************************************************************
+2018-08-30 10:16:55,034 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:55,046 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:55,100 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "outer item={u'loadSpread': 10, u'name': u'Execute chaincode operation Add', u'parameters': {u'channelName': u'testChannel1', u'peers': [u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc'], u'queryOnly': False, u'chaincodeName': u'samplecc', u'chaincodeParams': [{u'type': u'literal', u'value': u'Add'}, {u'type': u'stringPattern', u'value': u''}, {u'type': u'integerRang', u'value': [0, 1000]}]}, u'iterationCount': 1000000, u'retryCount': 3, u'operation': u'CHAINCODE_INVOKE', u'iterationInterval': u'120r'}"
+}
+2018-08-30 10:16:55,112 p=4543 u=ubuntu |  TASK [Get the op name] *************************************************************************************************
+2018-08-30 10:16:55,166 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:55,177 p=4543 u=ubuntu |  TASK [Verify the operation name is valid] ******************************************************************************
+2018-08-30 10:16:55,194 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:55,206 p=4543 u=ubuntu |  TASK [Setup container command params] **********************************************************************************
+2018-08-30 10:16:55,260 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:55,273 p=4543 u=ubuntu |  TASK [Add all the parameters to the command] ***************************************************************************
+2018-08-30 10:16:55,336 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': False, 'key': u'queryOnly'})
+2018-08-30 10:16:55,337 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': [u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc'], 'key': u'peers'})
+2018-08-30 10:16:55,337 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'testChannel1', 'key': u'channelName'})
+2018-08-30 10:16:55,342 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': u'samplecc', 'key': u'chaincodeName'})
+2018-08-30 10:16:55,347 p=4543 u=ubuntu |  ok: [cloud] => (item={'value': [{u'type': u'literal', u'value': u'Add'}, {u'type': u'stringPattern', u'value': u''}, {u'type': u'integerRang', u'value': [0, 1000]}], 'key': u'chaincodeParams'})
+2018-08-30 10:16:55,361 p=4543 u=ubuntu |  TASK [Set up command and arg string] ***********************************************************************************
+2018-08-30 10:16:55,413 p=4543 u=ubuntu |  ok: [cloud]
+2018-08-30 10:16:55,425 p=4543 u=ubuntu |  TASK [debug] ***********************************************************************************************************
+2018-08-30 10:16:55,477 p=4543 u=ubuntu |  ok: [cloud] => {
+    "msg": "gosdk\",\"chaincode\",\"invoke\",\"--queryOnly\",\"False\",\"--peers\",\"[u'peer1st.orga', u'peer2nd.orgb', u'peer3rd.orgc']\",\"--channelName\",\"testChannel1\",\"--chaincodeName\",\"samplecc\",\"--chaincodeParams\",\"[{u'type': u'literal', u'value': u'Add'}, {u'type': u'stringPattern', u'value': u''}, {u'type': u'integerRang', u'value': [0, 1000]}]"
+}
+2018-08-30 10:16:55,490 p=4543 u=ubuntu |  TASK [Generate k8s job specs] ******************************************************************************************
+2018-08-30 10:16:55,700 p=4543 u=ubuntu |  changed: [cloud]
+2018-08-30 10:16:55,712 p=4543 u=ubuntu |  TASK [fail] ************************************************************************************************************
+2018-08-30 10:16:55,727 p=4543 u=ubuntu |  skipping: [cloud]
+2018-08-30 10:16:55,728 p=4543 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-08-30 10:16:55,728 p=4543 u=ubuntu |  cloud                      : ok=53   changed=12   unreachable=0    failed=0   
+2018-09-04 09:10:28,790 p=1353 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:10:28,827 p=1353 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:10:29,488 p=1353 u=ubuntu |  ok: [cloud]
+2018-09-04 09:10:29,502 p=1353 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:10:29,554 p=1353 u=ubuntu |  ok: [cloud]
+2018-09-04 09:10:29,566 p=1353 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:10:29,617 p=1353 u=ubuntu |  ok: [cloud]
+2018-09-04 09:10:29,629 p=1353 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:10:29,887 p=1353 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:10:29,970 p=1353 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:10:29,982 p=1353 u=ubuntu |  TASK [Get certs file] **************************************************************************************************
+2018-09-04 09:10:30,285 p=1353 u=ubuntu |  fatal: [cloud]: FAILED! => {"changed": false, "dest": "/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/networkspec.yml", "msg": "Request failed", "response": "HTTP Error 404: Not Found", "state": "absent", "status_code": 404, "url": "http://localhost/mt/001/networkspec.yml"}
+2018-09-04 09:10:30,287 p=1353 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/createvar.retry
+
+2018-09-04 09:10:30,287 p=1353 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:10:30,288 p=1353 u=ubuntu |  cloud                      : ok=4    changed=1    unreachable=0    failed=1   
+2018-09-04 09:14:57,861 p=1629 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:14:57,870 p=1629 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:14:58,372 p=1629 u=ubuntu |  ok: [cloud]
+2018-09-04 09:14:58,383 p=1629 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:14:58,440 p=1629 u=ubuntu |  ok: [cloud]
+2018-09-04 09:14:58,450 p=1629 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:14:58,501 p=1629 u=ubuntu |  ok: [cloud]
+2018-09-04 09:14:58,513 p=1629 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:14:58,750 p=1629 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:14:58,831 p=1629 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:14:58,843 p=1629 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:14:59,132 p=1629 u=ubuntu |  changed: [cloud]
+2018-09-04 09:14:59,152 p=1629 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:14:59,212 p=1629 u=ubuntu |  fatal: [cloud]: FAILED! => {"ansible_facts": {"networkspec": {}}, "ansible_included_var_files": [], "changed": false, "message": "Syntax Error while loading YAML.\n  expected <block end>, but found ','\n\nThe error appears to have been in '/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/run001/networkspec.yml': line 1, column 19, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\npeer_db: \"CouchDB\",\n                  ^ here\nThis one looks easy to fix.  It seems that there is a value started\nwith a quote, and the YAML parser is expecting to see the line ended\nwith the same kind of quote.  For instance:\n\n    when: \"ok\" in result.stdout\n\nCould be written as:\n\n   when: '\"ok\" in result.stdout'\n\nOr equivalently:\n\n   when: \"'ok' in result.stdout\"\n"}
+2018-09-04 09:14:59,214 p=1629 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/createvar.retry
+
+2018-09-04 09:14:59,214 p=1629 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:14:59,215 p=1629 u=ubuntu |  cloud                      : ok=5    changed=2    unreachable=0    failed=1   
+2018-09-04 09:15:44,256 p=1773 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:15:44,265 p=1773 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:15:44,762 p=1773 u=ubuntu |  ok: [cloud]
+2018-09-04 09:15:44,772 p=1773 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:15:44,823 p=1773 u=ubuntu |  ok: [cloud]
+2018-09-04 09:15:44,838 p=1773 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:15:44,888 p=1773 u=ubuntu |  ok: [cloud]
+2018-09-04 09:15:44,900 p=1773 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:15:45,136 p=1773 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:15:45,219 p=1773 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:15:45,232 p=1773 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:15:45,518 p=1773 u=ubuntu |  changed: [cloud]
+2018-09-04 09:15:45,530 p=1773 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:15:45,586 p=1773 u=ubuntu |  ok: [cloud]
+2018-09-04 09:15:45,603 p=1773 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:15:45,986 p=1773 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:15:45,988 p=1773 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:15:45,988 p=1773 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:21:58,877 p=1980 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:21:58,885 p=1980 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:21:59,374 p=1980 u=ubuntu |  ok: [cloud]
+2018-09-04 09:21:59,385 p=1980 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:21:59,438 p=1980 u=ubuntu |  ok: [cloud]
+2018-09-04 09:21:59,450 p=1980 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:21:59,500 p=1980 u=ubuntu |  ok: [cloud]
+2018-09-04 09:21:59,511 p=1980 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:21:59,756 p=1980 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:21:59,837 p=1980 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:21:59,849 p=1980 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:22:00,143 p=1980 u=ubuntu |  changed: [cloud]
+2018-09-04 09:22:00,154 p=1980 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:22:00,209 p=1980 u=ubuntu |  ok: [cloud]
+2018-09-04 09:22:00,220 p=1980 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:22:00,582 p=1980 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:22:00,584 p=1980 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:22:00,585 p=1980 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:24:26,557 p=2161 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:24:26,565 p=2161 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:24:27,065 p=2161 u=ubuntu |  ok: [cloud]
+2018-09-04 09:24:27,077 p=2161 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:24:27,134 p=2161 u=ubuntu |  ok: [cloud]
+2018-09-04 09:24:27,146 p=2161 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:24:27,200 p=2161 u=ubuntu |  ok: [cloud]
+2018-09-04 09:24:27,212 p=2161 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:24:27,461 p=2161 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:24:27,546 p=2161 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:24:27,561 p=2161 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:24:27,858 p=2161 u=ubuntu |  changed: [cloud]
+2018-09-04 09:24:27,869 p=2161 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:24:27,922 p=2161 u=ubuntu |  ok: [cloud]
+2018-09-04 09:24:27,934 p=2161 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:24:28,303 p=2161 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:24:28,305 p=2161 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:24:28,305 p=2161 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:24:54,744 p=2342 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:24:54,752 p=2342 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:24:55,252 p=2342 u=ubuntu |  ok: [cloud]
+2018-09-04 09:24:55,263 p=2342 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:24:55,317 p=2342 u=ubuntu |  ok: [cloud]
+2018-09-04 09:24:55,328 p=2342 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:24:55,379 p=2342 u=ubuntu |  ok: [cloud]
+2018-09-04 09:24:55,390 p=2342 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:24:55,631 p=2342 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:24:55,714 p=2342 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:24:55,728 p=2342 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:24:56,018 p=2342 u=ubuntu |  changed: [cloud]
+2018-09-04 09:24:56,031 p=2342 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:24:56,084 p=2342 u=ubuntu |  ok: [cloud]
+2018-09-04 09:24:56,096 p=2342 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:24:56,468 p=2342 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:24:56,472 p=2342 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:24:56,472 p=2342 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:25:33,196 p=2523 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:25:33,204 p=2523 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:25:33,705 p=2523 u=ubuntu |  ok: [cloud]
+2018-09-04 09:25:33,716 p=2523 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:25:33,768 p=2523 u=ubuntu |  ok: [cloud]
+2018-09-04 09:25:33,779 p=2523 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:25:33,830 p=2523 u=ubuntu |  ok: [cloud]
+2018-09-04 09:25:33,842 p=2523 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:25:34,080 p=2523 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:25:34,168 p=2523 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:25:34,181 p=2523 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:25:34,486 p=2523 u=ubuntu |  changed: [cloud]
+2018-09-04 09:25:34,497 p=2523 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:25:34,551 p=2523 u=ubuntu |  ok: [cloud]
+2018-09-04 09:25:34,563 p=2523 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:25:34,974 p=2523 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:25:34,976 p=2523 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:25:34,976 p=2523 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:26:47,966 p=2704 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:26:47,974 p=2704 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:26:48,495 p=2704 u=ubuntu |  ok: [cloud]
+2018-09-04 09:26:48,506 p=2704 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:26:48,559 p=2704 u=ubuntu |  ok: [cloud]
+2018-09-04 09:26:48,571 p=2704 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:26:48,622 p=2704 u=ubuntu |  ok: [cloud]
+2018-09-04 09:26:48,633 p=2704 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:26:48,874 p=2704 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:26:48,957 p=2704 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:26:48,970 p=2704 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:26:49,261 p=2704 u=ubuntu |  changed: [cloud]
+2018-09-04 09:26:49,272 p=2704 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:26:49,328 p=2704 u=ubuntu |  ok: [cloud]
+2018-09-04 09:26:49,341 p=2704 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:26:49,727 p=2704 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:26:49,729 p=2704 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:26:49,729 p=2704 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:27:43,898 p=2885 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:27:43,906 p=2885 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:27:44,411 p=2885 u=ubuntu |  ok: [cloud]
+2018-09-04 09:27:44,423 p=2885 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:27:44,477 p=2885 u=ubuntu |  ok: [cloud]
+2018-09-04 09:27:44,489 p=2885 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:27:44,539 p=2885 u=ubuntu |  ok: [cloud]
+2018-09-04 09:27:44,550 p=2885 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:27:44,790 p=2885 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:27:44,876 p=2885 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:27:44,888 p=2885 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:27:45,183 p=2885 u=ubuntu |  changed: [cloud]
+2018-09-04 09:27:45,195 p=2885 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:27:45,249 p=2885 u=ubuntu |  ok: [cloud]
+2018-09-04 09:27:45,261 p=2885 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:27:45,630 p=2885 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:27:45,631 p=2885 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:27:45,631 p=2885 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:29:02,272 p=3067 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:29:02,281 p=3067 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:29:02,774 p=3067 u=ubuntu |  ok: [cloud]
+2018-09-04 09:29:02,784 p=3067 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:29:02,838 p=3067 u=ubuntu |  ok: [cloud]
+2018-09-04 09:29:02,848 p=3067 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:29:02,900 p=3067 u=ubuntu |  ok: [cloud]
+2018-09-04 09:29:02,911 p=3067 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:29:03,156 p=3067 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:29:03,239 p=3067 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:29:03,251 p=3067 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:29:03,543 p=3067 u=ubuntu |  changed: [cloud]
+2018-09-04 09:29:03,555 p=3067 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:29:03,609 p=3067 u=ubuntu |  ok: [cloud]
+2018-09-04 09:29:03,621 p=3067 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:29:03,990 p=3067 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:29:03,991 p=3067 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:29:03,992 p=3067 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:32:09,748 p=3249 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:32:09,756 p=3249 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:32:10,265 p=3249 u=ubuntu |  ok: [cloud]
+2018-09-04 09:32:10,276 p=3249 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:32:10,329 p=3249 u=ubuntu |  ok: [cloud]
+2018-09-04 09:32:10,341 p=3249 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:32:10,392 p=3249 u=ubuntu |  ok: [cloud]
+2018-09-04 09:32:10,403 p=3249 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:32:10,658 p=3249 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:32:10,742 p=3249 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:32:10,755 p=3249 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:32:11,042 p=3249 u=ubuntu |  changed: [cloud]
+2018-09-04 09:32:11,054 p=3249 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:32:11,108 p=3249 u=ubuntu |  ok: [cloud]
+2018-09-04 09:32:11,120 p=3249 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:32:11,207 p=3249 u=ubuntu |  failed: [cloud] (item=fabricspec) => {"changed": false, "item": "fabricspec", "msg": "AnsibleUndefinedVariable: 'dict object' has no attribute 'ca'"}
+2018-09-04 09:32:11,210 p=3249 u=ubuntu |  	to retry, use: --limit @/home/ubuntu/hl/src/hfrd/backend/jenkins/pipelines/ansible/createvar.retry
+
+2018-09-04 09:32:11,211 p=3249 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:32:11,211 p=3249 u=ubuntu |  cloud                      : ok=6    changed=2    unreachable=0    failed=1   
+2018-09-04 09:33:45,816 p=3409 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:33:45,826 p=3409 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:33:46,314 p=3409 u=ubuntu |  ok: [cloud]
+2018-09-04 09:33:46,324 p=3409 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:33:46,377 p=3409 u=ubuntu |  ok: [cloud]
+2018-09-04 09:33:46,388 p=3409 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:33:46,446 p=3409 u=ubuntu |  ok: [cloud]
+2018-09-04 09:33:46,460 p=3409 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:33:46,719 p=3409 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:33:46,802 p=3409 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:33:46,814 p=3409 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:33:47,106 p=3409 u=ubuntu |  changed: [cloud]
+2018-09-04 09:33:47,116 p=3409 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:33:47,174 p=3409 u=ubuntu |  ok: [cloud]
+2018-09-04 09:33:47,187 p=3409 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:33:47,556 p=3409 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:33:47,557 p=3409 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:33:47,558 p=3409 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:35:25,290 p=3612 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:35:25,298 p=3612 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:35:25,804 p=3612 u=ubuntu |  ok: [cloud]
+2018-09-04 09:35:25,814 p=3612 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:35:25,867 p=3612 u=ubuntu |  ok: [cloud]
+2018-09-04 09:35:25,879 p=3612 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:35:25,930 p=3612 u=ubuntu |  ok: [cloud]
+2018-09-04 09:35:25,941 p=3612 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:35:26,181 p=3612 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:35:26,262 p=3612 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:35:26,274 p=3612 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:35:26,558 p=3612 u=ubuntu |  changed: [cloud]
+2018-09-04 09:35:26,569 p=3612 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:35:26,624 p=3612 u=ubuntu |  ok: [cloud]
+2018-09-04 09:35:26,636 p=3612 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:35:27,010 p=3612 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:35:27,012 p=3612 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:35:27,012 p=3612 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:36:05,697 p=3797 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:36:05,705 p=3797 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:36:06,197 p=3797 u=ubuntu |  ok: [cloud]
+2018-09-04 09:36:06,208 p=3797 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:36:06,260 p=3797 u=ubuntu |  ok: [cloud]
+2018-09-04 09:36:06,271 p=3797 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:36:06,323 p=3797 u=ubuntu |  ok: [cloud]
+2018-09-04 09:36:06,334 p=3797 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:36:06,574 p=3797 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:36:06,656 p=3797 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:36:06,669 p=3797 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:36:06,963 p=3797 u=ubuntu |  changed: [cloud]
+2018-09-04 09:36:06,975 p=3797 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:36:07,028 p=3797 u=ubuntu |  ok: [cloud]
+2018-09-04 09:36:07,040 p=3797 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:36:07,415 p=3797 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:36:07,416 p=3797 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:36:07,417 p=3797 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:36:45,117 p=3978 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:36:45,126 p=3978 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:36:45,629 p=3978 u=ubuntu |  ok: [cloud]
+2018-09-04 09:36:45,640 p=3978 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:36:45,693 p=3978 u=ubuntu |  ok: [cloud]
+2018-09-04 09:36:45,704 p=3978 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:36:45,755 p=3978 u=ubuntu |  ok: [cloud]
+2018-09-04 09:36:45,766 p=3978 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:36:46,005 p=3978 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:36:46,086 p=3978 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:36:46,099 p=3978 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:36:46,397 p=3978 u=ubuntu |  changed: [cloud]
+2018-09-04 09:36:46,409 p=3978 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:36:46,478 p=3978 u=ubuntu |  ok: [cloud]
+2018-09-04 09:36:46,497 p=3978 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:36:46,875 p=3978 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:36:46,877 p=3978 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:36:46,878 p=3978 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   
+2018-09-04 09:48:08,601 p=4165 u=ubuntu |  PLAY [Get start timestamp] *********************************************************************************************
+2018-09-04 09:48:08,609 p=4165 u=ubuntu |  TASK [Gathering Facts] *************************************************************************************************
+2018-09-04 09:48:09,105 p=4165 u=ubuntu |  ok: [cloud]
+2018-09-04 09:48:09,115 p=4165 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:48:09,168 p=4165 u=ubuntu |  ok: [cloud]
+2018-09-04 09:48:09,179 p=4165 u=ubuntu |  TASK [set_fact] ********************************************************************************************************
+2018-09-04 09:48:09,231 p=4165 u=ubuntu |  ok: [cloud]
+2018-09-04 09:48:09,242 p=4165 u=ubuntu |  TASK [Create working directory] ****************************************************************************************
+2018-09-04 09:48:09,482 p=4165 u=ubuntu |  changed: [cloud] => (item=absent)
+2018-09-04 09:48:09,566 p=4165 u=ubuntu |  changed: [cloud] => (item=directory)
+2018-09-04 09:48:09,580 p=4165 u=ubuntu |  TASK [Get network spec file] *******************************************************************************************
+2018-09-04 09:48:09,868 p=4165 u=ubuntu |  changed: [cloud]
+2018-09-04 09:48:09,879 p=4165 u=ubuntu |  TASK [Get network specification] ***************************************************************************************
+2018-09-04 09:48:09,934 p=4165 u=ubuntu |  ok: [cloud]
+2018-09-04 09:48:09,945 p=4165 u=ubuntu |  TASK [Create network specification file] *******************************************************************************
+2018-09-04 09:48:10,324 p=4165 u=ubuntu |  changed: [cloud] => (item=fabricspec)
+2018-09-04 09:48:10,327 p=4165 u=ubuntu |  PLAY RECAP *************************************************************************************************************
+2018-09-04 09:48:10,327 p=4165 u=ubuntu |  cloud                      : ok=7    changed=3    unreachable=0    failed=0   

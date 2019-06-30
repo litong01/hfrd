@@ -1,0 +1,17 @@
+{% for nodeName in nodeNames %}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: exporter1
+  name: exporter1
+  namespace: "{{ networkspec.namespace | default('default') }}"
+spec:
+  selector:
+    nodeName: "{{ nodeName}}"
+  type: NodePort
+  ports:
+    - name: port1
+      port: 9100
+{% endfor %}

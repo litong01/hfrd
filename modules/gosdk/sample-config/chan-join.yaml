@@ -1,0 +1,14 @@
+Channels:
+  Join:
+    -
+      NamePrefix: mychannel
+      Count: 2
+      PeerOrgNames:
+        - org1
+        - org2
+    -
+      NamePrefix: hfrdchannel
+      Count: 5
+      PeerOrgNames:
+        - org1
+        - org2

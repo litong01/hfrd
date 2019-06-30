@@ -1,0 +1,43 @@
+- name: Get start timestamp
+  hosts: cloud
+  connection: local
+  tasks:
+    - set_fact:
+        starttime: "{{ ansible_date_time }}"
+        status_flag: "Success"
+        uid: "{{ uid }}"
+        contentrepo: "{{ contentrepo }}"
+        req_id: "{{ reqId }}"
+
+    - set_fact:
+        work_dir: "{{ playbook_dir }}/run{{ req_id }}"
+
+    - name: Create working directory
+      file:
+        path: "{{ work_dir }}/kube"
+        state: "{{ item }}"
+      with_items:
+        - absent
+        - directory
+
+    - name: Get network spec file
+      command: >-
+        cp "{{ contentrepo+'/'+uid+'/'+req_id+'/networkspec.yml' }}"
+        "{{ work_dir }}/networkspec.yml"
+
+    - name: Get network specification
+      include_vars:
+        file: "{{ work_dir }}/networkspec.yml"
+        name: networkspec
+
+
+
+    - name: Create network specification file
+      template:
+        src: "./templates/{{ item }}.j2"
+        dest: "{{ work_dir }}/../vars/{{ item }}.yml"
+      with_items:
+        - fabricspec
+        - resource
+
+

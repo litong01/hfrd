@@ -1,0 +1,17 @@
+- name: Creates directory
+  file:
+    path: "{{ contentrepo }}/{{ uid }}/{{ req_id }}/logs"
+    state: directory
+
+- name: Get all pod names
+  shell:
+    kubectl --kubeconfig {{ kubepath }}
+    get pods -a | grep job-{{ req_id }} | grep Completed | awk '{print $1}'
+  register: pod_names_output
+
+- name: Get pod logs
+  shell:
+    kubectl --kubeconfig {{ kubepath }}
+    logs {{ item }} > {{ contentrepo }}/{{ uid }}/{{ req_id }}/logs/{{ item }}.out
+  with_items:
+    - "{{ pod_names_output.stdout_lines }}"

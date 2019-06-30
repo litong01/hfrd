@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: metricsds
+  namespace: "{{ networkspec.namespace | default('default') }}"
+spec:
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      name:  metricsds
+  template:
+    metadata:
+      labels:
+        name: metricsds
+    spec:
+      containers:
+      - name: metricsds
+        image: prom/node-exporter:latest
+        securityContext:
+          privileged: true
+      terminationGracePeriodSeconds: 3

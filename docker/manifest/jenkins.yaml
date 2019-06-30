@@ -1,0 +1,13 @@
+image: hfrd/jenkins:latest
+tags: ['latest']
+manifests:
+  -
+    image: hfrd/jenkins:s390x-latest
+    platform:
+      architecture: s390x
+      os: linux
+  -
+    image: hfrd/jenkins:amd64-latest
+    platform:
+      architecture: amd64
+      os: linux

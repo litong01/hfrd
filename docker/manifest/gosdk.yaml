@@ -1,0 +1,13 @@
+image: hfrd/gosdk:latest
+tags: ['latest']
+manifests:
+  -
+    image: hfrd/gosdk:s390x-latest
+    platform:
+      architecture: s390x
+      os: linux
+  -
+    image: hfrd/gosdk:amd64-latest
+    platform:
+      architecture: amd64
+      os: linux

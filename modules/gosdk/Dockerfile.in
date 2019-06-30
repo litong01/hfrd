@@ -1,0 +1,22 @@
+FROM alpine
+
+ARG user=ubuntu
+ARG uid=1000
+ARG gid=1000
+
+USER root
+
+RUN set -eux; \
+    mkdir -p /opt/gopath \
+    && addgroup -g ${gid} ${user} \
+    && adduser -D -h /opt/gopath -s /bin/bash -u ${uid} -G ${user} ${user} \
+    && adduser ${user} ${user}
+
+COPY gosdk /usr/local/bin/gosdk
+ENV HOME=/opt/gopath \
+    WORKDIR=/opt/gopath \
+    GOPATH=/opt/gopath
+WORKDIR $WORKDIR
+COPY config $HOME/config
+RUN chown -R ${uid}:${gid} $HOME
+USER ${user}

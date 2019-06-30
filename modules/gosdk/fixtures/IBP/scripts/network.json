@@ -1,0 +1,14 @@
+{
+    "PeerOrg2": {
+        "network_id": "5c372ac731d54bfd88af0e40c93a2f3a", 
+        "url": "https://ibmblockchain-dev-v2.stage1.ng.bluemix.net", 
+        "secret": "nQFdcj5tIfBtr_9ZGECwymH6myPt9LDUxtNZ6qwlUsOcU3EJ0LRzn6INMfjoYWkg", 
+        "key": "PeerOrg2"
+    }, 
+    "PeerOrg1": {
+        "network_id": "5c372ac731d54bfd88af0e40c93a2f3a", 
+        "url": "https://ibmblockchain-dev-v2.stage1.ng.bluemix.net", 
+        "secret": "n5gfmbPRf94vwpNcpQ_WuJky4wa2SoVgoJqPFH9VL22kluXqTPfZvpct8_dTpSHy", 
+        "key": "PeerOrg1"
+    }
+}

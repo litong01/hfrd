@@ -1,0 +1,13 @@
+apikey=${bxc.apikey}
+org=${bxc.org}
+space=${bxc.space}
+endpoint=${bxc.endpoint}
+service=${bxc.service}
+serviceplan=${bxc.serviceplan}
+serviceid=${bxc.serviceid}
+servicekey=${bxc.servicekey}
+env=${bxc.env}
+loc=${bxc.loc}
+numOfOrgs=${bxc.numOfOrgs}
+numOfPeers=${bxc.numOfPeers}
+ledgerType=${bxc.ledgerType}

@@ -1,0 +1,69 @@
+<html>
+<head>
+    <link href="/static/css/index.css" type="text/css" rel="stylesheet" />
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/hfrd.js"></script>
+    <script>
+        $( document ).ready(function() {
+            $( "#ac tbody tr" ).on( "click", function() {
+                uid = $("#uid").val();
+                if ( uid.length == 0) {
+                    alert("User id is empty");
+                } else if (uid.indexOf(' ') > 0) {
+                    alert("User id can not contain white spaces");
+                } else {
+                    window.location.href = "/v1/"+uid+"/ui/"+this.id;
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="bx--grid" style="margin-top: 20px">
+    <div class="bx--row">
+        <div class="bx--col-xs-6 bx--col-md-4">
+            <h4 class="bx--data-table-v2-header">Input your ID and click on one of the tasks to proceed</h4>
+            <div style="padding: 20px" class="thestyle">
+                <div class="bx--form-item">
+                    <strong class="bx--label">User ID:</strong>
+                    <div class="bx--file" data-file>
+                        <input class="bx--text-input"
+                               id="uid" name="uid" />
+                    </div>
+                </div>
+                <br />
+                <div class="bx--col-xs-18 bx--col-md-8">
+                    <div class="bx--data-table-v2-container" data-table-v2>
+                        <table id="ac" class="bx--data-table-v2 bx--data-table-v2--zebra">
+                            <tbody>
+                            <tr id="network"><td>
+                                <span><img src="/static/images/todo.png" alt="log" height="24" width="24" /></span>
+                            </td><td><span>Manage fabric networks on Kubernetes</span>
+                            </td></tr>
+                            <tr id="ibp"><td>
+                                <span><img src="/static/images/todo.png" alt="log" height="24" width="24" /></span>
+                            </td><td><span>Manage fabric networks on IBP</span>
+                            </td></tr>
+                            <tr id="icp"><td>
+                                <span><img src="/static/images/todo.png" alt="log" height="24" width="24" /></span>
+                            </td><td><span>Manage fabric networks on ICP</span>
+                            </td></tr>
+                            <tr id="moduletest"><td>
+                                <span><img src="/static/images/todo.png" alt="log" height="24" width="24" /></span>
+                            </td><td><span>Manage tests</span>
+                            </td></tr>
+                            <tr id="ibpcerts"><td>
+                                <span><img src="/static/images/todo.png" alt="log" height="24" width="24" /></span>
+                            </td><td><span>Get certs from an existing IBP network</span>
+                            </td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

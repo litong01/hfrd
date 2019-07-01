@@ -28,7 +28,7 @@
 	* CHAINCODE_INVOKE : Used to send traffic to fabric networks
 	* CHAINCODE_INVOKE (private data chaincode) : Show how to configure private data parameters in 	`CHAINCODE_INVOKE`
 	* EXECUTE_COMMAND: Used to execute shell command (a bash script or other binary files,like `ls` `go` `gosdk`)
-**HFRD** users can define their own test plans by using these operations,then upload the test plan yaml file to **HFRD** .**HFRD** will help submit test plans and generate k8s job according to different operations inner test plan. You can find an example test plan file [here](../tests/e2e/testplan_example.yml)
+**HFRD** users can define their own test plans by using these operations,then upload the test plan yaml file to **HFRD** .**HFRD** will help submit test plans and generate k8s job according to different operations inner test plan. You can find an example test plan file [here](testplan.yml)
 
 Next will show how to **define different operation** in testplan.yml.
 

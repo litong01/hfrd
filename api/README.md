@@ -26,8 +26,9 @@ Jenkins jobs to execute tests.
 
 Swagger doc and api server endpoint are as below. The two endpoints serve with
 latest code in master branch of this repository
-- hfrd api server swagger doc:  http://hfrdrestsrv.rtp.raleigh.ibm.com:9595/
-- hfrd api server endpoint:     http://hfrdrestsrv.rtp.raleigh.ibm.com:8080/
+
+- hfrd api server swagger doc:  http://<<server ip or name>>:9595/
+- hfrd api server endpoint:     http://<<server ip or name>>:8080/
 
 ## How to build and run api server
 ### Prerequisites
@@ -36,7 +37,7 @@ api server should work on MacOS and Linux
 To run the golang api server, clone this project under
 &lt;somedir&gt;/src,
 
-        git clone git@github.ibm.com:IBMCode/hfrd.git
+        git clone https://github.com/litong01/hfrd
 
 then include &lt;somedir&gt; in your GOPATH
 environment, then change directory to hfrd

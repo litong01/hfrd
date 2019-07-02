@@ -33,3 +33,18 @@ for msp name, msp id, and msp admin id. Without doing this, the tool
 may generate incorrect certs or may not find the right information
 2. When download your MSP json file, make sure that you are using the
 same name (normally you do not have to change it) as the msp id.
+3. The names of peer, orderer should only use numeric numbers and lower
+characters. Character dash - and underscore _ must be avoided.
+
+# EXTREMELY IMPORTANT:
+Here are the steps that you have to do in IBP Console manually:
+1. Create an Certificate Authority if you do not already have one.
+2. Create 1 msp per organization. Export Identity and save each to
+a directory where you will need it to run the certgen tool.
+3. Create an orderer service with either 1 node or 5 nodes using the
+msp created in step 2 for orderer org.
+4. Add all the orgs into the Consortium.
+5. Create peers for each peer org created in step 2.
+
+Once all the steps are complete, you can run the certgen tool by following
+the steps described in how to use it section

@@ -1,14 +1,14 @@
 ---
 - name: Get cas
   command: >-
-    kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+    kubectl --kubeconfig vars/kubeconfig --namespace {{ namespace }}
     get pods -o
     jsonpath='{range @.items[?(@.metadata.labels.component=="ca")]}{.spec.containers[?(@.name=="ca")].env[?(@.name=="PROXY_IP")].value},{@.metadata.labels.name},{@.metadata.labels.name},{@.metadata.name}{"\n"}{end}'
   register: cas_res
 
 - name: Get orderers
   command: >-
-    kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+    kubectl --kubeconfig vars/kubeconfig --namespace {{ namespace }}
     get pods -o
     jsonpath='{range @.items[?(@.metadata.labels.component=="orderer")]}{.spec.containers[?(@.name=="proxy")].env[?(@.name=="EXTERNAL_ADDRESS")].value},{@.metadata.labels.name},{@.metadata.labels.orgname},{@.metadata.name}{"\n"}{end}'
   register: orderers_res
@@ -18,7 +18,7 @@
 
 - name: Get peers
   command: >-
-    kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+    kubectl --kubeconfig vars/kubeconfig --namespace {{ namespace }}
     get pods -o
     jsonpath='{range @.items[?(@.metadata.labels.component=="peer")]}{.spec.containers[?(@.name=="peer")].env[?(@.name=="CORE_PEER_GOSSIP_EXTERNALENDPOINT")].value},{@.metadata.labels.name},{@.metadata.labels.orgname},{@.metadata.name}{"\n"}{end}'
   register: peers_res

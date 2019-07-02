@@ -11,7 +11,7 @@
 
     - name: Try to figure out if it is IBP on ICP
       command: >-
-        kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+        kubectl --kubeconfig vars/kubeconfig --namespace {{ namespace }}
         get pods -o
         jsonpath='{range @.items[?(@.metadata.annotations.productName=="IBM Blockchain Platform")]}{.metadata.labels.creator}{"\n"}{end}'
       register: ptype_raw
@@ -60,13 +60,13 @@
 
     - name: get certs from peer pods
       command: >-
-        kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+        kubectl --kubeconfig vars/kubeconfig --namespace {{ namespace }}
         cp {{ item.id }}:/certs -c peer keyfiles/{{ item.org }}/{{ item.name }}
       with_items: "{{ allpeers }}"
 
     - name: get certs from orderer pods
       command: >-
-        kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+        kubectl --kubeconfig vars/kubeconfig --namespace {{ namespace }}
         cp {{ item.id }}:/certs -c orderer keyfiles/{{ item.org }}/{{ item.name }}
       with_items: "{{ allorderers }}"
 

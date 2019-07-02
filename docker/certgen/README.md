@@ -34,7 +34,7 @@ may generate incorrect certs or may not find the right information
 2. When download your MSP json file, make sure that you are using the
 same name (normally you do not have to change it) as the msp id.
 3. The names of peer, orderer should only use numeric numbers and lower
-characters. Character dash - and underscore _ must be avoided.
+case characters. Character dash - and underscore _ can not be used.
 
 # EXTREMELY IMPORTANT:
 Here are the steps that you have to do in IBP Console manually:

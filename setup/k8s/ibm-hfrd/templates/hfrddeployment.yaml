@@ -58,7 +58,7 @@ spec:
         claimName: longrunpvc
   containers:
     - name: jenkins
-      image: hfrd/jenkins:pub
+      image: hfrd/jenkins:latest
       ports:
       - containerPort: 8080
       imagePullPolicy: Always

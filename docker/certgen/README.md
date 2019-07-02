@@ -4,9 +4,9 @@ This tool is to generate cert file package
 # How to use it?
 
 1. Download the tool container image
-
+```
         docker pull hfrd/certgen:latest
-
+```
 2. Create a working directory, name it *allcerts* for example or
 anything you like
 3. Place your kubeconfig file in *allcerts* directory

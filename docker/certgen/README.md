@@ -5,7 +5,7 @@ This tool is to generate cert file package
 
 1. Download the tool container image
 
-    `docker pull hfrd/certgen:latest`
+        docker pull hfrd/certgen:latest
 
 2. Create a working directory, name it *allcerts* for example or
 anything you like

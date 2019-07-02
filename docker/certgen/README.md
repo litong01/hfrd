@@ -5,19 +5,21 @@ This tool is to generate cert file package
 
 1. Download the tool container image
 
-        docker pull hfrd/certgen:latest
+    `docker pull hfrd/certgen:latest`
 
-2. Create a working directory, name it allcerts for example
-3. Place your kubeconfig file in allcerts directory
+2. Create a working directory, name it *allcerts* for example or
+anything you like
+3. Place your kubeconfig file in *allcerts* directory
 4. Download all your msp json files from your wallet
-and also place them in the allcerts directory
-5. Change to allcerts directory and run the following command:
+and also place them in the *allcerts* directory
+5. Change to *allcerts* directory and run the following command:
+
 ```
-   docker run -v $(pwd):/opt/agent/vars --rm hfrd/certgen:latest \
-   ansible-playbook -e "namespace=default" certgen.yml
+        docker run -v $(pwd):/opt/agent/vars --rm hfrd/certgen:latest \
+        ansible-playbook -e "namespace=default" certgen.yml
 ```
 6. If the command finishes successfully, you should have a file
-named certs.tgz in the allcerts directory.
+named certs.tgz in the *allcerts* directory.
 
 Replace the word default in the command with your actual k8s
 namespace if your fabric network is not in the default namespace

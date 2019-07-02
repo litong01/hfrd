@@ -4,8 +4,8 @@ This tool is to generate cert file package
 # How to use it?
 
 1. Download the tool container image
-```
-        docker pull hfrd/certgen:latest
+```bash
+docker pull hfrd/certgen:latest
 ```
 2. Create a working directory, name it *allcerts* for example or
 anything you like
@@ -14,9 +14,9 @@ anything you like
 and also place them in the *allcerts* directory
 5. Change to *allcerts* directory and run the following command:
 
-```
-        docker run -v $(pwd):/opt/agent/vars --rm hfrd/certgen:latest \
-        ansible-playbook -e "namespace=default" certgen.yml
+```bash
+docker run -v $(pwd):/opt/agent/vars --rm hfrd/certgen:latest \
+ansible-playbook -e "namespace=default" certgen.yml
 ```
 6. If the command finishes successfully, you should have a file
 named certs.tgz in the *allcerts* directory.

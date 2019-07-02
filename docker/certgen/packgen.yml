@@ -1,0 +1,82 @@
+- name: Get start timestamp
+  hosts: cloud
+  connection: local
+  tasks:
+    - set_fact:
+        namespace: "{{ namespace | default('default') }}"
+        allorderers: []
+        allpeers: []
+        allcas: []
+        tls: true
+
+    - name: Try to figure out if it is IBP on ICP
+      command: >-
+        kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+        get pods -o
+        jsonpath='{range @.items[?(@.metadata.annotations.productName=="IBM Blockchain Platform")]}{.metadata.labels.creator}{"\n"}{end}'
+      register: ptype_raw
+
+    - name: Set ptype
+      set_fact:
+        ptype: "{{ 'ibponicp' if (ptype_raw.stdout_lines|length) > 0 else 'ibponsaas' }}"
+
+    - debug:
+        var: ptype
+
+    - include_tasks: "{{ ptype }}.yml"
+
+    - name: get all orgs
+      set_fact:
+        allorgs: >-
+          {{ ((allorderers|map(attribute='org')|list) + (allpeers|map(attribute='org')|list))|unique }}
+
+    - name: create working directory
+      file:
+        path: "{{ playbook_dir}}/keyfiles"
+        state: "{{ item }}"
+      with_items:
+        - absent
+        - directory
+
+    - name: create org directory
+      file:
+        path: "{{ playbook_dir}}/keyfiles/{{ item.org }}/{{ item.name }}"
+        state: "directory"
+      with_flattened:
+        - "{{ allpeers }}"
+        - "{{ allorderers }}"
+
+    - name: create org users directory
+      file:
+        path: "{{ playbook_dir}}/keyfiles/{{ item }}/users/Admin@{{ item }}/msp"
+        state: "directory"
+      with_items: "{{ allorgs }}"
+
+    - name: create yaml connection profiles
+      template:
+        src: "{{ playbook_dir }}/templates/connyaml.j2"
+        dest: "{{ playbook_dir }}/keyfiles/{{ item }}/connection.yml"
+      with_items: "{{ allorgs }}"
+
+    - name: get certs from peer pods
+      command: >-
+        kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+        cp {{ item.id }}:/certs -c peer keyfiles/{{ item.org }}/{{ item.name }}
+      with_items: "{{ allpeers }}"
+
+    - name: get certs from orderer pods
+      command: >-
+        kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+        cp {{ item.id }}:/certs -c orderer keyfiles/{{ item.org }}/{{ item.name }}
+      with_items: "{{ allorderers }}"
+
+    - include_tasks: mspadminuser.yml
+      loop: "{{ allorgs }}"
+      loop_control:
+        loop_var: org
+        index_var: org_idx
+
+    - name: generate the cert package
+      archive:
+        path: "{{ playbook_dir }}/keyfiles"
+        dest: "{{ playbook_dir }}/vars/certs.tgz"

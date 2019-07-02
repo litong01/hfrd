@@ -1,0 +1,52 @@
+- debug:
+    msg: "outer item={{ org }}"
+
+- name: Load test plan
+  include_vars:
+    file: "{{ playbook_dir }}/vars/{{ org }}.json"
+    name: mspinfo
+
+- name: get all orgs
+  set_fact:
+    mspdir: "{{ playbook_dir }}/keyfiles/{{ org }}/users/Admin@{{ org }}/msp/"
+
+- name: create org user directory
+  file:
+    path: "{{ mspdir }}{{ item }}"
+    state: "directory"
+  with_items:
+    - "keystore"
+    - "signcerts"
+
+- name: Create signing cert file
+  copy:
+    content: "{{ mspinfo.cert | b64decode }}"
+    dest: "{{ mspdir }}/signcerts/Admin@{{org}}-cert.pem"
+
+- name: Create private key file
+  copy:
+    content: "{{ mspinfo.private_key | b64decode }}"
+    dest: "{{ mspdir }}/keystore/admin_private.key"
+
+- name: get the cert pubkey from private key
+  command: >-
+    openssl ec -in {{ mspdir }}/keystore/admin_private.key
+    -text -noout -conv_form uncompressed        
+  register: keycontent
+
+- set_fact:
+    rawkey: "{{ keycontent.stdout.split('pub: \n')[1].split('ASN1 OID:')[0] }}"
+
+- name: get the sha256 hash for private key file name
+  shell: >-
+    echo "{{ rawkey }}" | xxd -r -p | sha256sum
+  register: keyname
+
+- name: trim the trailing space and dash
+  set_fact:
+    keyname: "{{ keyname.stdout.split(' ')[0] }}_sk"
+
+- name: move the private key file to the right name
+  command: >-
+    mv {{ mspdir }}/keystore/admin_private.key
+    {{ mspdir }}/keystore/{{ keyname }}

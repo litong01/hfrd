@@ -1,0 +1,25 @@
+---
+- name: Get all pods
+  command: >-
+    kubectl --kubeconfig kubeconfig --namespace {{ namespace }}
+    get pods -o jsonpath='{ range .items[*]}{@.metadata.name},{@.metadata.labels.app},{@.metadata.labels.orgname},{@.spec.containers[*].name},{@.spec.containers[*].env[?(.name=="EXTERNAL_ADDRESS")].value},{@.spec.containers[*].env[?(.name=="CORE_PEER_GOSSIP_EXTERNALENDPOINT")].value}{"\n"}{end}'
+  register: allpod_res
+
+- debug:
+    var: allpod_res
+
+- name: make orderer list
+  set_fact:
+    allorderers: >-
+      {{ allorderers + [{'url': item.split(',')[4], 'name': item.split(',')[1],
+         'org': item.split(',')[2], 'id': item.split(',')[0]}] }}
+  with_items: "{{ allpod_res.stdout_lines }}"
+  when: item.split(',')[3].find('orderer') >= 0
+
+- name: make peer list
+  set_fact:
+    allpeers: >-
+      {{ allpeers + [{'url': item.split(',')[5].split(' ')[0], 'name': item.split(',')[1],
+        'org': item.split(',')[2], 'id': item.split(',')[0]}] }}
+  with_items: "{{ allpod_res.stdout_lines }}"
+  when: item.split(',')[3].find('peer') >= 0

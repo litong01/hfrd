@@ -1,0 +1,61 @@
+---
+name: "{{ item }}-network"
+x-type: "hlfv1"
+version: "1.0.0"
+client:
+  organization: "{{ item }}"
+  cryptoconfig:
+    path: "/fabric/keyfiles"
+  connection:
+    timeout:
+      peer:
+        endorser: 300
+        eventHub: 300
+        eventReg: 300
+      orderer: 300
+organizations:
+{% for org in allorgs %}
+  {{ org }}:
+    mspid: "{{ org }}"
+    cryptoPath: "{{ org }}/users/{username}@{{ org }}/msp"
+    peers:
+{% for peer in allpeers|selectattr('org', 'equalto', org)|list %}
+      - {{ peer.name }}
+{% endfor %}
+    certificateAuthorities:
+{% for ca in allcas|selectattr('org', 'equalto', org)|list %}
+      - {{ ca.name }}
+{% endfor %}
+{% endfor %}
+orderers:
+{% for orderer in allorderers %}
+  {{ orderer.name }}:
+    url: "grpcs://{{ orderer.url }}"
+    grpcOptions:
+      ssl-target-name-override: "{{ orderer.url | replace(':7050', '') }}"
+    tlsCACerts:
+      path: "{{ '/fabric/keyfiles/'+orderer.org+'/'+orderer.name+'/msp/tlscacerts/cacert-1.pem' }}"
+{% endfor %}
+peers:
+{% for peer in allpeers %}
+  {{ peer.name }}:
+    url: "grpcs://{{ peer.url }}"
+    grpcOptions:
+      ssl-target-name-override: "{{ peer.url | replace(':7051', '') }}"
+    tlsCACerts:
+      path: "{{ '/fabric/keyfiles/'+peer.org+'/'+peer.name+'/msp/tlscacerts/cacert-1.pem' }}"
+{% endfor %}
+certificateAuthorities:
+entityMatchers:
+  orderer:
+{% for orderer in allorderers %}
+  - mappedHost: {{ orderer.name }}
+    pattern: (\w*){{ orderer.name }}(\w*)
+    urlSubstitutionExp: "{{ orderer.url }}"
+{% endfor %}
+  peer:
+{% for peer in allpeers %}
+  - mappedHost: {{ peer.name }}
+    pattern: (\w*){{ peer.name }}(\w*)
+    urlSubstitutionExp: "{{ peer.url }}"
+{% endfor %}

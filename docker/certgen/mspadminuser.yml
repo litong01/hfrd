@@ -35,7 +35,7 @@
   register: keycontent
 
 - set_fact:
-    rawkey: "{{ keycontent.stdout.split('pub: \n')[1].split('ASN1 OID:')[0] }}"
+    rawkey: "{{ keycontent.stdout.split('pub:')[1].split('ASN1 OID:')[0] }}"
 
 - name: get the sha256 hash for private key file name
   shell: >-

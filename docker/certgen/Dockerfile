@@ -6,7 +6,7 @@ RUN cd /tmp && git init hfrd && cd hfrd                            && \
     echo "docker/certgen/*" >> .git/info/sparse-checkout        && \
     git pull --depth=1 origin master
 
-FROM ubuntu:xenial
+FROM ubuntu:18.04
 
 MAINTAINER Tong Li <email4tong@gmail.com>
 
@@ -14,8 +14,8 @@ ARG user=ubuntu
 ARG uid=1000
 ARG gid=1000
 
-RUN apt-get update                                                 && \
-    apt-get install -y bash python-pip sudo                        && \
+RUN apt-get update -y                                                && \
+    apt-get install -y bash xxd python-pip sudo                        && \
     pip install --upgrade pip ansible pyyaml                       && \
     groupadd -g ${gid} ${user}                                     && \
     useradd -d /opt/agent -u ${uid} -g ${user} ${user}             && \

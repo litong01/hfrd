@@ -5,13 +5,15 @@
     get pods -o jsonpath='{ range .items[*]}{@.metadata.name},{@.metadata.labels.app},{@.metadata.labels.orgname},{@.spec.containers[*].name},{@.spec.containers[*].env[?(.name=="EXTERNAL_ADDRESS")].value},{@.spec.containers[*].env[?(.name=="CORE_PEER_GOSSIP_EXTERNALENDPOINT")].value}{"\n"}{end}'
   register: allpod_res
 
-- debug:
-    var: allpod_res
+- set_fact:
+    allservices: []
+    allports: {}
+    orderers: []
 
 - name: make orderer list
   set_fact:
-    allorderers: >-
-      {{ allorderers + [{'url': item.split(',')[4], 'name': item.split(',')[1],
+    orderers: >-
+      {{ orderers + [{'url': item.split(',')[4], 'name': item.split(',')[1],
          'org': item.split(',')[2], 'id': item.split(',')[0]}] }}
   with_items: "{{ allpod_res.stdout_lines }}"
   when: item.split(',')[3].find('orderer') >= 0
@@ -23,3 +25,32 @@
         'org': item.split(',')[2], 'id': item.split(',')[0]}] }}
   with_items: "{{ allpod_res.stdout_lines }}"
   when: item.split(',')[3].find('peer') >= 0
+
+- name: get orderer service ports
+  command: >-
+    kubectl --kubeconfig vars/kubeconfig --namespace {{ namespace }}
+    get services -o jsonpath='{ range .items[*]}{@.metadata.name},{@.metadata.labels.app},{@.metadata.labels.orgname},{@.spec.ports[?(@.name=="orderer-grpc")].nodePort},{@.spec.ports[?(@.name=="operations")].nodePort}{"\n"}{end}'
+  register: allservice_res
+
+- name: make all orderer service port list
+  set_fact:
+    allservices: >-
+      {{ allservices + [{'grpcport': item.split(',')[3], 'operations': item.split(',')[4],
+         'name': item.split(',')[1],
+         'org': item.split(',')[2], 'id': item.split(',')[0]}] }}
+  with_items: "{{ allservice_res.stdout_lines }}"
+
+- name: create the service port object
+  set_fact:
+    allports: >-
+      {{ allports | combine({ item.name+'-'+item.org: item.grpcport }) }}
+  with_items: "{{ allservices }}"
+  when: item.name != "" and item.org != "" and item.grpcport != ""
+
+- name: fix the port issue
+  set_fact:
+    allorderers : >-
+      {{ allorderers + [{ 'url': item.url.replace('7051', allports[item.name+'-'+item.org]),
+         'name': item.name, 'org': item.org, 'id': item.id }] }}
+  with_items: "{{ orderers }}"
+

@@ -33,7 +33,7 @@ type UpdateOptions struct {
 	OrdererName            string
 	BatchTimeout           string
 	MaxMessageCount        float64
-	AbsoluteMaxBytes       float64
+	PreferredMaxBytes       float64
 	OrdererAddressesAction string
 	OrdererAddresses       []string
 	AnchorPeers            []string

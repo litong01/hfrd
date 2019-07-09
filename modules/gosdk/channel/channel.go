@@ -22,7 +22,7 @@ const (
 	ORDERER_ORG                      = "ordererOrgName"
 	CH_BATCH_TIMEOUT                 = "batchTimeout"
 	CH_BATCH_SIZE_MAX_MESSAGE_COUNT  = "maxMessageCount"
-	CH_BATCH_SIZE_ABSOLUTE_MAX_BATES = "absoluteMaxBytes"
+	CH_BATCH_SIZE_PREFERRED_MAX_BATES = "preferredMaxBytes"
 	CH_ORDERER_ADDRESSES_ACTION      = "ordererAddressesAction"
 	CH_ORDERER_ADDRESSES             = "ordererAddresses"
 
@@ -45,7 +45,7 @@ var (
 	ordererOrgName         string
 	batchTimeout           string
 	maxMessageCount        float64
-	absoluteMaxBytes       float64
+	preferredMaxBytes       float64
 	ordererAddressesAction string
 	ordererAddresses       []string
 	anchorPeers            []string

@@ -114,7 +114,7 @@ ${DOCKER_BASE_CMD} \
 gosdk channel update -c ${WORKDIR}/fixtures/ConnectionProfile_org1.yaml --channelNamePrefix mychannel --prefixOffset 0 \
         --ordererOrgName ordererorg --ordererName orderer.example.com --peers peer0.org1.example.com \
         --ordererAddresses orderer.example.com:7050 \
-        --batchTimeout 1s --maxMessageCount 200 --absoluteMaxBytes 103802353 --anchorPeers peer0.org1.example.com:7051 \
+        --batchTimeout 1s --maxMessageCount 200 --preferredMaxBytes 103802353 --anchorPeers peer0.org1.example.com:7051 \
         --iterationCount 1 --iterationInterval 2s --retryCount 5 --logLevel DEBUG 
 
 echo "#############################Query org1 channels########################"

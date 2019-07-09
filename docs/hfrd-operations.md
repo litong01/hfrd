@@ -181,7 +181,7 @@ For example, if you set `connectionProfile: org1`,test modules will automaticall
       ordererName: orderer.example.com
       batchTimeout: 1s
       maxMessageCount: 100
-      absoluteMaxBytes: 103802353
+      preferredMaxBytes: 103802353
       anchorPeers: peer0.org1.example.com:7051
       ordererAddressesAction: replace/add/remove
       ordererAddresses: orderer0.example.com,orderer1.example.com
@@ -197,7 +197,7 @@ Same like `CHANNEL_JOIN`.
 3.  `peers`: The peers that will be used to update channels.`peers` must have been joined into these channels.     
 4. `ordererOrgName `: The orderer org name.   
 5. `ordererName`: The orderer name that you want to use when update channels.  
-6. `batchTimeout ` `maxMessageCount ` `absoluteMaxBytes ` `anchorPeers ` are the channel configurations currently supported in hfrd. Remember that the anchorPeers should be the list of peers' url which contains the IP and port.   
+6. `batchTimeout ` `maxMessageCount ` `preferredMaxBytes ` `anchorPeers ` are the channel configurations currently supported in hfrd. Remember that the anchorPeers should be the list of peers' url which contains the IP and port.   
 7. `ordererAddressesAction `: Used to specify the operation type when update orderer addresses.Currently support `replace`,`remove`,`add`.    
  `ordererAddressesAction: replace` will replace the orderer addresses with  orderer addresses specified in`ordererAddresses` .   
  `ordererAddressesAction: remove` will remove the orderer addresses that are specified in `ordererAddresses` from the channel configuration.             

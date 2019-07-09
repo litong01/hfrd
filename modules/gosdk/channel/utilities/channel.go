@@ -263,13 +263,13 @@ func UpdateChannelGroup(originalGroup map[string]interface{}, updateOptions *Upd
 	var updatedChannelGroup = make(map[string]interface{})
 	updatedChannelGroup = originalGroup
 
-	batchTimeout, maxMessageCount, absoluteMaxBytes, anchorPeerConfig, ordererCurrAddresses := GetConfigFromChannelGroup(updatedChannelGroup, updateOptions.MspID)
+	batchTimeout, maxMessageCount, preferredMaxBytes, anchorPeerConfig, ordererCurrAddresses := GetConfigFromChannelGroup(updatedChannelGroup, updateOptions.MspID)
 	if maxMessageCount != updateOptions.MaxMessageCount && updateOptions.MaxMessageCount != 0 {
 		updatedChannelGroup["channel_group"].(map[string]interface{})["groups"].(map[string]interface{})["Orderer"].(map[string]interface{})["values"].(map[string]interface{})["BatchSize"].(map[string]interface{})["value"].(map[string]interface{})["max_message_count"] = updateOptions.MaxMessageCount
 		updateOptions.OrdererOrgUpdate = true
 	}
-	if absoluteMaxBytes != updateOptions.AbsoluteMaxBytes && updateOptions.AbsoluteMaxBytes != 0 {
-		updatedChannelGroup["channel_group"].(map[string]interface{})["groups"].(map[string]interface{})["Orderer"].(map[string]interface{})["values"].(map[string]interface{})["BatchSize"].(map[string]interface{})["value"].(map[string]interface{})["absolute_max_bytes"] = updateOptions.AbsoluteMaxBytes
+	if preferredMaxBytes != updateOptions.PreferredMaxBytes && updateOptions.PreferredMaxBytes != 0 {
+		updatedChannelGroup["channel_group"].(map[string]interface{})["groups"].(map[string]interface{})["Orderer"].(map[string]interface{})["values"].(map[string]interface{})["BatchSize"].(map[string]interface{})["value"].(map[string]interface{})["preferred_max_bytes"] = updateOptions.PreferredMaxBytes
 		updateOptions.OrdererOrgUpdate = true
 	}
 
@@ -363,11 +363,11 @@ func UpdateChannelGroup(originalGroup map[string]interface{}, updateOptions *Upd
 }
 
 // GetConfigFromChannelGroup will get batchTimeout/batchSize/AnchorPeers from channelGroup
-func GetConfigFromChannelGroup(channelGroup map[string]interface{}, mspID string) (batchTimeout string, maxMessageCount float64, absoluteMaxBytes float64, anchorPeers map[string]interface{}, orderers []string) {
+func GetConfigFromChannelGroup(channelGroup map[string]interface{}, mspID string) (batchTimeout string, maxMessageCount float64, preferredMaxBytes float64, anchorPeers map[string]interface{}, orderers []string) {
 
 	maxMessageCount = channelGroup["channel_group"].(map[string]interface{})["groups"].(map[string]interface{})["Orderer"].(map[string]interface{})["values"].(map[string]interface{})["BatchSize"].(map[string]interface{})["value"].(map[string]interface{})["max_message_count"].(float64)
 
-	absoluteMaxBytes = channelGroup["channel_group"].(map[string]interface{})["groups"].(map[string]interface{})["Orderer"].(map[string]interface{})["values"].(map[string]interface{})["BatchSize"].(map[string]interface{})["value"].(map[string]interface{})["absolute_max_bytes"].(float64)
+	preferredMaxBytes = channelGroup["channel_group"].(map[string]interface{})["groups"].(map[string]interface{})["Orderer"].(map[string]interface{})["values"].(map[string]interface{})["BatchSize"].(map[string]interface{})["value"].(map[string]interface{})["preferred_max_bytes"].(float64)
 
 	batchTimeout = channelGroup["channel_group"].(map[string]interface{})["groups"].(map[string]interface{})["Orderer"].(map[string]interface{})["values"].(map[string]interface{})["BatchTimeout"].(map[string]interface{})["value"].(map[string]interface{})["timeout"].(string)
 
@@ -384,7 +384,7 @@ func GetConfigFromChannelGroup(channelGroup map[string]interface{}, mspID string
 		}
 
 	}
-	return batchTimeout, maxMessageCount, absoluteMaxBytes, orgAnchors, ordererAddresses
+	return batchTimeout, maxMessageCount, preferredMaxBytes, orgAnchors, ordererAddresses
 }
 
 // PrintMSPidFromChannelGroup print MSPid list in given channel group config
@@ -506,7 +506,7 @@ func WaitUntilUpdateSucc(ledgerClient *ledger.Client, updateOptions *UpdateOptio
 			return errors.Errorf("Error in decode proto : %s", err)
 		}
 
-		batchTimeout, maxMessageCount, absoluteMaxBytes, anchorPeerConfig, ordererAddresses := GetConfigFromChannelGroup(currentChannelGroup, updateOptions.MspID)
+		batchTimeout, maxMessageCount, preferredMaxBytes, anchorPeerConfig, ordererAddresses := GetConfigFromChannelGroup(currentChannelGroup, updateOptions.MspID)
 		if updateOptions.OrdererOrgUpdate {
 			if updateOptions.BatchTimeout != "" && updateOptions.BatchTimeout != batchTimeout {
 				continue
@@ -514,7 +514,7 @@ func WaitUntilUpdateSucc(ledgerClient *ledger.Client, updateOptions *UpdateOptio
 			if updateOptions.MaxMessageCount != 0 && updateOptions.MaxMessageCount != maxMessageCount {
 				continue
 			}
-			if updateOptions.AbsoluteMaxBytes != 0 && updateOptions.AbsoluteMaxBytes != absoluteMaxBytes {
+			if updateOptions.PreferredMaxBytes != 0 && updateOptions.PreferredMaxBytes != preferredMaxBytes {
 				continue
 			}
 		}
@@ -530,7 +530,7 @@ func WaitUntilUpdateSucc(ledgerClient *ledger.Client, updateOptions *UpdateOptio
 		hfrdcommon.Logger.Info(fmt.Sprintf("Successfully updated channel: %s", updateOptions.ChannelID))
 		hfrdcommon.Logger.Info(fmt.Sprintf("    Batchtimeout: %s", batchTimeout))
 		hfrdcommon.Logger.Info(fmt.Sprintf("    BatchSize.MaxMessageCount: %f", maxMessageCount))
-		hfrdcommon.Logger.Info(fmt.Sprintf("    BatchSize.AbsoluteMaxBytes: %f", absoluteMaxBytes))
+		hfrdcommon.Logger.Info(fmt.Sprintf("    BatchSize.PreferredMaxBytes: %f", preferredMaxBytes))
 		hfrdcommon.Logger.Info(fmt.Sprintf("    OrdererAddresses: %s", ordererAddresses))
 		hfrdcommon.Logger.Info(fmt.Sprintf("    Org anchor peers: %#v", anchorPeerConfig))
 		break

@@ -131,8 +131,8 @@ func (c *ChannelConfig) SingleChannelQuery(org string, iterationIndex int) error
 	if err != nil {
 		return errors.Errorf("Error in decode proto : %s", err)
 	}
-	batchTimeout, maxMessageCount, absoluteMaxBytes, orgAnchorPeers, ordererAddresses := utilities.GetConfigFromChannelGroup(channelGroup, connection.Organizations[org].Mspid)
-	common.Logger.Info(fmt.Sprintf("Query %s config: BatchTimeout:%s, BatchSize.MaxMessageCount:%f, BatchSize.AbsoluteMaxBytes:%f", c.namePrefix, batchTimeout, maxMessageCount, absoluteMaxBytes))
+	batchTimeout, maxMessageCount, preferredMaxBytes, orgAnchorPeers, ordererAddresses := utilities.GetConfigFromChannelGroup(channelGroup, connection.Organizations[org].Mspid)
+	common.Logger.Info(fmt.Sprintf("Query %s config: BatchTimeout:%s, BatchSize.MaxMessageCount:%f, BatchSize.PreferredMaxBytes:%f", c.namePrefix, batchTimeout, maxMessageCount, preferredMaxBytes))
 	common.Logger.Info(fmt.Sprintf("OrdererAddresses: %s", ordererAddresses))
 	common.Logger.Info(fmt.Sprintf(" Org:%s AnchorPeers: %#v", org, orgAnchorPeers))
 	utilities.PrintMSPidFromChannelGroup(channelGroup)

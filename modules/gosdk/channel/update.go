@@ -40,7 +40,7 @@ func updateCmd() *cobra.Command {
 
 	flags.StringVar(&batchTimeout, CH_BATCH_TIMEOUT, "", "update batch timeout")
 	flags.Float64Var(&maxMessageCount, CH_BATCH_SIZE_MAX_MESSAGE_COUNT, 0, "update the max message count in single block")
-	flags.Float64Var(&absoluteMaxBytes, CH_BATCH_SIZE_ABSOLUTE_MAX_BATES, 0, "update the max bytes in single block")
+	flags.Float64Var(&preferredMaxBytes, CH_BATCH_SIZE_PREFERRED_MAX_BATES, 0, "update the max bytes in single block")
 	flags.StringVar(&ordererAddressesAction, CH_ORDERER_ADDRESSES_ACTION, "replace", "which action (add/remove/replace) will be executed when update orderer addresses")
 	flags.StringSliceVar(&ordererAddresses, CH_ORDERER_ADDRESSES, []string{}, "update the orderer addresses in the channel")
 	flags.StringSliceVar(&anchorPeers, ANCHOR_PEERS, []string{}, "")
@@ -151,13 +151,13 @@ func (c *ChannelConfig) SingleChannelUpdate(org string, channelName string) erro
 		MaxMessageCount:        maxMessageCount,
 		OrdererAddressesAction: ordererAddressesAction,
 		OrdererAddresses:       ordererAddresses,
-		AbsoluteMaxBytes:       absoluteMaxBytes,
+		PreferredMaxBytes:       preferredMaxBytes,
 
 		AnchorPeers: anchorPeers,
 	}
 
 	// Update channel configurations
-	if updateOptions.BatchTimeout != "" || updateOptions.MaxMessageCount != 0 || updateOptions.AbsoluteMaxBytes != 0 || len(ordererAddresses) != 0 || len(anchorPeers) != 0 {
+	if updateOptions.BatchTimeout != "" || updateOptions.MaxMessageCount != 0 || updateOptions.PreferredMaxBytes != 0 || len(ordererAddresses) != 0 || len(anchorPeers) != 0 {
 		err := UpdateChannelConfig(c.sdk, updateOptions)
 		if err != nil {
 			return err

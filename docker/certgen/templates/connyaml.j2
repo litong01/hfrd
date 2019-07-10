@@ -32,7 +32,7 @@ orderers:
   {{ orderer.name }}:
     url: "grpcs://{{ orderer.url }}"
     grpcOptions:
-      ssl-target-name-override: "{{ orderer.url | replace(':7050', '') }}"
+      ssl-target-name-override: "{{ orderer.url.split(':')[0] }}"
     tlsCACerts:
       path: "{{ '/fabric/keyfiles/'+orderer.org+'/'+orderer.name+'/msp/tlscacerts/cacert-1.pem' }}"
 {% endfor %}
@@ -41,7 +41,7 @@ peers:
   {{ peer.name }}:
     url: "grpcs://{{ peer.url }}"
     grpcOptions:
-      ssl-target-name-override: "{{ peer.url | replace(':7051', '') }}"
+      ssl-target-name-override: "{{ peer.url.split(':')[0] }}"
     tlsCACerts:
       path: "{{ '/fabric/keyfiles/'+peer.org+'/'+peer.name+'/msp/tlscacerts/cacert-1.pem' }}"
 {% endfor %}

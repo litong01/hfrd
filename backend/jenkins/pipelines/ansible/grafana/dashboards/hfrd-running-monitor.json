@@ -617,12 +617,14 @@
           "expr": "sum(hfrd_chaincode_invoke_counter_ps{testid=\"[[TargetTestId]]\"})",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "Commit Rate",
           "refId": "A"
         },
         {
           "expr": "sum(hfrd_chaincode_invoke_sent_counter_ps{testid=\"[[TargetTestId]]\"})",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "Endorsement Rate",
           "refId": "B"
         }
       ],

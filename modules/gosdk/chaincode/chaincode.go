@@ -56,6 +56,7 @@ var (
 	serviceDiscovery      bool
 	fabricVersion         string
 	prometheusTargetUrl   string
+	lang                  string
 )
 
 const (

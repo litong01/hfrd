@@ -219,6 +219,7 @@ Same like `CHANNEL_JOIN`.
       chaincodeVersion: "v1"
       path: "chaincode/samplecc" # cc src code path relative to $GOPATH
       peers: "peer1st-orga"
+      lang: "golang"
 ```
 `CHAINCODE_INSTALL ` will help to install chaincodes to peers according to the parameters,including:  
 1. `connectionProfile`: Specify org name or full path of connection profile here. 	
@@ -227,7 +228,8 @@ For example, if you set `connectionProfile: org1`,test modules will automaticall
 3. `prefixOffset`: The offset of `chaincodeNamePrefix `. This is optional and default number is 0. When `prefixOffset: 3` and `iterationCount: 10`,then HFRD will install chiancodes from `mysamplecc-3 (mysamplecc- + prefixOffset)` to `mysamplecc-12 (mysamplecc- + prefixOffset + iterationCount - 1 )`.   
 4. `chaincodeVersion `: The chaincode version     
 5. `path` : The path of the chaincode.This shoule be same dir structure as the uploaded chaincode.tgz file.For example,if your tgz file's dir structure is `chaincode/samplecc/samplecc.go`, you should set `path` to `chaincode/samplecc`.   
-6. `peers `: The peers that chaincode will be installed on.Be careful,only the peers that belong to the **connectionProfile client.organization**  can be installed by using this operation.If you want to install chaincode on another org's peers,you need to add another operation with that org's connection profile. 
+6. `peers`: The peers that chaincode will be installed on.Be careful,only the peers that belong to the **connectionProfile client.organization**  can be installed by using this operation.If you want to install chaincode on another org's peers,you need to add another operation with that org's connection profile. 
+7. `lang`: The language used by the chaincode. The possible values are `golang` and `node`. The default value is `golang`
 
 
 #### CHAINCODE_INSTANTIATE

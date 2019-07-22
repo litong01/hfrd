@@ -137,7 +137,7 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:65f4c5a8d1f96596ddde904ad37904a5e885a2469204ee8740e422a238958370"
+  digest = "1:d49f30c0489e2ede3396955dcb83c3af1ea9a5fa75178b91a12bd2a9ad1e8efb"
   name = "github.com/hyperledger/fabric"
   packages = [
     "bccsp",
@@ -149,6 +149,7 @@
     "common/flogging/fabenc",
     "common/metadata",
     "common/util",
+    "core/chaincode/platforms/ccmetadata",
     "discovery/client",
     "gossip/api",
     "gossip/common",
@@ -704,6 +705,7 @@
     "github.com/hyperledger/fabric-sdk-go/pkg/fab/ccpackager/gopackager",
     "github.com/hyperledger/fabric-sdk-go/pkg/fab/comm",
     "github.com/hyperledger/fabric-sdk-go/pkg/fab/peer",
+    "github.com/hyperledger/fabric-sdk-go/pkg/fab/resource",
     "github.com/hyperledger/fabric-sdk-go/pkg/fabsdk",
     "github.com/hyperledger/fabric-sdk-go/pkg/fabsdk/factory/defsvc",
     "github.com/hyperledger/fabric-sdk-go/pkg/fabsdk/provider/chpvdr",
@@ -713,6 +715,7 @@
     "github.com/hyperledger/fabric-sdk-go/third_party/github.com/hyperledger/fabric/protos/common",
     "github.com/hyperledger/fabric-sdk-go/third_party/github.com/hyperledger/fabric/protos/peer",
     "github.com/hyperledger/fabric/bccsp/factory",
+    "github.com/hyperledger/fabric/core/chaincode/platforms/ccmetadata",
     "github.com/hyperledger/fabric/discovery/client",
     "github.com/hyperledger/fabric/protos/common",
     "github.com/hyperledger/fabric/protos/discovery",

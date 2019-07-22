@@ -8,15 +8,12 @@ import (
 	"go/build"
 	"path"
 	"path/filepath"
-	"github.com/hyperledger/fabric-sdk-go/pkg/common/logging"
 	"github.com/hyperledger/fabric-sdk-go/pkg/fab/resource"
 	"github.com/pkg/errors"
 	"fmt"
 	pb "github.com/hyperledger/fabric-sdk-go/third_party/github.com/hyperledger/fabric/protos/peer"
-	cutil "github.com/hyperledger/fabric/core/container/util"
 )
 
-var logger = logging.NewLogger("hfrd/chaincode")
 
 // NewCCPackage creates new node chaincode package
 func NewCCPackage(chaincodePath string, goPath string) (*resource.CCPackage, error) {
@@ -32,28 +29,18 @@ func NewCCPackage(chaincodePath string, goPath string) (*resource.CCPackage, err
 		if gp == "" {
 			return nil, errors.New("GOPATH not defined")
 		}
-		logger.Debugf("Default GOPATH=%s", gp)
 	}
-
 	projDir = path.Join(gp, "src", chaincodePath)
-
-	logger.Debugf("projDir variable=%s", projDir)
-
-
 	tarBytes, err := GetDeploymentPayload(projDir)
 	if err != nil {
 		return nil, err
 	}
-
 	ccPkg := &resource.CCPackage{Type: pb.ChaincodeSpec_NODE, Code: tarBytes}
-
 	return ccPkg, nil
 }
 
 func GetDeploymentPayload(path string) ([]byte, error) {
-
 	var err error
-
 	// --------------------------------------------------------------------------------------
 	// Write out our tar package
 	// --------------------------------------------------------------------------------------
@@ -71,11 +58,7 @@ func GetDeploymentPayload(path string) ([]byte, error) {
 		folder = folder[:len(folder)-1]
 	}
 
-	logger.Debugf("Packaging node.js project from path %s", folder)
-
-	if err = cutil.WriteFolderToTarPackage(tw, folder, []string{"node_modules"}, nil, nil); err != nil {
-
-		logger.Errorf("Error writing folder to tar package %s", err)
+	if err = WriteFolderToTarPackage(tw, folder, []string{"node_modules"}, nil, nil); err != nil {
 		return nil, fmt.Errorf("Error writing Chaincode package contents: %s", err)
 	}
 

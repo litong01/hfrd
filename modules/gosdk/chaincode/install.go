@@ -13,6 +13,8 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"hfrd/modules/gosdk/chaincode/packager"
+	"github.com/hyperledger/fabric-sdk-go/pkg/fab/resource"
 )
 
 var chaincodeInstallCmd = &cobra.Command{
@@ -34,6 +36,7 @@ func installCmd() *cobra.Command {
 	flags.StringVar(&chaincodeVersion, CC_VERSION, "", "chaincode version")
 	flags.StringVar(&path, CC_PATH, "", "chaincode path")
 	flags.StringSliceVar(&peers, PEERS, []string{}, "on which peer to install cc")
+	flags.StringVarP(&lang, "lang", "l", "golang", "chaincode language(golang, node)")
 
 	chaincodeInstallCmd.MarkFlagRequired(CC_NAME_PREFIX)
 	chaincodeInstallCmd.MarkFlagRequired(CC_VERSION)
@@ -128,7 +131,13 @@ func (cc *Chaincode) InstallChaincode(name, version, path, peer, org string) err
 			common.TrackTime(now, CC_INSTALL)
 		}
 	}(time.Now())
-	ccPkg, err := gopackager.NewCCPackage(path, os.Getenv("GOPATH"))
+	var ccPkg *resource.CCPackage
+	if (lang == "node") {
+		ccPkg, err = packager.NewCCPackage(path, os.Getenv("GOPATH"))
+	} else {  // currently we can support either node or go chaincode
+		ccPkg, err = gopackager.NewCCPackage(path, os.Getenv("GOPATH"))
+	}
+
 	if err != nil {
 		return errors.WithMessage(err, fmt.Sprintf("Error packaging cc from path %s",
 			os.Getenv("GOPATH")+"/"+path))

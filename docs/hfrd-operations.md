@@ -229,7 +229,9 @@ For example, if you set `connectionProfile: org1`,test modules will automaticall
 4. `chaincodeVersion `: The chaincode version     
 5. `path` : The path of the chaincode.This shoule be same dir structure as the uploaded chaincode.tgz file.For example,if your tgz file's dir structure is `chaincode/samplecc/samplecc.go`, you should set `path` to `chaincode/samplecc`.   
 6. `peers`: The peers that chaincode will be installed on.Be careful,only the peers that belong to the **connectionProfile client.organization**  can be installed by using this operation.If you want to install chaincode on another org's peers,you need to add another operation with that org's connection profile. 
-7. `lang`: The language used by the chaincode. The possible values are `golang` and `node`. The default value is `golang`
+7. `lang`: The language used by the chaincode. The possible values are `golang`, `node` and `cds`. The default value is `golang`.
+When the `lang` is set as `cds`, you need to set the path as the cds file path.
+
 
 
 #### CHAINCODE_INSTANTIATE

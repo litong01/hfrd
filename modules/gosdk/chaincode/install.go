@@ -15,6 +15,7 @@ import (
 	"github.com/spf13/viper"
 	"hfrd/modules/gosdk/chaincode/packager"
 	"github.com/hyperledger/fabric-sdk-go/pkg/fab/resource"
+	"path/filepath"
 )
 
 var chaincodeInstallCmd = &cobra.Command{
@@ -134,7 +135,10 @@ func (cc *Chaincode) InstallChaincode(name, version, path, peer, org string) err
 	var ccPkg *resource.CCPackage
 	if (lang == "node") {
 		ccPkg, err = packager.NewCCPackage(path, os.Getenv("GOPATH"))
-	} else {  // currently we can support either node or go chaincode
+	} else if (lang == "cds") {
+		ccPkg, err = packager.NewCDSPackage(path, os.Getenv("GOPATH"))
+		path = filepath.Dir(path)
+	} else {  // currently we can support node, golang and cds. The default would be golang
 		ccPkg, err = gopackager.NewCCPackage(path, os.Getenv("GOPATH"))
 	}
 

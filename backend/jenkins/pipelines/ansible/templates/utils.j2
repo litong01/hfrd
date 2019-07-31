@@ -24,7 +24,7 @@ spec:
       name: "pv-storage-{{ req_id }}"
       subPath: "monitor"
   - name: pushgateway
-    image: prom/pushgateway:latest
+    image: prom/pushgateway:v0.8.0
     imagePullPolicy: IfNotPresent
     ports:
     - containerPort: 9091

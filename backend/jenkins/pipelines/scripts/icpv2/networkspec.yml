@@ -41,14 +41,4 @@ repo:
   password: ""
   bin: "https://nexus.hyperledger.org/content/repositories/snapshots/org/hyperledger/fabric/hyperledger-fabric-1.4.1-stable/linux-amd64.1.4.1-stable-SNAPSHOT/hyperledger-fabric-1.4.1-stable-linux-amd64.1.4.1-stable-20190719.003326-116.tar.gz"
 
-# raftsettings:
-#   Options:
-#     TickInterval: "500ms"
-#     ElectionTick: 10
-#     HeartbeatTick: 1
-#     MaxInflightBlocks: 5
-#     SnapshotIntervalSize: "20 MB"
-# ca:
-#   admin: "admin"
-#   adminpw: "adminpw"
 

@@ -19,9 +19,7 @@ icp = networkspec['icp']
 ibp4icp = icp['ibp4icp']
 resources = networkspec['resources']
 network = networkspec['network']
-raftsettings = networkspec['raftsettings']
 orderersettings = networkspec['orderersettings']
-peersettings = networkspec['peersettings']
 
 url = ibp4icp['url'] + config.get('Initiate', 'Api_Key_URL')
 api_key, api_secret = utils.createApiKeySecret(url, ibp4icp['user'], ibp4icp['password'])
@@ -40,10 +38,10 @@ config['Initiate']['Api_Key'] = api_key
 config['Initiate']['Api_Secret'] = api_secret
 config['Initiate']['Work_Dir'] = networkspec['work_dir']
 
-config['Network']['Orderer_Batch_Timeout'] = str(networkspec['orderersettings']['config']['BatchTimeout'])
-config['Network']['Orderer_Max_Message_Count'] = str(networkspec['orderersettings']['config']['MaxMessageCount'])
-config['Network']['Orderer_Preferred_Max_Bytes'] = str(networkspec['orderersettings']['config']['PreferredMaxBytes'])
-config['Network']['Orderer_Absolute_Max_Bytes'] = str(networkspec['orderersettings']['config']['AbsoluteMaxBytes'])
+config['Network']['Orderer_Batch_Timeout'] = str(orderersettings['config']['BatchTimeout'])
+config['Network']['Orderer_Max_Message_Count'] = str(orderersettings['config']['MaxMessageCount'])
+config['Network']['Orderer_Preferred_Max_Bytes'] = str(orderersettings['config']['PreferredMaxBytes'])
+config['Network']['Orderer_Absolute_Max_Bytes'] = str(orderersettings['config']['AbsoluteMaxBytes'])
 
 with open('apis.ini', 'w') as configfile:
     config.write(configfile, space_around_delimiters=False)

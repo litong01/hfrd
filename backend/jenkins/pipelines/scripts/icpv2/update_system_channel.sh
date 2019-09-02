@@ -158,6 +158,7 @@ export SYS_CHANNEL_NAME=testchainid
 ## To use default config configtx.yaml downloaded along with binaries
 export FABRIC_CFG_PATH=$PWD/config
 
+UPDATE_ORDERER=false
 # ## Update System channel to include the org1 and org2 as members of the SampleConsortium
 for PEER_ORG_NAME in ${ORG_NAMES[@]}
 do
@@ -173,12 +174,13 @@ do
     jq -s '.[0] * {"channel_group":{"groups":{"Consortiums":{"groups":{"SampleConsortium":{"groups": {"'${PEER_ORG_NAME}'":.[1]} }}}}}}' ${ARTIFACTS}/config.json ${ARTIFACTS}/${PEER_ORG_NAME}.json > ${ARTIFACTS}/modify_channel.json
 
     # Update Orderer Defaults for channels
-    if [ ${i} -eq 0 ]
+    if [ ${UPDATE_ORDERER} = 'false' ]
     then
         export MAXBATCHSIZEPATH=".channel_group.groups.Orderer.values.BatchSize.value.max_message_count"  ABSOLUTEMAXBYTESPATH=".channel_group.groups.Orderer.values.BatchSize.value.absolute_max_bytes" PREFERREDMAXBYTESPATH=".channel_group.groups.Orderer.values.BatchSize.value.preferred_max_bytes" MAXBATCHTIMEOUT=".channel_group.groups.Orderer.values.BatchTimeout.value.timeout" ORDERERADDRESS=".channel_group.values.OrdererAddresses.value.addresses[0]"
         jq "$MAXBATCHSIZEPATH = $MAX_MESSAGE_COUNT" ${ARTIFACTS}/modify_channel.json > ${ARTIFACTS}/config1.json && jq "$PREFERREDMAXBYTESPATH = $PREFERRED_MAX_BYTES" ${ARTIFACTS}/config1.json > ${ARTIFACTS}/config2.json && jq "$ABSOLUTEMAXBYTESPATH = $ABSOLUTE_MAX_BYTES" ${ARTIFACTS}/config2.json > ${ARTIFACTS}/config1.json && jq "$ORDERERADDRESS = \"$ORDERER_URL\"" ${ARTIFACTS}/config1.json > ${ARTIFACTS}/config2.json && jq "$MAXBATCHTIMEOUT = \"$MAX_BATCH_TIMEOUT\"" ${ARTIFACTS}/config2.json > ${ARTIFACTS}/modify_channel.json
         rm -rf ${ARTIFACTS}/config1.json ${ARTIFACTS}/config2.json
     fi
+    UPDATE_ORDERER=true
 
     # Encode the original and modified json to protobufs
     configtxlator proto_encode --input ${ARTIFACTS}/config.json --type common.Config --output ${ARTIFACTS}/config.pb

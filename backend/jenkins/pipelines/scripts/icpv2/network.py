@@ -40,10 +40,10 @@ config['Initiate']['Api_Key'] = api_key
 config['Initiate']['Api_Secret'] = api_secret
 config['Initiate']['Work_Dir'] = networkspec['work_dir']
 
-config['Network']['Orderer_Batch_Timeout'] = networkspec['orderersettings']['config']['BatchTimeout']
-config['Network']['Orderer_Max_Message_Count'] = networkspec['orderersettings']['config']['MaxMessageCount']
-config['Network']['Orderer_Preferred_Max_Bytes'] = networkspec['orderersettings']['config']['PreferredMaxBytes']
-config['Network']['Orderer_Absolute_Max_Bytes'] = networkspec['orderersettings']['config']['AbsoluteMaxBytes']
+config['Network']['Orderer_Batch_Timeout'] = str(networkspec['orderersettings']['config']['BatchTimeout'])
+config['Network']['Orderer_Max_Message_Count'] = str(networkspec['orderersettings']['config']['MaxMessageCount'])
+config['Network']['Orderer_Preferred_Max_Bytes'] = str(networkspec['orderersettings']['config']['PreferredMaxBytes'])
+config['Network']['Orderer_Absolute_Max_Bytes'] = str(networkspec['orderersettings']['config']['AbsoluteMaxBytes'])
 
 with open('apis.ini', 'w') as configfile:
     config.write(configfile, space_around_delimiters=False)

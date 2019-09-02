@@ -1,0 +1,14 @@
+{
+    "msp_id": "",
+    "display_name": "",
+    "type": "",
+    "config": {},
+    "resources": {
+        "peer":{
+            "requests": {
+                "cpu": "1",
+                "memory": "256M"
+            }
+        }
+    }
+}

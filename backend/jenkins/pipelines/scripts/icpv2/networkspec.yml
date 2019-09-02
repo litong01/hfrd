@@ -1,0 +1,70 @@
+---
+# peer_db: "goleveldb"
+# consensus_type: etcdraft
+# tls: true
+# logging_level: "ERROR"
+# exposeMetricsPort: false
+# k8s:
+#   # exposeserviceport: True
+#   storageclass: "nfs-recycle"
+#   storagecapacity: "20Gi"
+#   # shared_storage: False
+#   mem_req: "3Gi"
+#   mem_limit: "8Gi"
+#   cpu_req: "1"
+#   cpu_limit: "3"
+work_dir: "/opt/src/scripts/icpv2"
+icp:
+  url: ""
+  user: ""
+  password: ""
+  namespace: ""
+  storageclass: ""
+  ibp4icp:
+    url: ""
+    # admin not works
+    user: ""
+    password: ""
+
+
+resources:
+  peer:
+    cpu_req: 0.5
+    mem_req: 256M
+  orderer:
+    cpu_req: 0.5
+    mem_req: 256M
+
+network:
+  orderers:
+    - 1.ordererorg
+  peers:
+    - peer1.org0
+
+
+raftsettings:
+  Options:
+    TickInterval: "500ms"
+    ElectionTick: 10
+    HeartbeatTick: 1
+    MaxInflightBlocks: 5
+    SnapshotIntervalSize: "20 MB"
+
+orderersettings:
+  config:
+    BatchTimeout: 10s
+  ordererenv:
+    ORDERER_GENERAL_PROFILE_ENABLED: false
+
+peersettings:
+  CORE_PEER_PROFILE_ENABLED: false
+
+ca:
+  admin: "admin"
+  adminpw: "adminpw"
+
+repo:
+  url: "hfrd/"
+  username: ""
+  password: ""
+  bin: "https://nexus.hyperledger.org/content/repositories/snapshots/org/hyperledger/fabric/hyperledger-fabric-1.4.1-stable/linux-amd64.1.4.1-stable-SNAPSHOT/hyperledger-fabric-1.4.1-stable-linux-amd64.1.4.1-stable-20190719.003326-116.tar.gz"

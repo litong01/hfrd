@@ -1,0 +1,28 @@
+{
+    "enrollment": {
+        "component": {
+            "cahost": "",
+            "caport": "",
+            "caname": "",
+            "catls": {
+                "cacert": ""
+            },
+            "enrollid": "",
+            "enrollsecret": "",
+            "admincerts": []
+        },
+        "tls": {
+            "cahost": "",
+            "caport": "",
+            "caname": "",
+            "catls": {
+                "cacert": ""
+            },
+            "enrollid": "",
+            "enrollsecret": "",
+            "csr": {
+                "hosts": []
+            }
+        }
+    }
+}

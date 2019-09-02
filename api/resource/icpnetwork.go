@@ -59,9 +59,9 @@ func IcpNetworkDelete(c *gin.Context) {
 	uid := c.Param("uid")
 	reqId := c.Query("requestid")
 	var params = map[string]string{jenkins.REQUESTID: reqId, jenkins.UID: uid,
-		jenkins.ACTION: "delete"}
+		jenkins.METHOD: jenkins.DELETE}
 	thisLogger.Debug(utils.PrettyMapString(params))
-	queueid, err := jks.TriggerJob(jenkins.K8SNETWORK, params)
+	queueid, err := jks.TriggerJob(jenkins.NETWORK_ICP, params)
 	if err != nil {
 		c.String(http.StatusServiceUnavailable, err.Error())
 		return
@@ -69,5 +69,5 @@ func IcpNetworkDelete(c *gin.Context) {
 	c.JSON(http.StatusOK,
 		gin.H{"reqId": reqId, "jobId": queueid,
 			"baseUrl": utils.GetValue("jenkins.baseUrl").(string),
-			"jobName": jenkins.K8SNETWORK})
+			"jobName": jenkins.NETWORK_ICP})
 }

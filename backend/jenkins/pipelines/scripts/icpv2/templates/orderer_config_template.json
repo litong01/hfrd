@@ -1,0 +1,15 @@
+{
+    "msp_id": "",
+    "display_name": "",
+    "orderer_type": "raft",
+    "cluster_name": "",
+    "config": [],
+    "resources": {
+        "orderer": {
+            "requests": {
+                "cpu": "1",
+                "memory": "256M"
+            }
+        }
+    }
+}

@@ -28,30 +28,27 @@ network:
     - peer1.org0
     - peer1.org1
 
-
-raftsettings:
-  Options:
-    TickInterval: "500ms"
-    ElectionTick: 10
-    HeartbeatTick: 1
-    MaxInflightBlocks: 5
-    SnapshotIntervalSize: "20 MB"
-
 orderersettings:
   config:
     BatchTimeout: 10s
-  ordererenv:
-    ORDERER_GENERAL_PROFILE_ENABLED: false
-
-peersettings:
-  CORE_PEER_PROFILE_ENABLED: false
-
-ca:
-  admin: "admin"
-  adminpw: "adminpw"
+    MaxMessageCount: 100
+    PreferredMaxBytes: 33554432
+    AbsoluteMaxBytes: 103809024
 
 repo:
   url: "hfrd/"
   username: ""
   password: ""
   bin: "https://nexus.hyperledger.org/content/repositories/snapshots/org/hyperledger/fabric/hyperledger-fabric-1.4.1-stable/linux-amd64.1.4.1-stable-SNAPSHOT/hyperledger-fabric-1.4.1-stable-linux-amd64.1.4.1-stable-20190719.003326-116.tar.gz"
+
+# raftsettings:
+#   Options:
+#     TickInterval: "500ms"
+#     ElectionTick: 10
+#     HeartbeatTick: 1
+#     MaxInflightBlocks: 5
+#     SnapshotIntervalSize: "20 MB"
+# ca:
+#   admin: "admin"
+#   adminpw: "adminpw"
+

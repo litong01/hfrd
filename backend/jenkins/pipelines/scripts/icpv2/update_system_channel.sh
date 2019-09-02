@@ -5,13 +5,13 @@ ORDERER_ORG_NAME=$1
 ORG_NAME_STRING=$2
 IFS=',' read -ra ORG_NAMES <<< "$ORG_NAME_STRING"
 
-
+source $work_dir'/apis.ini' || true
 ARTIFACTS=$work_dir/config_artifacts
 #Orderer Configuration Parameters
-MAX_MESSAGE_COUNT=${MAX_MESSAGE_COUNT:-"100"}
-PREFERRED_MAX_BYTES=${PREFERRED_MAX_BYTES:-"33554432"}
-ABSOLUTE_MAX_BYTES=${ABSOLUTE_MAX_BYTES:-"103809024"}
-MAX_BATCH_TIMEOUT=${MAX_BATCH_TIMEOUT:-"2s"}
+MAX_MESSAGE_COUNT=${orderer_max_message_count:-"100"}
+PREFERRED_MAX_BYTES=${orderer_preferred_max_bytes:-"33554432"}
+ABSOLUTE_MAX_BYTES=${orderer_absolute_max_bytes:-"103809024"}
+MAX_BATCH_TIMEOUT=${orderer_batch_timeout:-"2s"}
 
 rm -rf ${ARTIFACTS} config_update.json *.block
 

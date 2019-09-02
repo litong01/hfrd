@@ -1,18 +1,4 @@
 ---
-# peer_db: "goleveldb"
-# consensus_type: etcdraft
-# tls: true
-# logging_level: "ERROR"
-# exposeMetricsPort: false
-# k8s:
-#   # exposeserviceport: True
-#   storageclass: "nfs-recycle"
-#   storagecapacity: "20Gi"
-#   # shared_storage: False
-#   mem_req: "3Gi"
-#   mem_limit: "8Gi"
-#   cpu_req: "1"
-#   cpu_limit: "3"
 work_dir: "/opt/src/scripts/icpv2"
 icp:
   url: ""
@@ -29,10 +15,10 @@ icp:
 
 resources:
   peer:
-    cpu_req: 0.5
+    cpu_req: 0.3
     mem_req: 256M
   orderer:
-    cpu_req: 0.5
+    cpu_req: 0.3
     mem_req: 256M
 
 network:
@@ -40,6 +26,7 @@ network:
     - 1.ordererorg
   peers:
     - peer1.org0
+    - peer1.org1
 
 
 raftsettings:

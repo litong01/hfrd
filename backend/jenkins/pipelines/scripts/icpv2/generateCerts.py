@@ -72,18 +72,13 @@ def generateConnectionProfiles(networkspec):
             connection_template['organizations'][ordererorg_name] = generateOrgSection(org_template, ordererorg_name,'','ordererorg')
 
         # Load peers
-        for peer_name in peers:
-            peer_name = peer_name.split('.')[0]
+        print peers
+        for peer in peers:
+            org_name = peer.split('.')[1]
+            peer_name = peer.split('.')[0]
             peer_template = loadJsonContent('./templates/peer_template.json')
             peer_name = org_name + peer_name
             connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, org_name, networkspec['icp']['url'].split(':')[0])
-        # for org_index in range(int(num_of_orgs)):
-        #     for peer_index in range(int(peers_per_org)):
-        #         org_name = org_name_prefix + str(org_index)
-        #         for peer_index in range(int(peers_per_org)):
-        #             peer_template = loadJsonContent('./templates/peer_template.json')
-        #             peer_name = network_name + '-' + org_name + '-peer' + str(peer_index)
-        #             connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, org_name)
         # Load orderers
         orderer_template = loadJsonContent('./templates/orderer_template.json')
         for ordererorg in networkspec['network']['orderers']:

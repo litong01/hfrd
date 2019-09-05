@@ -97,7 +97,7 @@ do
     NUMBER_OF_ORDERER_NODES=$(($NUMBER_OF_ORDERER_NODES-1))
 done
 
-
+sleep 30s
 
 mkdir -p ${ARTIFACTS}
 

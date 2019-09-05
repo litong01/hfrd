@@ -19,7 +19,7 @@ done
 
 if [ $SECONDS -ge 600 ]
 then
-    echo "Timed out waiting for ${NAME} CA to come up"
+    echo "Timed out waiting for ${NAME} to come up"
     exit 1
 fi
 

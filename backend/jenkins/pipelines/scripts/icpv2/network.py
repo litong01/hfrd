@@ -84,14 +84,15 @@ if action == 'POST':
         peerorg_names.append(peer_object.split('.')[1])
         create_node(config, networkspec, peer_object, 'peer')
     for orderer_object in orderers:
-        ordererorg_names.append(orderer_object.split('.')[1])
+        ordererorg_names.append(orderer_object)
         create_node(config, networkspec, orderer_object, 'orderer')
     # Update system channel
     ordererorg_names = list(set(ordererorg_names))
     peerorg_names = list(set(peerorg_names))
     peerorg_names_string = ','.join(peerorg_names)
     for ordererorg_name in ordererorg_names:
-        if subprocess.call([networkspec['work_dir'] + '/update_system_channel.sh', ordererorg_name, peerorg_names_string ] ) == 1:
+
+        if subprocess.call([networkspec['work_dir'] + '/update_system_channel.sh', ordererorg_name,peerorg_names_string ] ) == 1:
             print 'error found when update system channel '
             sys.exit(1)
     # Generate certs package

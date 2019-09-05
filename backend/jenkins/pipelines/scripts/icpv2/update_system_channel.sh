@@ -3,6 +3,10 @@
 work_dir=$PWD
 ORDERER_ORG_NAME=$1
 ORG_NAME_STRING=$2
+
+IFS='.' read -ra ORDERER_OBJECT <<< "$ORDERER_ORG_NAME"
+NUMBER_OF_ORDERER_NODES=${ORDERER_ORG_NAME[1]}
+ORDERER_ORG_NAME=${ORDERER_ORG_NAME[1]}
 IFS=',' read -ra ORG_NAMES <<< "$ORG_NAME_STRING"
 
 source $work_dir'/apis.ini' || true
@@ -86,7 +90,13 @@ ORDERER_URL=${ORDERER_URL:8}
 echo -e "\n Orderer URL : ${ORDERER_URL}"
 
 echo "Waiting for Orderering service up"
-NAME=${ORDERER_ORG_NAME}'orderer' ./wait_for_pod.sh
+
+while [ ${NUMBER_OF_ORDERER_NODES} -gt 0 ]
+do
+    NAME=${ORDERER_ORG_NAME}'orderer'${NUMBER_OF_ORDERER_NODES} ./wait_for_pod.sh
+    NUMBER_OF_ORDERER_NODES=$(($NUMBER_OF_ORDERER_NODES-1))
+done
+
 
 
 mkdir -p ${ARTIFACTS}

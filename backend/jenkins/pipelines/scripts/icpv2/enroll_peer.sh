@@ -65,6 +65,10 @@ export PROXY_IP=${ADDR[0]}
 export ${PEER_ORG_NAME}_CA_HOST=${ADDR[0]}
 export ${PEER_ORG_NAME}_CA_PORT=${ADDR[1]}
 
+var0=${PEER_ORG_NAME}_CA_HOST
+var1=${PEER_ORG_NAME}_CA_PORT
+NAME=${PEER_ORG_NAME}ca CA_HOST=${!var0} CA_PORT=${!var1} ./wait_for_pod.sh
+
 var0=${PEER_ORG_NAME}_CA_FOLDER
 echo $TLS_CERT | base64 -d -w 0 > ${!var0}/tls-ca-cert.pem
 

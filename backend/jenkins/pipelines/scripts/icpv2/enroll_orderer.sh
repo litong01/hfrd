@@ -40,6 +40,8 @@ export PROXY_IP=${ADDR[0]}
 ORDERERORG_CA_HOST=${ADDR[0]}
 ORDERERORG_CA_PORT=${ADDR[1]}
 
+NAME=${ORDERER_ORG_NAME}ca CA_HOST=${ORDERERORG_CA_HOST} CA_PORT=${ORDERERORG_CA_PORT} ./wait_for_pod.sh
+
 echo $TLS_CERT | base64 -d -w 0 > ${ORDERER_CA_FOLDER}/tls-ca-cert.pem
 
 CSRHOSTS="${PROXY_IP},${org_name}-orderer,127.0.0.1,localhost"

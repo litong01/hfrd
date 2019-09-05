@@ -91,7 +91,6 @@ if action == 'POST':
     peerorg_names = list(set(peerorg_names))
     peerorg_names_string = ','.join(peerorg_names)
     for ordererorg_name in ordererorg_names:
-
         if subprocess.call([networkspec['work_dir'] + '/update_system_channel.sh', ordererorg_name,peerorg_names_string ] ) == 1:
             print 'error found when update system channel '
             sys.exit(1)

@@ -5,40 +5,63 @@ icp:
   user: ""
   password: ""
   namespace: ""
-  storageclass: ""
+  storageclass: "nfs-recycle"
   ibp4icp:
     url: ""
     # admin not works
     user: ""
     password: ""
 
-
-resources:
-  peer:
-    cpu_req: 0.3
-    mem_req: 256M
-  orderer:
-    cpu_req: 0.3
-    mem_req: 256M
-
 network:
   orderers:
-    - 1.ordererorg
+    - 5.ordererorg
   peers:
     - peer1.org0
+    - peer2.org0
     - peer1.org1
-
+    - peer2.org1
+    - peer1.org2
+    - peer2.org2
+    - peer1.org3
+    - peer2.org3
 orderersettings:
   config:
     BatchTimeout: 10s
-    MaxMessageCount: 100
-    PreferredMaxBytes: 33554432
+    MaxMessageCount: 192
+    PreferredMaxBytes: 10485759
     AbsoluteMaxBytes: 103809024
 
+resources:
+  peer:
+    requests:
+      cpu: 0.25
+      memory: 8192M
+  couchdb:
+    requests:
+      cpu: 0.25
+      memory: 8192M
+  dind:
+    requests:
+      cpu: 1
+      memory: 2048M
+  grpcweb:
+    requests:
+      cpu: 0.2
+      memory: 200M
+  orderer:
+    requests:
+      cpu: 2.5
+      memory: 7168M
+# storage:
+#   peer:
+#     size:
+#     class:
+#   orderer:
+#     size:
+#     class:
+
 repo:
-  url: "hfrd/"
-  username: ""
-  password: ""
+  # url: "hfrd/"
+  # username: ""
+  # password: ""
   bin: "https://nexus.hyperledger.org/content/repositories/snapshots/org/hyperledger/fabric/hyperledger-fabric-1.4.1-stable/linux-amd64.1.4.1-stable-SNAPSHOT/hyperledger-fabric-1.4.1-stable-linux-amd64.1.4.1-stable-20190719.003326-116.tar.gz"
-
-

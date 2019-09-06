@@ -71,8 +71,7 @@ def generateConnectionProfiles(networkspec):
         for ordererorg_name in ordererorg_names:
             connection_template['organizations'][ordererorg_name] = generateOrgSection(org_template, ordererorg_name,'','ordererorg')
 
-        # Load peers
-        print peers
+        # Load peer
         for peer in peers:
             org_name = peer.split('.')[1]
             peer_name = peer.split('.')[0]
@@ -80,13 +79,13 @@ def generateConnectionProfiles(networkspec):
             peer_name = org_name + peer_name
             connection_template['peers'][peer_name] = generatePeerSection(peer_template, peer_name, org_name, networkspec['icp']['url'].split(':')[0])
         # Load orderers
-        orderer_template = loadJsonContent('./templates/orderer_template.json')
         for ordererorg in networkspec['network']['orderers']:
             orderer_num = ordererorg.split('.')[0]
             ordererorg_name = ordererorg.split('.')[1]
             for orderer_index in range(int(orderer_num)):
                 orderer_index += 1
                 orderer_name = ordererorg_name + 'orderer' + str(orderer_index)
+                orderer_template = loadJsonContent('./templates/orderer_template.json')
                 connection_template['orderers'][orderer_name] = generateOrdererSection(orderer_template, orderer_name, ordererorg_name, networkspec['icp']['url'].split(':')[0])
         # write out connection file
         with open(networkspec['work_dir'] + '/crypto-config/' + org + '/connection.json', 'w') as f:

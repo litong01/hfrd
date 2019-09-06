@@ -7,7 +7,6 @@ import subprocess, os
 
 action = sys.argv[1]
 
-
 config = configparser.ConfigParser()
 config.read('templates/apis_template.ini')
 
@@ -16,7 +15,6 @@ with open('./networkspec.yml', 'r') as stream:
 
 icp = networkspec['icp']
 ibp4icp = icp['ibp4icp']
-resources = networkspec['resources']
 network = networkspec['network']
 orderersettings = networkspec['orderersettings']
 
@@ -83,21 +81,19 @@ if action == 'create':
         peerorg_names.append(peer_object.split('.')[1])
         create_node(config, networkspec, peer_object, 'peer')
     for orderer_object in orderers:
-        ordererorg_names.append(orderer_object.split('.')[1])
+        ordererorg_names.append(orderer_object)
         create_node(config, networkspec, orderer_object, 'orderer')
     # Update system channel
     ordererorg_names = list(set(ordererorg_names))
     peerorg_names = list(set(peerorg_names))
     peerorg_names_string = ','.join(peerorg_names)
     for ordererorg_name in ordererorg_names:
-        if subprocess.call([networkspec['work_dir'] + '/update_system_channel.sh', ordererorg_name, peerorg_names_string ] ) == 1:
+        if subprocess.call([networkspec['work_dir'] + '/update_system_channel.sh', ordererorg_name,peerorg_names_string ] ) == 1:
             print 'error found when update system channel '
             sys.exit(1)
     # Generate certs package
     generateCerts.generateCertificatesPackage(networkspec)
     generateCerts.generateConnectionProfiles(networkspec)
-    os.system('cp -rf crypto-config keyfiles')
-    os.system('tar -zcf icpcerts.tgz keyfiles/ && mv icpcerts.tgz keyfiles/ /opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/')
 elif action == 'delete':
     delete_all_url = config['Initiate']['Console_Url'] + config['Components']['delete_all_components']
     utils.sendDeleteRequest(delete_all_url, api_key, api_secret)
@@ -107,6 +103,4 @@ elif action == 'delete':
     print 'current components:  '
     print utils.getAllComponents(config, api_key, api_secret)
     print 'all components are deleted'
-elif action == 'orderer':
-    node.create_orderer(config, networkspec, 'ordererorg', int('5'))
 

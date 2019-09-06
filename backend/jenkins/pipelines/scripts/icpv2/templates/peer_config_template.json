@@ -4,9 +4,27 @@
     "type": "",
     "config": {},
     "resources": {
-        "peer":{
+        "peer": {
             "requests": {
-                "cpu": "1",
+                "cpu": 0.1,
+                "memory": "256M"
+            }
+        },
+        "dind": {
+            "requests": {
+                "cpu": 1,
+                "memory": "256M"
+            }
+        },
+        "couchdb": {
+            "requests": {
+                "cpu": 0.1,
+                "memory": "256M"
+            }
+        },
+        "grpcweb": {
+            "requests": {
+                "cpu": 0.1,
                 "memory": "256M"
             }
         }

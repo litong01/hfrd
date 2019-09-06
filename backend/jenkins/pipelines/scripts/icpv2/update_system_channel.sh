@@ -99,6 +99,7 @@ done
 
 sleep 30s
 
+
 mkdir -p ${ARTIFACTS}
 
 cat << EOF > ${ARTIFACTS}/configtx.yaml

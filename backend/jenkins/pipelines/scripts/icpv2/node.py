@@ -70,8 +70,14 @@ def create_peer(config,networkspec, org_name, peer_name):
     peer_payload['type'] = 'fabric-peer'
     peer_payload['display_name'] = peer_name
     peer_payload['config'] = peer_config
-    peer_payload['resources']['peer']['requests']['cpu'] = networkspec['resources']['peer']['cpu_req']
-    peer_payload['resources']['peer']['requests']['memory'] = networkspec['resources']['peer']['mem_req']
+    peer_payload['resources']['peer']['requests']['cpu'] = networkspec['resources']['peer']['requests']['cpu']
+    peer_payload['resources']['peer']['requests']['memory'] = networkspec['resources']['peer']['requests']['memory']
+    peer_payload['resources']['dind']['requests']['cpu'] = networkspec['resources']['dind']['requests']['cpu']
+    peer_payload['resources']['dind']['requests']['memory'] = networkspec['resources']['dind']['requests']['memory']
+    peer_payload['resources']['couchdb']['requests']['cpu'] = networkspec['resources']['couchdb']['requests']['cpu']
+    peer_payload['resources']['couchdb']['requests']['memory'] = networkspec['resources']['couchdb']['requests']['memory']
+    peer_payload['resources']['grpcweb']['requests']['cpu'] = networkspec['resources']['grpcweb']['requests']['cpu']
+    peer_payload['resources']['grpcweb']['requests']['memory'] = networkspec['resources']['grpcweb']['requests']['memory']
     utils.sendPostRequest(create_peer_url, peer_payload,api_key,api_secret)
     print 'successfully created peer ' + peer_name + ' for organization ' + org_name
     # Get peer component
@@ -88,8 +94,8 @@ def create_orderer(config, networkspec, service_name, num_of_orderers):
     orderer_payload['msp_id'] = service_name
     orderer_payload['cluster_name'] = service_name
     orderer_payload['display_name'] = service_name + '-orderer'
-    orderer_payload['resources']['orderer']['requests']['cpu'] = networkspec['resources']['orderer']['cpu_req']
-    orderer_payload['resources']['orderer']['requests']['memory'] = networkspec['resources']['orderer']['mem_req']
+    orderer_payload['resources']['orderer']['requests']['cpu'] = networkspec['resources']['orderer']['requests']['cpu']
+    orderer_payload['resources']['orderer']['requests']['memory'] = networkspec['resources']['orderer']['requests']['memory']
 
     while(num_of_orderers > 0):
         orderer_admin = open(work_dir + '/crypto-config/' + service_name + '/peer_signed_cert', 'r')

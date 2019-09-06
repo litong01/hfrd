@@ -17,7 +17,6 @@ with open('/opt/hfrd/contentRepo/' + user_id + '/' + network_id + '/networkspec.
 
 icp = networkspec['icp']
 ibp4icp = icp['ibp4icp']
-resources = networkspec['resources']
 network = networkspec['network']
 orderersettings = networkspec['orderersettings']
 

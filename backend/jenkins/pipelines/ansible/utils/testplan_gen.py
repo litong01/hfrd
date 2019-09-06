@@ -130,7 +130,7 @@ for install_org in install_list:
 
 # CHAINCODE_INSTANTIATE
 chaincode_instantiate["parameters"]["connectionProfile"] = org_list[0]
-chaincode_instantiate["parameters"]["peers"] = ','.join(peer_list)
+chaincode_instantiate["parameters"]["peers"] = peer_list[0]
 
 # CHAINCODE_INVOKE
 # Invoke with fixed transaction count : 100

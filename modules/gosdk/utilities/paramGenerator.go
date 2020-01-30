@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
+        "github.com/google/uuid"
 	"hfrd/modules/gosdk/common"
 	"math/rand"
 	"strconv"
@@ -13,6 +14,7 @@ import (
 
 const (
 	LITERAL_PARAM     = "literal"
+        UUID_PARAM        = "uuid"
 	STRING_PATTERN    = "stringPattern"
 	INTEGER_RANGE     = "intRange"
 	PAYLOAD_RANGE     = "payloadRange"
@@ -41,6 +43,14 @@ type IntegerRange struct {
 type PayloadRange struct {
 	Min string
 	Max string
+}
+
+type UUID struct {
+}
+
+func (p *UUID) GetValue() string {
+        id, _ := uuid.NewRandom()
+        return strings.Replace(id.String(), "-", "", -1)
 }
 
 func (p *Literal) GetValue() string {
@@ -126,6 +136,12 @@ func GetComplexArgs(complexParams []string, loopIndex int) ([]string, error) {
 			}
 			literal := &Literal{paramKV[1]}
 			arg = literal.GetValue()
+                case UUID_PARAM:
+                        if len(paramKV) != 1 {
+                                return nil, errors.Errorf("uuid type should contains 1 param")
+                        }
+                        uuidgt := &UUID{}
+                        arg = uuidgt.GetValue()
 		case STRING_PATTERN:
 			if len(paramKV) != 2 {
 				return nil, errors.Errorf("stringPattern type should contains 2 params")
@@ -189,6 +205,12 @@ func GetTransientMap(complexParams []string, loopIndex int) ([]byte, error) {
 			}
 			literal := &Literal{paramKV[2]}
 			arg = literal.GetValue()
+                case UUID_PARAM:
+                        if len(paramKV) != 1 {
+                                return nil, errors.Errorf("uuid type should contains 1 param")
+                        }
+                        uuidgt := &UUID{}
+                        arg = uuidgt.GetValue()
 		case STRING_PATTERN:
 			if len(paramKV) != 3 {
 				return nil, errors.Errorf("stringPattern type should contains 2 params")

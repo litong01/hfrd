@@ -3,7 +3,7 @@
 # Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
 # for detailed Gopkg.toml documentation.
 #
-# required = ["github.com/user/thing/cmd/thing"]
+required = ["github.com/google/uuid"]
 # ignored = ["github.com/user/project/pkgX", "bitbucket.org/user/project/pkgA/pkgY"]
 #
 # [[constraint]]
@@ -39,6 +39,10 @@
 [[constraint]]
   name = "github.com/hyperledger/fabric"
   version = "1.4.0"
+
+[[constraint]]
+  name = "github.com/google/uuid"
+  version = "1.1.1"
 
 [[constraint]]
   name = "github.com/xixuejia/viper"

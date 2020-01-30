@@ -49,7 +49,8 @@ type UUID struct {
 }
 
 func (p *UUID) GetValue() string {
-        id, _ := uuid.NewRandom()
+        rand.Seed(time.Now().UnixNano())
+        id, _ := uuid.NewUUID()
         return strings.Replace(id.String(), "-", "", -1)
 }
 

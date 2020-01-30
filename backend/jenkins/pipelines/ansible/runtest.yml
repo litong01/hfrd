@@ -49,7 +49,15 @@
 - name: Add literal/stringPattern parameters to complex_params_string
   set_fact:
     complex_params_string: "{{ complex_params_string + paramItem.type + '~~~' + paramItem.value + '#' }}"
-  when: paramItem.min is not defined
+  when: paramItem.min is not defined and paramItem.type != 'uuid'
+  loop: "{{ complex_params }}"
+  loop_control:
+    loop_var: paramItem
+
+- name: Add uuid parameters to complex_params_string
+  set_fact:
+    complex_params_string: "{{ complex_params_string + paramItem.type + '#' }}"
+  when: paramItem.type == 'uuid'
   loop: "{{ complex_params }}"
   loop_control:
     loop_var: paramItem

@@ -15,7 +15,7 @@ if [[ $(uname -m) == 's390x' ]]; then
 else
     IMAGE_ARCH=''
     HTTPD_IMAGE_NAME='httpd:2.4.34-alpine'
-    COUCHDB_IMAGE_NAME='couchdb'
+    COUCHDB_IMAGE_NAME='couchdb:2.3.1'
 fi
 
 rootdir=~/hfrd

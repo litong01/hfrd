@@ -1,0 +1,16 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: BuildAndTests
+  jobs:
+  - job:
+    steps:
+    - script: echo Hello world!
+      displayName: 'Build up the minifabric container'
+  
+  
+  
